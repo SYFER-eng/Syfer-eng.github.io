@@ -279,17 +279,7 @@ body {
     <!-- Gradient Background -->
     <div class="main"></div>
 
-    <!-- Island content -->
-    <div class="island">
-        <h1>Zorara Key Generator</h1>
-		<form action="/generate_key" method="POST">
-            <button type="submit" id="generate-btn">Generate Key</button>
-        </form>
-        <p>Run twice to complete the process.</p>
-    </div>
 
-
-</body>
 <!-- Gradient Background -->
 <div class="main"></div>
 <!-- Island content -->
@@ -309,14 +299,7 @@ body {
     <!-- Gradient Background -->
     <div class="main"></div>
 
-    <!-- Island content -->
-    <div class="island">
-        <h1>Zorara Key Generator</h1>
-		<form action="/generate_key" method="POST">
-            <button type="submit" id="generate-btn">Generate Key</button>
-        </form>
-        <p>Run twice to complete the process.</p>
-    </div>
+
 
 
 </body>
