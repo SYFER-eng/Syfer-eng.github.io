@@ -1,15 +1,16 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movies Menu</title>
+    <title>Movie Collection</title>
     <style>
         :root {
             --primary: #6200ea;
             --secondary: #b388ff;
             --dark: #1a1a1a;
             --light: #ffffff;
-            --transition: all 0.3s ease;
+            --card-bg: #2d2d2d;
         }
 
         body {
@@ -17,141 +18,164 @@
             font-family: 'Segoe UI', sans-serif;
             background: var(--dark);
             color: var(--light);
+            padding: 20px;
         }
 
-        .nav-container {
-            position: fixed;
+        .search-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(179, 136, 255, 0.2);
+        }
+
+        .search-input {
             width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(26, 26, 26, 0.95);
-            backdrop-filter: blur(10px);
+            padding: 12px;
+            border: 2px solid var(--secondary);
+            border-radius: 25px;
+            background: var(--dark);
+            color: var(--light);
+            font-size: 1.1rem;
         }
 
-        .nav-wrapper {
+        .categories {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .category-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 20px;
+            background: var(--primary);
+            color: var(--light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
         }
 
-        .nav-menu {
+        .movie-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 15px;
+        }
+
+        .movie-title {
+            color: var(--secondary);
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .movie-meta {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            height: 70px;
+            color: #888;
+            font-size: 0.9rem;
         }
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--secondary);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-link {
+        .play-btn {
+            display: block;
+            background: var(--primary);
             color: var(--light);
             text-decoration: none;
-            font-size: 1.1rem;
-            padding: 8px 16px;
-            border-radius: 25px;
-            transition: var(--transition);
-            position: relative;
+            text-align: center;
+            padding: 8px;
+            margin-top: 10px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
         }
 
-        .nav-link:hover {
-            color: var(--secondary);
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 50%;
+        .play-btn:hover {
             background: var(--secondary);
-            transition: var(--transition);
-            transform: translateX(-50%);
-        }
-
-        .nav-link:hover::after {
-            width: 70%;
-        }
-
-        .menu-button {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--light);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 10px;
         }
 
         @media (max-width: 768px) {
-            .menu-button {
-                display: block;
-            }
-
-            .nav-links {
-                position: fixed;
-                top: 70px;
-                right: -100%;
-                flex-direction: column;
-                background: rgba(26, 26, 26, 0.98);
-                width: 100%;
-                text-align: center;
-                transition: var(--transition);
-                padding: 20px 0;
-                backdrop-filter: blur(10px);
-            }
-
-            .nav-links.active {
-                right: 0;
-            }
-
-            .nav-link {
-                padding: 15px;
-                width: 100%;
-                border-radius: 0;
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
         }
     </style>
 </head>
 <body>
-    <nav class="nav-container">
-        <div class="nav-wrapper">
-            <div class="nav-menu">
-                <a href="https://syfes-eng.github.io/Menu.html" class="logo">CodeHub</a>
-                <div class="nav-links">
-                    <a href="#home" class="nav-link">Home</a>
-                    <a href="#projects" class="nav-link">Projects</a>
-                    <a href="#about" class="nav-link">About</a>
-                    <a href="#contact" class="nav-link">Contact</a>
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search movies...">
+        <div class="categories">
+            <button class="category-btn">Action</button>
+            <button class="category-btn">Comedy</button>
+            <button class="category-btn">Drama</button>
+            <button class="category-btn">Sci-Fi</button>
+            <button class="category-btn">Horror</button>
+            <button class="category-btn">Romance</button>
+        </div>
+    </div>
+
+    <div class="movies-grid">
+        <!-- Movie Card Template -->
+        <div class="movie-card">
+            <img src="movie-poster-1.jpg" alt="Movie Title" class="movie-poster">
+            <div class="movie-info">
+                <h3 class="movie-title">Movie Title</h3>
+                <div class="movie-meta">
+                    <span>2023</span>
+                    <span>2h 15m</span>
                 </div>
-                <button class="menu-button">☰</button>
+                <a href="player.html?movie=1" class="play-btn">Play Now</a>
             </div>
         </div>
-    </nav>
+        <!-- Add more movie cards as needed -->
+    </div>
 
     <script>
-        const menuButton = document.querySelector('.menu-button');
-        const navLinks = document.querySelector('.nav-links');
-
-        menuButton.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            menuButton.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const movieCards = document.querySelectorAll('.movie-card');
+            
+            movieCards.forEach(card => {
+                const title = card.querySelector('.movie-title').textContent.toLowerCase();
+                card.style.display = title.includes(searchTerm) ? 'block' : 'none';
+            });
         });
 
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuButton.textContent = '☰';
+        // Category filtering
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                categoryButtons.forEach(btn => btn.style.background = 'var(--primary)');
+                button.style.background = 'var(--secondary)';
+                // Add category filtering logic here
             });
         });
     </script>
