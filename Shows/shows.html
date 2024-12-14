@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Shows Collection</title>
+    <title>The Boys - TV Show Collection</title>
     <style>
         :root {
             --primary: #6200ea;
@@ -76,6 +77,12 @@
             font-size: 1.4rem;
         }
 
+        .show-meta {
+            margin-top: 8px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
         .episodes-view {
             display: none;
             position: fixed;
@@ -98,6 +105,7 @@
             align-items: flex-end;
             padding: 40px;
             margin: -60px -20px 0;
+            background-image: url('https://images.justwatch.com/poster/139452420/s718/season-1.%7Bformat%7D');
         }
 
         .show-header::before {
@@ -110,6 +118,13 @@
             background: linear-gradient(to top, var(--dark), transparent);
         }
 
+        .show-title-large {
+            position: relative;
+            z-index: 1;
+            font-size: 3rem;
+            margin: 0;
+        }
+
         .seasons-tabs {
             display: flex;
             gap: 10px;
@@ -117,6 +132,7 @@
             background: var(--card-bg);
             margin: 20px 0;
             border-radius: 10px;
+            overflow-x: auto;
         }
 
         .season-tab {
@@ -127,6 +143,7 @@
             cursor: pointer;
             border-radius: 20px;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .season-tab.active {
@@ -158,6 +175,11 @@
             flex-grow: 1;
         }
 
+        .episode-title {
+            margin: 0 0 10px 0;
+            color: var(--secondary);
+        }
+
         .watch-button {
             background: var(--primary);
             color: var(--light);
@@ -166,6 +188,7 @@
             border-radius: 20px;
             display: inline-block;
             transition: all 0.3s ease;
+            margin-top: 10px;
         }
 
         .watch-button:hover {
@@ -184,6 +207,12 @@
             border-radius: 20px;
             cursor: pointer;
             z-index: 1002;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
@@ -198,6 +227,10 @@
             .episode-thumbnail {
                 width: 100%;
                 height: 200px;
+            }
+
+            .show-title-large {
+                font-size: 2rem;
             }
         }
     </style>
@@ -216,50 +249,211 @@
                 <div class="show-meta">4 Seasons • Action • Comedy • Crime • Drama • Sci-Fi</div>
             </div>
         </div>
-        <!-- Add more show cards -->
     </div>
 
     <div id="episodesView" class="episodes-view">
         <button class="back-button" onclick="hideEpisodes()">Close</button>
         <div class="show-header">
-            <h1 class="show-title-large">Show Title</h1>
+            <h1 class="show-title-large">The Boys</h1>
         </div>
         <div class="seasons-tabs">
             <button class="season-tab active">Season 1</button>
             <button class="season-tab">Season 2</button>
+            <button class="season-tab">Season 3</button>
+            <button class="season-tab">Season 4</button>
         </div>
-        <div class="episodes-list">
-            <div class="episode-card">
-                <img src="episode1.jpg" alt="Episode 1" class="episode-thumbnail">
-                <div class="episode-info">
-                    <h3 class="episode-title">Season 1 Episode 1: The Name of the Game</h3>
-                    <p></p>
-                    <a href="The-Name-of-the-Game.html" class="watch-button">Watch Now</a>
-                </div>
-            </div>
-            
-            <div class="episodes-list">
-            <div class="episode-card">
-                <img src="episode1.jpg" alt="Episode 2" class="episode-thumbnail">
-                <div class="episode-info">
-                    <h3 class="episode-title">Season 1 Episode 2: Cherry</h3>
-                    <p></p>
-                    <a href="Cherry.html" class="watch-button">Watch Now</a>
-                </div>
-            </div>
-            <!-- Add more episode cards -->
-        </div>
+        <div class="episodes-list"></div>
     </div>
 
     <script>
-        function showEpisodes(showId) {
-            document.getElementById('episodesView').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
+        const episodes = {
+            'season1': [
+                {
+                    title: "The Name of the Game",
+                    episode: 1,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "The-Name-of-the-Game.html"
+                },
+                {
+                    title: "Cherry",
+                    episode: 2,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Cherry.html"
+                },
+                {
+                    title: "Get Some",
+                    episode: 3,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "Get-Some.html"
+                },
+                {
+                    title: "The Female of the Species",
+                    episode: 4,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk0OWNiZjktZmM5NC00ZjNiLTg4YjAtZDY1NjM4NjQ3MjY4XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "The-Female-of-the-Species.html"
+                },
+                {
+                    title: "Good for the Soul",
+                    episode: 5,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Good-for-the-Soul.html"
+                },
+                {
+                    title: "The Innocents",
+                    episode: 6,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "The-Innocents.html"
+                },
+                {
+                    title: "The Self-Preservation Society",
+                    episode: 7,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "The-Self-Preservation-Society.html"
+                },
+                {
+                    title: "You Found Me",
+                    episode: 8,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "You-Found-Me.html"
+                }
+            ],
+            'season2': [
+                {
+                    title: "The Big Ride",
+                    episode: 1,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BYmU3OGFhZDItMjhlZi00ZjY4LTg2YzUtOWIxZGU5YmVjM2YyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "The-Big-Ride.html"
+                },
+                {
+                    title: "Proper Preparation and Planning",
+                    episode: 2,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Proper-Preparation-and-Planning.html"
+                },
+                {
+                    title: "Over the Hill with the Swords of a Thousand Men",
+                    episode: 3,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Over-the-Hill-with-the-Swords-of-a-Thousand-Men.html"
+                },
+                {
+                    title: "Nothing Like It in the World",
+                    episode: 4,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "Nothing-Like-It-in-the-World.html"
+                },
+                {
+                    title: "We Gotta Go Now",
+                    episode: 5,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "We-Gotta-Go-Now.html"
+                },
+                {
+                    title: "The Bloody Doors Off",
+                    episode: 6,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "The-Bloody-Doors-Off.html"
+                },
+                                {
+                    title: "Butcher, Baker, Candlestick Maker",
+                    episode: 7,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Butcher-Baker-Candlestick-Maker.html"
+                },
+                {
+                    title: "What I Know",
+                    episode: 8,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "What-I-Know.html"
+                }
+            ],
+            'season3': [
+                {
+                    title: "Payback",
+                    episode: 1,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Payback.html"
+                },
+                {
+                    title: "The Only Man in the Sky",
+                    episode: 2,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "The-Only-Man-in-the-Sky.html"
+                },
+                {
+                    title: "Barbary Coast",
+                    episode: 3,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Barbary-Coast.html"
+                },
+                {
+                    title: "Glorious Five Year Plan",
+                    episode: 4,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Glorious-Five-Year-Plan.html"
+                },
+                {
+                    title: "The Last Time to Look on This World of Lies",
+                    episode: 5,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "The-Last-Time-to-Look-on-This-World-of-Lies.html"
+                },
+                {
+                    title: "Herogasm",
+                    episode: 6,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "Herogasm.html"
+                },
+                {
+                    title: "Here Comes a Candle to Light You to Bed",
+                    episode: 7,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Here-Comes-a-Candle-to-Light-You-to-Bed.html"
+                },
+                {
+                    title: "The Instant White-Hot Wild",
+                    episode: 8,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "The-Instant-White-Hot-Wild.html"
+                }
+            ],
+            'season4': [
+                {
+                    title: "Department of Dirty Tricks",
+                    episode: 1,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Department-of-Dirty-Tricks.html"
+                },
+                {
+                    title: "Do You Know Who You Are?",
+                    episode: 2,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "Do-You-Know-Who-You-Are.html"
+                },
+                {
+                    title: "Symptoms",
+                    episode: 3,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Symptoms.html"
+                }
+            ]
+        };
 
-        function hideEpisodes() {
-            document.getElementById('episodesView').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        function updateEpisodesList(season) {
+            const episodesList = document.querySelector('.episodes-list');
+            episodesList.innerHTML = '';
+            
+            episodes[season].forEach(ep => {
+                episodesList.innerHTML += `
+                    <div class="episode-card">
+                        <img src="${ep.thumbnail}" alt="Episode ${ep.episode}" class="episode-thumbnail">
+                        <div class="episode-info">
+                            <h3 class="episode-title">Season ${season.slice(-1)} Episode ${ep.episode}: ${ep.title}</h3>
+                            <a href="${ep.link}" class="watch-button">Watch Now</a>
+                        </div>
+                    </div>
+                `;
+            });
         }
 
         const seasonTabs = document.querySelectorAll('.season-tab');
@@ -267,8 +461,22 @@
             tab.addEventListener('click', () => {
                 seasonTabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
+                const season = 'season' + tab.textContent.split(' ')[1];
+                updateEpisodesList(season);
             });
         });
+
+        function showEpisodes(showId) {
+            document.getElementById('episodesView').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            document.querySelector('.show-title-large').textContent = showId;
+            updateEpisodesList('season1');
+        }
+
+        function hideEpisodes() {
+            document.getElementById('episodesView').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
     </script>
 </body>
 </html>
