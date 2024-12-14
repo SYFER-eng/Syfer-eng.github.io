@@ -354,4 +354,129 @@
                     thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
                     link: "The-Bloody-Doors-Off.html"
                 },
+                                {
+                    title: "Butcher, Baker, Candlestick Maker",
+                    episode: 7,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Butcher-Baker-Candlestick-Maker.html"
+                },
                 {
+                    title: "What I Know",
+                    episode: 8,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "What-I-Know.html"
+                }
+            ],
+            'season3': [
+                {
+                    title: "Payback",
+                    episode: 1,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Payback.html"
+                },
+                {
+                    title: "The Only Man in the Sky",
+                    episode: 2,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "The-Only-Man-in-the-Sky.html"
+                },
+                {
+                    title: "Barbary Coast",
+                    episode: 3,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Barbary-Coast.html"
+                },
+                {
+                    title: "Glorious Five Year Plan",
+                    episode: 4,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Glorious-Five-Year-Plan.html"
+                },
+                {
+                    title: "The Last Time to Look on This World of Lies",
+                    episode: 5,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "The-Last-Time-to-Look-on-This-World-of-Lies.html"
+                },
+                {
+                    title: "Herogasm",
+                    episode: 6,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "Herogasm.html"
+                },
+                {
+                    title: "Here Comes a Candle to Light You to Bed",
+                    episode: 7,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Here-Comes-a-Candle-to-Light-You-to-Bed.html"
+                },
+                {
+                    title: "The Instant White-Hot Wild",
+                    episode: 8,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "The-Instant-White-Hot-Wild.html"
+                }
+            ],
+            'season4': [
+                {
+                    title: "Department of Dirty Tricks",
+                    episode: 1,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Department-of-Dirty-Tricks.html"
+                },
+                {
+                    title: "Do You Know Who You Are?",
+                    episode: 2,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    link: "Do-You-Know-Who-You-Are.html"
+                },
+                {
+                    title: "Symptoms",
+                    episode: 3,
+                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    link: "Symptoms.html"
+                }
+            ]
+        };
+
+        function updateEpisodesList(season) {
+            const episodesList = document.querySelector('.episodes-list');
+            episodesList.innerHTML = '';
+            
+            episodes[season].forEach(ep => {
+                episodesList.innerHTML += `
+                    <div class="episode-card">
+                        <img src="${ep.thumbnail}" alt="Episode ${ep.episode}" class="episode-thumbnail">
+                        <div class="episode-info">
+                            <h3 class="episode-title">Season ${season.slice(-1)} Episode ${ep.episode}: ${ep.title}</h3>
+                            <a href="${ep.link}" class="watch-button">Watch Now</a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        const seasonTabs = document.querySelectorAll('.season-tab');
+        seasonTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                seasonTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const season = 'season' + tab.textContent.split(' ')[1];
+                updateEpisodesList(season);
+            });
+        });
+
+        function showEpisodes(showId) {
+            document.getElementById('episodesView').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            document.querySelector('.show-title-large').textContent = showId;
+            updateEpisodesList('season1');
+        }
+
+        function hideEpisodes() {
+            document.getElementById('episodesView').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
