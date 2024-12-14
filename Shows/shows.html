@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -39,14 +40,9 @@
             box-shadow: 0 4px 15px rgba(98, 0, 234, 0.3);
         }
 
-        .home-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(98, 0, 234, 0.4);
-        }
-
         .shows-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 30px;
             max-width: 1400px;
             margin: 60px auto 0;
@@ -56,16 +52,18 @@
             background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            transition: transform 0.3s ease;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .show-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(98, 0, 234, 0.3);
         }
 
         .show-poster {
             width: 100%;
-            height: 200px;
+            height: 350px;
             object-fit: cover;
         }
 
@@ -75,64 +73,132 @@
 
         .show-title {
             color: var(--secondary);
-            margin: 0 0 15px 0;
+            margin: 0;
             font-size: 1.4rem;
         }
 
-        .episodes-list {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease;
+        .episodes-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--dark);
+            z-index: 1001;
+            overflow-y: auto;
+            padding: 60px 20px 20px;
         }
 
-        .show-card:hover .episodes-list {
-            max-height: 500px;
-        }
-
-        .episode-item {
+        .show-header {
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            margin: 5px 0;
-            background: rgba(0,0,0,0.2);
-            border-radius: 8px;
-            transition: background 0.3s ease;
+            align-items: flex-end;
+            padding: 40px;
+            margin: -60px -20px 0;
         }
 
-        .episode-item:hover {
+        .show-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, var(--dark), transparent);
+        }
+
+        .seasons-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: var(--card-bg);
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .season-tab {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: var(--light);
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .season-tab.active {
             background: var(--primary);
         }
 
-        .episode-title {
-            flex-grow: 1;
-            margin-right: 15px;
-        }
-
-        .watch-btn {
-            background: var(--secondary);
-            color: var(--light);
-            text-decoration: none;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+        .episode-card {
+            display: flex;
+            gap: 20px;
+            background: var(--card-bg);
+            margin: 15px 0;
+            border-radius: 10px;
+            overflow: hidden;
             transition: transform 0.3s ease;
         }
 
-        .watch-btn:hover {
-            transform: scale(1.1);
+        .episode-card:hover {
+            transform: translateX(10px);
         }
 
-        .season-title {
-            color: var(--secondary);
-            margin: 15px 0 10px;
-            font-size: 1.1rem;
+        .episode-thumbnail {
+            width: 200px;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .episode-info {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .watch-button {
+            background: var(--primary);
+            color: var(--light);
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .watch-button:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            border: none;
+            color: var(--light);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 1002;
         }
 
         @media (max-width: 768px) {
             .shows-grid {
                 grid-template-columns: 1fr;
-                padding: 0 15px;
+            }
+
+            .episode-card {
+                flex-direction: column;
+            }
+
+            .episode-thumbnail {
+                width: 100%;
+                height: 200px;
             }
         }
     </style>
@@ -144,34 +210,64 @@
     </a>
 
     <div class="shows-grid">
-        <!-- Show Card Template -->
-        <div class="show-card">
-            <img src="https://example.com/show-poster.jpg" alt="Show Title" class="show-poster">
+        <div class="show-card" onclick="showEpisodes('The Boys')">
+            <img src="https://images.justwatch.com/poster/139452420/s718/season-1.%7Bformat%7D" alt="The Boys" class="show-poster">
             <div class="show-info">
-                <h2 class="show-title">Breaking Bad</h2>
-                <div class="episodes-list">
-                    <h3 class="season-title">Season 1</h3>
-                    <div class="episode-item">
-                        <span class="episode-title">Episode 1: Pilot</span>
-                        <a href="episode1.html" class="watch-btn">Watch</a>
-                    </div>
-                    <div class="episode-item">
-                        <span class="episode-title">Episode 2: Cat's in the Bag</span>
-                        <a href="episode2.html" class="watch-btn">Watch</a>
-                    </div>
-                    <!-- Add more episodes -->
-                </div>
+                <h2 class="show-title">The Boys</h2>
+                <div class="show-meta">4 Seasons • Action • Comedy • Crime • Drama • Sci-Fi</div>
             </div>
         </div>
+        <!-- Add more show cards -->
+    </div>
 
-        <!-- Add more show cards as needed -->
+    <div id="episodesView" class="episodes-view">
+        <button class="back-button" onclick="hideEpisodes()">Close</button>
+        <div class="show-header">
+            <h1 class="show-title-large">Show Title</h1>
+        </div>
+        <div class="seasons-tabs">
+            <button class="season-tab active">Season 1</button>
+            <button class="season-tab">Season 2</button>
+        </div>
+        <div class="episodes-list">
+            <div class="episode-card">
+                <img src="episode1.jpg" alt="Episode 1" class="episode-thumbnail">
+                <div class="episode-info">
+                    <h3 class="episode-title">Season 1 Episode 1: The Name of the Game</h3>
+                    <p></p>
+                    <a href="The-Name-of-the-Game.html" class="watch-button">Watch Now</a>
+                </div>
+            </div>
+            
+            <div class="episodes-list">
+            <div class="episode-card">
+                <img src="episode1.jpg" alt="Episode 2" class="episode-thumbnail">
+                <div class="episode-info">
+                    <h3 class="episode-title">Season 1 Episode 2: Cherry</h3>
+                    <p></p>
+                    <a href="Cherry.html" class="watch-button">Watch Now</a>
+                </div>
+            </div>
+            <!-- Add more episode cards -->
+        </div>
     </div>
 
     <script>
-        document.querySelectorAll('.show-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                const episodesList = card.querySelector('.episodes-list');
-                episodesList.style.maxHeight = episodesList.scrollHeight + "px";
+        function showEpisodes(showId) {
+            document.getElementById('episodesView').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideEpisodes() {
+            document.getElementById('episodesView').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        const seasonTabs = document.querySelectorAll('.season-tab');
+        seasonTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                seasonTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
             });
         });
     </script>
