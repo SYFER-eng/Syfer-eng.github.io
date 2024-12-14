@@ -1,26 +1,4 @@
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
-<!DOCTYPE html>
+🡹The Button above dose nothing🡹
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -75,10 +53,7 @@
 <body>
     <h1>Main Menu</h1>
     <div class="menu-container">
-        <a href="#" class="menu-button">Play Game</a>
-        <a href="#" class="menu-button">Settings</a>
-        <a href="#" class="menu-button">Credits</a>
-        <a href="index.html" class="menu-button">Back</a>
+        <a href="Menu.html" class="menu-button">Start Page</a>
     </div>
 </body>
 </html>
