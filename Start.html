@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieHub - Start Menu</title>
+    <style>
+        :root {
+            --primary: #6200ea;
+            --secondary: #b388ff;
+            --accent: #9c27b0;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--dark);
+            font-family: 'Segoe UI', sans-serif;
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                linear-gradient(rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.9)),
+                url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .menu-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .menu-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .menu-title {
+            font-size: 3.5rem;
+            color: var(--secondary);
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .menu-item {
+            background: rgba(45, 45, 45, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(179, 136, 255, 0.1);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+        }
+
+        .menu-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover .menu-icon {
+            transform: scale(1.1);
+        }
+
+        .menu-item-title {
+            font-size: 1.8rem;
+            color: var(--light);
+            margin: 10px 0;
+        }
+
+        .menu-item-description {
+            color: #bbb;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .menu-item-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: var(--light);
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .menu-item-link:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+
+        .stats {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .menu-container {
+                margin: 20px auto;
+            }
+            
+            .menu-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container">
+        <div class="menu-header">
+            <h1 class="menu-title">MovieHub</h1>
+        </div>
+
+        <div class="menu-grid">
+            <div class="menu-item">
+                <div class="menu-icon">🎬</div>
+                <h2 class="menu-item-title">Latest Movies</h2>
+                <p class="menu-item-description">Explore our collection of the newest blockbusters and indie films</p>
+                <a href="movies.html" class="menu-item-link">Browse Movies</a>
+                <div class="stats">500+ titles</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-icon">📺</div>
+                <h2 class="menu-item-title">TV Series</h2>
+                <p class="menu-item-description">Binge-watch your favorite shows and discover new series</p>
+                <a href="series.html" class="menu-item-link">Watch Series</a>
+                <div class="stats">200+ shows</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-icon">⭐</div>
+                <h2 class="menu-item-title">Top Rated</h2>
+                <p class="menu-item-description">Check out our highest-rated content picked by viewers</p>
+                <a href="top-rated.html" class="menu-item-link">View Best</a>
+                <div class="stats">4.8/5 avg</div>
+            </div>
+
+            <div class="menu-item">
+                <div class="menu-icon">🎭</div>
+                <h2 class="menu-item-title">Genres</h2>
+                <p class="menu-item-description">Find content by category - action, drama, comedy, and more</p>
+                <a href="genres.html" class="menu-item-link">Browse Genres</a>
+                <div class="stats">15+ genres</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('mousemove', (e) => {
+                const rect = item.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                item.style.background = `
+                    radial-gradient(circle at ${x}px ${y}px, 
+                    rgba(98, 0, 234, 0.2), 
+                    rgba(45, 45, 45, 0.8) 100px)
+                `;
+            });
+
+            item.addEventListener('mouseleave', () => {
+                item.style.background = 'rgba(45, 45, 45, 0.8)';
+            });
+        });
+    </script>
+</body>
+</html>
