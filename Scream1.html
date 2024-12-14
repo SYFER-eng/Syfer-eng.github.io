@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Movie Player</title>
+    <title>Premium Video Player</title>
     <style>
         :root {
             --primary: #6200ea;
@@ -23,109 +23,84 @@
             align-items: center;
         }
 
-        .ambient-container {
-            position: relative;
-            width: 90%;
-            max-width: 1400px;
-            aspect-ratio: 16/9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         .player-container {
-            position: relative;
             width: 80%;
-            height: 80%;
+            aspect-ratio: 16/9;
+            position: relative;
+            background: #2d2d2d;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(98, 0, 234, 0.5);
-            z-index: 2;
+            box-shadow: 0 0 30px rgba(98, 0, 234, 0.3);
         }
 
         .video-frame {
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 15px;
         }
 
-        .color-wave {
+        .glow-effect {
             position: absolute;
-            inset: -50px;
-            background: conic-gradient(
-                from 0deg,
-                #ff0000,
-                #ff8800,
-                #ffff00,
-                #00ff00,
-                #0000ff,
-                #8800ff,
-                #ff0000
-            );
-            filter: blur(50px);
-            opacity: 0.5;
-            animation: rotate 10s linear infinite;
-            z-index: 1;
-        }
-
-        .color-wave::after {
-            content: '';
-            position: absolute;
-            inset: 50px;
-            background: var(--dark);
-            border-radius: 15px;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .glow {
-            position: absolute;
-            inset: 0;
+            inset: -20px;
             background: radial-gradient(
                 circle at var(--x, 50%) var(--y, 50%),
-                rgba(98, 0, 234, 0.3) 0%,
+                rgba(98, 0, 234, 0.4),
                 transparent 50%
             );
-            z-index: 3;
-            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .player-container:hover .glow-effect {
+            opacity: 1;
+        }
+
+        .title-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            color: var(--light);
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .player-container:hover .title-bar {
+            opacity: 1;
         }
 
         @media (max-width: 768px) {
-            .ambient-container {
-                width: 95%;
-            }
             .player-container {
-                width: 90%;
-                height: 90%;
+                width: 95%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="ambient-container">
-        <div class="color-wave"></div>
-        <div class="player-container">
-            <iframe 
-                class="video-frame"
-                src="https://mega.nz/embed/oycVha7C#Q2oY-LI8nUjv98VbQPxTaY0CyCIOoGQjlUwOphyfQOU"
-                allowfullscreen>
-            </iframe>
-        </div>
-        <div class="glow"></div>
+    <div class="player-container">
+        <div class="title-bar">Now Playing: Premium Content</div>
+        <div class="glow-effect"></div>
+        <iframe 
+            class="video-frame"
+            src="YOUR_EMBED_LINK_HERE"
+            allowfullscreen>
+        </iframe>
     </div>
 
     <script>
-        const glow = document.querySelector('.glow');
-        document.addEventListener('mousemove', (e) => {
-            const rect = glow.getBoundingClientRect();
+        const container = document.querySelector('.player-container');
+        const glowEffect = document.querySelector('.glow-effect');
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
             const x = ((e.clientX - rect.left) / rect.width) * 100;
             const y = ((e.clientY - rect.top) / rect.height) * 100;
-            glow.style.setProperty('--x', `${x}%`);
-            glow.style.setProperty('--y', `${y}%`);
+            
+            glowEffect.style.setProperty('--x', `${x}%`);
+            glowEffect.style.setProperty('--y', `${y}%`);
         });
     </script>
 </body>
