@@ -1,19 +1,35 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start Button</title>
+    <title>Menu</title>
     <style>
         body {
             margin: 0;
             height: 100vh;
+            background-color: black;
+            color: #9932CC;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: black;
+            font-family: Arial, sans-serif;
         }
 
-        .start-button {
+        h1 {
+            font-size: 48px;
+            text-shadow: 0 0 10px #800080;
+            margin-bottom: 40px;
+        }
+
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .menu-button {
             padding: 15px 40px;
             font-size: 24px;
             font-weight: bold;
@@ -23,9 +39,11 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
         }
 
-        .start-button:hover {
+        .menu-button:hover {
             background-color: #9932CC;
             transform: scale(1.1);
             box-shadow: 0 0 20px #800080;
@@ -33,6 +51,12 @@
     </style>
 </head>
 <body>
-    <button class="start-button">START</button>
+    <h1>Main Menu</h1>
+    <div class="menu-container">
+        <a href="#" class="menu-button">Play Game</a>
+        <a href="#" class="menu-button">Settings</a>
+        <a href="#" class="menu-button">Credits</a>
+        <a href="index.html" class="menu-button">Back</a>
+    </div>
 </body>
 </html>
