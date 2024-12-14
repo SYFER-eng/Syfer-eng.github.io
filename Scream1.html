@@ -22,8 +22,14 @@
             align-items: center;
         }
 
-        .player-container {
+        .player-wrapper {
             width: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-container {
+            width: 100%;
             aspect-ratio: 16/9;
             position: relative;
             background: #2d2d2d;
@@ -38,69 +44,50 @@
             border: none;
         }
 
-        .glow-effect {
+        .home-button {
             position: absolute;
-            inset: -20px;
-            background: radial-gradient(
-                circle at var(--x, 50%) var(--y, 50%),
-                rgba(98, 0, 234, 0.4),
-                transparent 50%
-            );
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .player-container:hover .glow-effect {
-            opacity: 1;
-        }
-
-        .title-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 15px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            top: 20px;
+            left: 20px;
+            background: var(--primary);
             color: var(--light);
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 500;
+            z-index: 20;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .player-container:hover .title-bar {
-            opacity: 1;
+        .home-button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(98, 0, 234, 0.3);
         }
 
         @media (max-width: 768px) {
-            .player-container {
+            .player-wrapper {
                 width: 95%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="player-container">
-        <div class="title-bar">Now Playing: Premium Content</div>
-        <div class="glow-effect"></div>
-        <iframe 
-            class="video-frame"
-            src="YOUR_EMBED_LINK_HERE"
-            allowfullscreen>
-        </iframe>
+    <a href="movie.html" class="home-button">
+        <span>🏠</span>
+        Home
+    </a>
+
+    <div class="player-wrapper">
+        <div class="player-container">
+            <iframe 
+                class="video-frame"
+                src="https://mega.nz/embed/oycVha7C#Q2oY-LI8nUjv98VbQPxTaY0CyCIOoGQjlUwOphyfQOU"
+                allowfullscreen>
+            </iframe>
+        </div>
     </div>
-
-    <script>
-        const container = document.querySelector('.player-container');
-        const glowEffect = document.querySelector('.glow-effect');
-
-        container.addEventListener('mousemove', (e) => {
-            const rect = container.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width) * 100;
-            const y = ((e.clientY - rect.top) / rect.height) * 100;
-            
-            glowEffect.style.setProperty('--x', `${x}%`);
-            glowEffect.style.setProperty('--y', `${y}%`);
-        });
-    </script>
 </body>
 </html>
