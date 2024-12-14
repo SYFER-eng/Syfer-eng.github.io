@@ -1,1 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syfer-eng Premium Video Player</title>
+    <style>
+        :root {
+            --primary: #6200ea;
+            --secondary: #b388ff;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+        }
 
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--dark);
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .player-container {
+            width: 80%;
+            aspect-ratio: 16/9;
+            position: relative;
+            background: #2d2d2d;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(98, 0, 234, 0.3);
+        }
+
+        .video-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .glow-effect {
+            position: absolute;
+            inset: -20px;
+            background: radial-gradient(
+                circle at var(--x, 50%) var(--y, 50%),
+                rgba(98, 0, 234, 0.4),
+                transparent 50%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .player-container:hover .glow-effect {
+            opacity: 1;
+        }
+
+        .title-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+            color: var(--light);
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .player-container:hover .title-bar {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .player-container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="title-bar">Now Playing: Avengers Endgame</div>
+        <div class="glow-effect"></div>
+        <iframe 
+            class="video-frame"
+            src="https://drive.google.com/embed/d/18lbYQaJEW9ld5z9VNs9rViSgyQZKGIBx/view?usp=sharing" class="play-btn"
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    <script>
+        const container = document.querySelector('.player-container');
+        const glowEffect = document.querySelector('.glow-effect');
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            
+            glowEffect.style.setProperty('--x', `${x}%`);
+            glowEffect.style.setProperty('--y', `${y}%`);
+        });
+    </script>
+</body>
+</html>
