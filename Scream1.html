@@ -19,155 +19,113 @@
             font-family: 'Segoe UI', sans-serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-<style>
-    .player-container {
-        position: relative;
-        width: 80%;
-        max-width: 1200px;
-        height: 80vh;
-        margin: 50px auto;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(98, 0, 234, 0.3);
-    }
-
-    .video-frame {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: none;
-        border-radius: 15px;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .player-container {
-            width: 95%;
-            height: 70vh;
-            margin: 20px auto;
-        }
-    }
-</style>
-
-
-        .player-container:hover .controls-overlay {
-            opacity: 1;
-        }
-
-        .title-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 20px;
-            background: linear-gradient(rgba(0,0,0,0.8), transparent);
-            color: var(--light);
-            z-index: 10;
-        }
-
-        .movie-title {
-            font-size: 1.5rem;
-            margin: 0;
-            color: var(--secondary);
-        }
-
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: var(--primary);
-            color: var(--light);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 20;
-        }
-
-        .back-button:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
-
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--dark);
+        .ambient-container {
+            position: relative;
+            width: 90%;
+            max-width: 1400px;
+            aspect-ratio: 16/9;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 30;
         }
 
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--secondary);
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .player-container {
+            position: relative;
+            width: 80%;
+            height: 80%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(98, 0, 234, 0.5);
+            z-index: 2;
         }
 
-        @keyframes spin {
+        .video-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .color-wave {
+            position: absolute;
+            inset: -50px;
+            background: conic-gradient(
+                from 0deg,
+                #ff0000,
+                #ff8800,
+                #ffff00,
+                #00ff00,
+                #0000ff,
+                #8800ff,
+                #ff0000
+            );
+            filter: blur(50px);
+            opacity: 0.5;
+            animation: rotate 10s linear infinite;
+            z-index: 1;
+        }
+
+        .color-wave::after {
+            content: '';
+            position: absolute;
+            inset: 50px;
+            background: var(--dark);
+            border-radius: 15px;
+        }
+
+        @keyframes rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
+        .glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at var(--x, 50%) var(--y, 50%),
+                rgba(98, 0, 234, 0.3) 0%,
+                transparent 50%
+            );
+            z-index: 3;
+            pointer-events: none;
+        }
+
         @media (max-width: 768px) {
-            .movie-title {
-                font-size: 1.2rem;
+            .ambient-container {
+                width: 95%;
+            }
+            .player-container {
+                width: 90%;
+                height: 90%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="player-container">
-        <button class="back-button" onclick="window.location.href='movies.html'">← Back</button>
-        
-        <div class="title-bar">
-            <h1 class="movie-title">Now Playing: Premium Movie</h1>
+    <div class="ambient-container">
+        <div class="color-wave"></div>
+        <div class="player-container">
+            <iframe 
+                class="video-frame"
+                src="https://mega.nz/embed/oycVha7C#Q2oY-LI8nUjv98VbQPxTaY0CyCIOoGQjlUwOphyfQOU"
+                allowfullscreen>
+            </iframe>
         </div>
-
-        <iframe 
-            class="video-frame"
-            src="https://mega.nz/embed/oycVha7C#Q2oY-LI8nUjv98VbQPxTaY0CyCIOoGQjlUwOphyfQOU"
-            allowfullscreen>
-        </iframe>
-
-        <div class="controls-overlay">
-            <!-- Custom controls can be added here -->
-        </div>
-
-        <div class="loading-overlay">
-            <div class="loader"></div>
-        </div>
+        <div class="glow"></div>
     </div>
 
     <script>
-        window.onload = function() {
-            setTimeout(() => {
-                document.querySelector('.loading-overlay').style.display = 'none';
-            }, 1500);
-        }
-
-        // Fullscreen toggle
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'f' || e.key === 'F') {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen();
-                } else {
-                    document.exitFullscreen();
-                }
-            }
+        const glow = document.querySelector('.glow');
+        document.addEventListener('mousemove', (e) => {
+            const rect = glow.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            glow.style.setProperty('--x', `${x}%`);
+            glow.style.setProperty('--y', `${y}%`);
         });
     </script>
 </body>
