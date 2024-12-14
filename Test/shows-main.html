@@ -52,10 +52,8 @@
             background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
-            transition: all 0.3s ease;
             cursor: pointer;
-            text-decoration: none;
-            color: var(--light);
+            transition: all 0.3s ease;
         }
 
         .show-card:hover {
@@ -79,10 +77,129 @@
             font-size: 1.4rem;
         }
 
-        .show-meta {
-            margin-top: 10px;
-            color: #888;
-            font-size: 0.9rem;
+        .episodes-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--dark);
+            z-index: 1001;
+            overflow-y: auto;
+            padding: 60px 20px 20px;
+        }
+
+        .show-header {
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 40px;
+            margin: -60px -20px 0;
+        }
+
+        .show-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, var(--dark), transparent);
+        }
+
+        .seasons-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: var(--card-bg);
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .season-tab {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: var(--light);
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .season-tab.active {
+            background: var(--primary);
+        }
+
+        .episode-card {
+            display: flex;
+            gap: 20px;
+            background: var(--card-bg);
+            margin: 15px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .episode-card:hover {
+            transform: translateX(10px);
+        }
+
+        .episode-thumbnail {
+            width: 200px;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .episode-info {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .watch-button {
+            background: var(--primary);
+            color: var(--light);
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .watch-button:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            border: none;
+            color: var(--light);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        @media (max-width: 768px) {
+            .shows-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .episode-card {
+                flex-direction: column;
+            }
+
+            .episode-thumbnail {
+                width: 100%;
+                height: 200px;
+            }
         }
     </style>
 </head>
@@ -93,14 +210,56 @@
     </a>
 
     <div class="shows-grid">
-        <a href="breaking-bad-episodes.html" class="show-card">
-            <img src="breaking-bad-poster.jpg" alt="Breaking Bad" class="show-poster">
+        <div class="show-card" onclick="showEpisodes('breaking-bad')">
+            <img src="https://example.com/breaking-bad.jpg" alt="Breaking Bad" class="show-poster">
             <div class="show-info">
                 <h2 class="show-title">Breaking Bad</h2>
                 <div class="show-meta">5 Seasons • Drama</div>
             </div>
-        </a>
+        </div>
         <!-- Add more show cards -->
     </div>
+
+    <div id="episodesView" class="episodes-view">
+        <button class="back-button" onclick="hideEpisodes()">Close</button>
+        <div class="show-header">
+            <h1 class="show-title-large">Show Title</h1>
+        </div>
+        <div class="seasons-tabs">
+            <button class="season-tab active">Season 1</button>
+            <button class="season-tab">Season 2</button>
+        </div>
+        <div class="episodes-list">
+            <div class="episode-card">
+                <img src="episode1.jpg" alt="Episode 1" class="episode-thumbnail">
+                <div class="episode-info">
+                    <h3 class="episode-title">Episode 1: Pilot</h3>
+                    <p>Episode description goes here...</p>
+                    <a href="watch-episode.html" class="watch-button">Watch Now</a>
+                </div>
+            </div>
+            <!-- Add more episode cards -->
+        </div>
+    </div>
+
+    <script>
+        function showEpisodes(showId) {
+            document.getElementById('episodesView').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideEpisodes() {
+            document.getElementById('episodesView').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        const seasonTabs = document.querySelectorAll('.season-tab');
+        seasonTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                seasonTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
