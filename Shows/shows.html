@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Boys - TV Show Collection</title>
+    <title>TV Shows Collection</title>
     <style>
         :root {
             --primary: #6200ea;
@@ -11,6 +12,7 @@
             --light: #ffffff;
             --card-bg: #2d2d2d;
         }
+
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
@@ -18,6 +20,7 @@
             color: var(--light);
             padding: 20px;
         }
+
         .home-button {
             position: fixed;
             top: 20px;
@@ -36,6 +39,7 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(98, 0, 234, 0.3);
         }
+
         .shows-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -43,6 +47,7 @@
             max-width: 1400px;
             margin: 60px auto 0;
         }
+
         .show-card {
             background: var(--card-bg);
             border-radius: 15px;
@@ -50,28 +55,34 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
+
         .show-card:hover {
             transform: translateY(-10px) scale(1.02);
             box-shadow: 0 10px 20px rgba(98, 0, 234, 0.3);
         }
+
         .show-poster {
             width: 100%;
             height: 350px;
             object-fit: cover;
         }
+
         .show-info {
             padding: 20px;
         }
+
         .show-title {
             color: var(--secondary);
             margin: 0;
             font-size: 1.4rem;
         }
+
         .show-meta {
             margin-top: 8px;
             color: #888;
             font-size: 0.9rem;
         }
+
         .episodes-view {
             display: none;
             position: fixed;
@@ -84,6 +95,7 @@
             overflow-y: auto;
             padding: 60px 20px 20px;
         }
+
         .show-header {
             height: 400px;
             background-size: cover;
@@ -93,8 +105,8 @@
             align-items: flex-end;
             padding: 40px;
             margin: -60px -20px 0;
-            background-image: url('https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg');
         }
+
         .show-header::before {
             content: '';
             position: absolute;
@@ -104,12 +116,14 @@
             bottom: 0;
             background: linear-gradient(to top, var(--dark), transparent);
         }
+
         .show-title-large {
             position: relative;
             z-index: 1;
             font-size: 3rem;
             margin: 0;
         }
+
         .seasons-tabs {
             display: flex;
             gap: 10px;
@@ -119,6 +133,7 @@
             border-radius: 10px;
             overflow-x: auto;
         }
+
         .season-tab {
             padding: 10px 20px;
             border: none;
@@ -129,9 +144,11 @@
             transition: all 0.3s ease;
             white-space: nowrap;
         }
+
         .season-tab.active {
             background: var(--primary);
         }
+
         .episode-card {
             display: flex;
             gap: 20px;
@@ -141,22 +158,27 @@
             overflow: hidden;
             transition: transform 0.3s ease;
         }
+
         .episode-card:hover {
             transform: translateX(10px);
         }
+
         .episode-thumbnail {
             width: 200px;
             height: 120px;
             object-fit: cover;
         }
+
         .episode-info {
             padding: 20px;
             flex-grow: 1;
         }
+
         .episode-title {
             margin: 0 0 10px 0;
             color: var(--secondary);
         }
+
         .watch-button {
             background: var(--primary);
             color: var(--light);
@@ -167,10 +189,12 @@
             transition: all 0.3s ease;
             margin-top: 10px;
         }
+
         .watch-button:hover {
             background: var(--secondary);
             transform: scale(1.05);
         }
+
         .back-button {
             position: absolute;
             top: 20px;
@@ -184,10 +208,12 @@
             z-index: 1002;
             transition: all 0.3s ease;
         }
+
         .back-button:hover {
             background: var(--secondary);
             transform: scale(1.05);
         }
+
         @media (max-width: 768px) {
             .shows-grid {
                 grid-template-columns: 1fr;
@@ -206,402 +232,108 @@
     </style>
 </head>
 <body>
-    <a href="https://syfer-eng.github.io/Menu.html" class="home-button">
+    <a href="index.html" class="home-button">
         <span>🏠</span>
         Home
     </a>
-<div class="shows-grid">
-    <div class="show-card" onclick="showEpisodes('The Boys')">
-        <img src="https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg" alt="The Boys" class="show-poster">
-        <div class="show-info">
-            <h2 class="show-title">The Boys</h2>
-            <div class="show-meta">4 Seasons • Action • Comedy • Crime • Drama • Sci-Fi</div>
+
+    <div class="shows-grid">
+        <div class="show-card" onclick="showEpisodes('The Boys', 'boys-header.jpg')">
+            <img src="boys-poster.jpg" alt="The Boys" class="show-poster">
+            <div class="show-info">
+                <h2 class="show-title">The Boys</h2>
+                <div class="show-meta">4 Seasons • Action • Drama</div>
+            </div>
+        </div>
+        
+        <div class="show-card" onclick="showEpisodes('Pink Panther', 'panther-header.jpg')">
+            <img src="panther-poster.jpg" alt="Pink Panther" class="show-poster">
+            <div class="show-info">
+                <h2 class="show-title">Pink Panther</h2>
+                <div class="show-meta">Animation • Comedy</div>
+            </div>
         </div>
     </div>
-    
-    <div class="show-card" onclick="showEpisodes('Pink Panther')">
-        <img src="https://www.whatspaper.com/wp-content/uploads/2021/07/pink-panther-wallpaper-whatspaper-10.jpg" alt="Pink Panther" class="show-poster">
-        <div class="show-info">
-            <h2 class="show-title">Pink Panther</h2>
-            <div class="show-meta">Pink Panther</div>
-        </div>
-    </div>
-</div>
-    </div>
+
     <div id="episodesView" class="episodes-view">
         <button class="back-button" onclick="hideEpisodes()">Close</button>
         <div class="show-header">
-            <h1 class="show-title-large">The Boys</h1>
+            <h1 class="show-title-large"></h1>
         </div>
         <div class="seasons-tabs">
             <button class="season-tab active">Season 1</button>
             <button class="season-tab">Season 2</button>
             <button class="season-tab">Season 3</button>
             <button class="season-tab">Season 4</button>
-            <button class="season-tab">Season 5</button>
         </div>
         <div class="episodes-list"></div>
     </div>
+
     <script>
-        const episodes = {
-            'season1': [
-                {
-                    title: "The Name of the Game",
-                    episode: 1,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Name-of-the-Game.html"
-                },
-                {
-                    title: "Cherry",
-                    episode: 2,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Cherry.html"
-                },
-                {
-                    title: "Get Some",
-                    episode: 3,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Get-Some.html"
-                },
-                {
-                    title: "The Female of the Species",
-                    episode: 4,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Female-of-the-Species.html"
-                },
-                {
-                    title: "Good for the Soul",
-                    episode: 5,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Good-for-the-Soul.html"
-                },
-                {
-                    title: "The Innocents",
-                    episode: 6,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Innocents.html"
-                },
-                {
-                    title: "The Self-Preservation Society",
-                    episode: 7,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Self-Preservation-Society.html"
-                },
-                {
-                    title: "You Found Me",
-                    episode: 8,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/You-Found-Me.html"
+        const shows = {
+            'The Boys': {
+                seasons: true,
+                headerImage: 'boys-header.jpg',
+                episodes: {
+                    'season1': [/* Your existing The Boys episodes */],
+                    'season2': [/* Your existing The Boys episodes */],
+                    'season3': [/* Your existing The Boys episodes */],
+                    'season4': [/* Your existing The Boys episodes */]
                 }
-            ],
-            'season2': [
-                {
-                    title: "The Big Ride",
-                    episode: 1,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Big-Ride.html"
-                },
-                {
-                    title: "Proper Preparation and Planning",
-                    episode: 2,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Proper-Preparation-and-Planning.html"
-                },
-                {
-                    title: "Over the Hill with the Swords of a Thousand Men",
-                    episode: 3,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Over-the-Hill-with-the-Swords-of-a-Thousand-Men.html"
-                },
-                {
-                    title: "Nothing Like It in the World",
-                    episode: 4,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Nothing-Like-It-in-the-World.html"
-                },
-                {
-                    title: "We Gotta Go Now",
-                    episode: 5,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/We-Gotta-Go-Now.html"
-                },
-                {
-                    title: "The Bloody Doors Off",
-                    episode: 6,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Bloody-Doors-Off.html"
-                },
-                {
-                    title: "Butcher, Baker, Candlestick Maker",
-                    episode: 7,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Butcher-Baker-Candlestick-Maker.html"
-                },
-                {
-                    title: "What I Know",
-                    episode: 8,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/What-I-Know.html"
-                }
-            ],
-            'season3': [
-                {
-                    title: "Payback",
-                    episode: 1,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Payback.html"
-                },
-                {
-                    title: "The Only Man in the Sky",
-                    episode: 2,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Only-Man-in-the-Sky.html"
-                },
-                {
-                    title: "Barbary Coast",
-                    episode: 3,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Barbary-Coast.html"
-                },
-                {
-                    title: "Glorious Five Year Plan",
-                    episode: 4,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Glorious-Five-Year-Plan.html"
-                },
-                {
-                    title: "The Last Time to Look on This World of Lies",
-                    episode: 5,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Last-Time-to-Look-on-This-World-of-Lies.html"
-                },
-                {
-                    title: "Herogasm",
-                    episode: 6,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Herogasm.html"
-                },
-                {
-                    title: "Here Comes a Candle to Light You to Bed",
-                    episode: 7,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Here-Comes-a-Candle-to-Light-You-to-Bed.html"
-                },
-                {
-                    title: "The Instant White-Hot Wild",
-                    episode: 8,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Instant-White-Hot-Wild.html"
-                }
-            ],
-            'season4': [
-                {
-                    title: "Department of Dirty Tricks",
-                    episode: 1,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Department-of-Dirty-Tricks.html"
-                },
-                {
-                    title: "Life Among the Septics",
-                    episode: 2,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Life-Among-the-Septics.html"
-                },
-                {
-                    title: "We'll Keep the Red Flag Flying Here",
-                    episode: 3,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/We'll-Keep-the-Red-Flag-Flying-Herehtml.html"
-                },
-                {
-                    title: "Wisdom of the Ages",
-                    episode: 4,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Wisdom-of-the-Ages.html"
-                },
-                {
-                    title: "Beware the Jabberwock, My Son",
-                    episode: 5,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Beware-the-Jabberwock,-My-Son.html"
-                },
-                {
-                    title: "We'll Keep the Red Flag Flying Here",
-                    episode: 6,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Dirty-Business.html"
-                },
-                {
-                    title: "We'll Keep the Red Flag Flying Here",
-                    episode: 7,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/The-Insider.html"
-                },
-                {
-                    title: "We'll Keep the Red Flag Flying Here",
-                    episode: 8,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "The-Boys/Season-Four-Finale.html"
-                }
-             ],
-            'season5': [
-                {
-                    title: "The Big Ride",
-                    episode: 1,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "Shows Coming soon.html"
-                },
-                {
-                    title: "The Big Ride",
-                    episode: 2,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "Shows Coming soon.html"
-                },                {
-                    title: "The Big Ride",
-                    episode: 3,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "Shows Coming soon.html"
-                },                {
-                    title: "The Big Ride",
-                    episode: 4,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "Shows Coming soon.html"
-                },                {
-                    title: "The Big Ride",
-                    episode: 5,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "Shows Coming soon.html"
-                },                {
-                    title: "The Big Ride",
-                    episode: 6,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "Shows Coming soon.html"
-                },                {
-                    title: "The Big Ride",
-                    episode: 7,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "Shows Coming soon.html"
-                },                {
-                    title: "The Big Ride",
-                    episode: 8,
-                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
-                    link: "Shows Coming soon.html"
-                },
-            ]
+            },
+            'Pink Panther': {
+                seasons: false,
+                headerImage: 'panther-header.jpg',
+                episodes: [/* Your Pink Panther episodes */]
+            }
         };
 
+        function showEpisodes(showId, headerImage) {
+            const view = document.getElementById('episodesView');
+            const header = document.querySelector('.show-header');
+            const seasonTabs = document.querySelector('.seasons-tabs');
+            const title = document.querySelector('.show-title-large');
 
-</div>
-    </div>
-            <div id="episodesView" class="episodes-view">
-        <button class="back-button" onclick="hideEpisodes()">Close</button>
-        <div class="show-header">
-            <h1 class="show-title-large">Pink Panther</h1>
-        </div>
-        <div class="seasons-tabs">
-            <button class="season-tab active">Pink Panther</button>
-        </div>
-        <div class="episodes-list"></div>
-    </div>
-    <script>
-        
-     const episodes = {
-        'pinkPantherSeason1': [
-    {
-        title: "Pink Panther 1",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/1.html"
-    },
-    {
-        title: "Pink Panther 2",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/2.html"
-    },    {
-        title: "Pink Panther 3",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/3.html"
-    },    {
-        title: "Pink Panther 4",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/4.html"
-    },    {
-        title: "Pink Panther 5",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/5.html"
-    },    {
-        title: "Pink Panther 6",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/6.html"
-    },    {
-        title: "Pink Panther 7",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/7.html"
-    },    {
-        title: "Pink Panther 8",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/8.html"
-    },    {
-        title: "Pink Panther 9",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/9.html"
-    },
-    {
-        title: "Pink Panther 10",
-        episode: 1,
-        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
-        link: "Pink-Panther/10.html"
-    },
-    // Add more episodes as needed
-],
+            view.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            header.style.backgroundImage = `url(${headerImage})`;
+            title.textContent = showId;
 
-
-        function updateEpisodesList(season) {
-            const episodesList = document.querySelector('.episodes-list');
-            episodesList.innerHTML = '';
-            
-            episodes[season].forEach(ep => {
-                episodesList.innerHTML += `
-                    <div class="episode-card">
-                        <img src="${ep.thumbnail}" alt="Episode ${ep.episode}" class="episode-thumbnail">
-                        <div class="episode-info">
-                            <h3 class="episode-title">Season ${season.slice(-1)} Episode ${ep.episode}: ${ep.title}</h3>
-                            <a href="${ep.link}" class="watch-button">Watch Now</a>
-                        </div>
-                    </div>
-                `;
-            });
+            seasonTabs.style.display = shows[showId].seasons ? 'flex' : 'none';
+            updateEpisodesList(showId, shows[showId].seasons ? 'season1' : null);
         }
 
-        const seasonTabs = document.querySelectorAll('.season-tab');
-        seasonTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                seasonTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                const season = 'season' + tab.textContent.split(' ')[1];
-                updateEpisodesList(season);
-            });
-        });
+        function updateEpisodesList(showId, season) {
+            const episodesList = document.querySelector('.episodes-list');
+            const episodes = season ? 
+                shows[showId].episodes[season] : 
+                shows[showId].episodes;
 
-        function showEpisodes(showId) {
-            document.getElementById('episodesView').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            document.querySelector('.show-title-large').textContent = showId;
-            updateEpisodesList('season1');
+            episodesList.innerHTML = episodes.map(ep => `
+                <div class="episode-card">
+                    <img src="${ep.thumbnail}" alt="${ep.title}" class="episode-thumbnail">
+                    <div class="episode-info">
+                        <h3 class="episode-title">${ep.title}</h3>
+                        <a href="${ep.link}" class="watch-button">Watch Now</a>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function hideEpisodes() {
             document.getElementById('episodesView').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
+
+        document.querySelectorAll('.season-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('.season-tab').forEach(t => 
+                    t.classList.remove('active'));
+                e.target.classList.add('active');
+                const season = 'season' + e.target.textContent.split(' ')[1];
+                updateEpisodesList('The Boys', season);
+            });
+        });
     </script>
 </body>
 </html>
