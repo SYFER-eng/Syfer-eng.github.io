@@ -210,14 +210,23 @@
         <span>🏠</span>
         Home
     </a>
-    <div class="shows-grid">
-        <div class="show-card" onclick="showEpisodes('The Boys')">
-            <img src="https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg" alt="The Boys" class="show-poster">
-            <div class="show-info">
-                <h2 class="show-title">The Boys</h2>
-                <div class="show-meta">4 Seasons • Action • Comedy • Crime • Drama • Sci-Fi</div>
-            </div>
+<div class="shows-grid">
+    <div class="show-card" onclick="showEpisodes('The Boys')">
+        <img src="https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg" alt="The Boys" class="show-poster">
+        <div class="show-info">
+            <h2 class="show-title">The Boys</h2>
+            <div class="show-meta">4 Seasons • Action • Comedy • Crime • Drama • Sci-Fi</div>
         </div>
+    </div>
+    
+    <div class="show-card" onclick="showEpisodes('Pink Panther')">
+        <img src="https://m.media-amazon.com/images/M/MV5BNDYxNWUzZmYtOGQxMC00MTdkLTkxOTctYzkyOGIwNWQxZjhmXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg" alt="Pink Panther" class="show-poster">
+        <div class="show-info">
+            <h2 class="show-title">Pink Panther</h2>
+            <div class="show-meta">5 Seasons • Animation • Comedy • Family</div>
+        </div>
+    </div>
+</div>
     </div>
     <div id="episodesView" class="episodes-view">
         <button class="back-button" onclick="hideEpisodes()">Close</button>
@@ -480,6 +489,64 @@
                 },
             ]
         };
+
+        'pinkPantherSeason1': [
+    {
+        title: "Pink Panther 1",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/1.html"
+    },
+    {
+        title: "Pink Panther 2",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/2.html"
+    },    {
+        title: "Pink Panther 3",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/3.html"
+    },    {
+        title: "Pink Panther 4",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/4.html"
+    },    {
+        title: "Pink Panther 5",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/5.html"
+    },    {
+        title: "Pink Panther 6",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/6.html"
+    },    {
+        title: "Pink Panther 7",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/7.html"
+    },    {
+        title: "Pink Panther 8",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/8.html"
+    },    {
+        title: "Pink Panther 9",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/9.html"
+    },
+    {
+        title: "Pink Panther 10",
+        episode: 1,
+        thumbnail: "https://th.bing.com/th/id/OIP.gaPWwla62Z-jYB6jLwDAYwHaJ3?rs=1&pid=ImgDetMain",
+        link: "Pink-Panther/10.html"
+    },
+    // Add more episodes as needed
+],
+
 
         function updateEpisodesList(season) {
             const episodesList = document.querySelector('.episodes-list');
