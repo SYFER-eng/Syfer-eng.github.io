@@ -27,7 +27,6 @@
             width: 80%;
             display: flex;
             flex-direction: column;
-            gap: 20px;
         }
 
         .player-container {
@@ -44,85 +43,6 @@
             width: 100%;
             height: 100%;
             border: none;
-        }
-
-        .controls-panel {
-            background: rgba(45, 45, 45, 0.9);
-            padding: 15px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .control-button {
-            background: var(--primary);
-            border: none;
-            color: var(--light);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 10px;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .control-button:hover {
-            background: var(--secondary);
-            transform: scale(1.1);
-        }
-
-        .progress-container {
-            flex-grow: 1;
-            padding: 0 15px;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 3px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .progress {
-            width: 0%;
-            height: 100%;
-            background: var(--secondary);
-            border-radius: 3px;
-            transition: width 0.1s linear;
-            position: relative;
-        }
-
-        .progress::after {
-            content: '';
-            position: absolute;
-            right: -5px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 10px;
-            height: 10px;
-            background: var(--light);
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .progress-bar:hover .progress::after {
-            opacity: 1;
-        }
-
-        .time-display {
-            color: var(--light);
-            font-size: 0.9rem;
-            min-width: 100px;
-            text-align: center;
         }
 
         .home-button {
@@ -152,17 +72,6 @@
             .player-wrapper {
                 width: 95%;
             }
-            
-            .control-button {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-            }
-
-            .time-display {
-                font-size: 0.8rem;
-                min-width: 80px;
-            }
         }
     </style>
 </head>
@@ -180,69 +89,6 @@
                 allowfullscreen>
             </iframe>
         </div>
-
-        <div class="controls-panel">
-            <button class="control-button play-pause">▶</button>
-            <button class="control-button volume">🔊</button>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress"></div>
-                </div>
-            </div>
-            <div class="time-display">00:00 / 00:00</div>
-            <button class="control-button fullscreen">⛶</button>
-        </div>
     </div>
-
-    <script>
-        const playerWrapper = document.querySelector('.player-wrapper');
-        const videoFrame = document.querySelector('.video-frame');
-        const playPauseBtn = document.querySelector('.play-pause');
-        const volumeBtn = document.querySelector('.volume');
-        const fullscreenBtn = document.querySelector('.fullscreen');
-        const progressBar = document.querySelector('.progress-bar');
-        const progress = document.querySelector('.progress');
-        const timeDisplay = document.querySelector('.time-display');
-        let isPlaying = false;
-        let isMuted = false;
-
-        playPauseBtn.addEventListener('click', () => {
-            isPlaying = !isPlaying;
-            playPauseBtn.textContent = isPlaying ? '⏸' : '▶';
-        });
-
-        volumeBtn.addEventListener('click', () => {
-            isMuted = !isMuted;
-            volumeBtn.textContent = isMuted ? '🔇' : '🔊';
-        });
-
-        fullscreenBtn.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                playerWrapper.requestFullscreen();
-            } else {
-                document.exitFullscreen();
-            }
-        });
-
-        progressBar.addEventListener('click', (e) => {
-            const rect = progressBar.getBoundingClientRect();
-            const pos = (e.clientX - rect.left) / rect.width;
-            progress.style.width = `${pos * 100}%`;
-        });
-
-        // Example progress update
-        setInterval(() => {
-            const currentTime = 0; // Replace with actual current time
-            const duration = 100; // Replace with actual duration
-            progress.style.width = `${(currentTime / duration) * 100}%`;
-            timeDisplay.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
-        }, 1000);
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = Math.floor(seconds % 60);
-            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-        }
-    </script>
 </body>
 </html>
