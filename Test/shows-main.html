@@ -12,7 +12,6 @@
             --light: #ffffff;
             --card-bg: #2d2d2d;
         }
-
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
@@ -20,7 +19,6 @@
             color: var(--light);
             padding: 20px;
         }
-
         .home-button {
             position: fixed;
             top: 20px;
@@ -39,7 +37,6 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(98, 0, 234, 0.3);
         }
-
         .shows-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -47,7 +44,6 @@
             max-width: 1400px;
             margin: 60px auto 0;
         }
-
         .show-card {
             background: var(--card-bg);
             border-radius: 15px;
@@ -55,34 +51,28 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
         .show-card:hover {
             transform: translateY(-10px) scale(1.02);
             box-shadow: 0 10px 20px rgba(98, 0, 234, 0.3);
         }
-
         .show-poster {
             width: 100%;
             height: 350px;
             object-fit: cover;
         }
-
         .show-info {
             padding: 20px;
         }
-
         .show-title {
             color: var(--secondary);
             margin: 0;
             font-size: 1.4rem;
         }
-
         .show-meta {
             margin-top: 8px;
             color: #888;
             font-size: 0.9rem;
         }
-
         .episodes-view {
             display: none;
             position: fixed;
@@ -95,7 +85,6 @@
             overflow-y: auto;
             padding: 60px 20px 20px;
         }
-
         .show-header {
             height: 400px;
             background-size: cover;
@@ -105,9 +94,8 @@
             align-items: flex-end;
             padding: 40px;
             margin: -60px -20px 0;
-            background-image: url('https://images.justwatch.com/poster/139452420/s718/season-1.%7Bformat%7D');
+            background-image: url('https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg');
         }
-
         .show-header::before {
             content: '';
             position: absolute;
@@ -117,14 +105,12 @@
             bottom: 0;
             background: linear-gradient(to top, var(--dark), transparent);
         }
-
         .show-title-large {
             position: relative;
             z-index: 1;
             font-size: 3rem;
             margin: 0;
         }
-
         .seasons-tabs {
             display: flex;
             gap: 10px;
@@ -134,7 +120,6 @@
             border-radius: 10px;
             overflow-x: auto;
         }
-
         .season-tab {
             padding: 10px 20px;
             border: none;
@@ -145,11 +130,9 @@
             transition: all 0.3s ease;
             white-space: nowrap;
         }
-
         .season-tab.active {
             background: var(--primary);
         }
-
         .episode-card {
             display: flex;
             gap: 20px;
@@ -159,27 +142,22 @@
             overflow: hidden;
             transition: transform 0.3s ease;
         }
-
         .episode-card:hover {
             transform: translateX(10px);
         }
-
         .episode-thumbnail {
             width: 200px;
             height: 120px;
             object-fit: cover;
         }
-
         .episode-info {
             padding: 20px;
             flex-grow: 1;
         }
-
         .episode-title {
             margin: 0 0 10px 0;
             color: var(--secondary);
         }
-
         .watch-button {
             background: var(--primary);
             color: var(--light);
@@ -190,12 +168,10 @@
             transition: all 0.3s ease;
             margin-top: 10px;
         }
-
         .watch-button:hover {
             background: var(--secondary);
             transform: scale(1.05);
         }
-
         .back-button {
             position: absolute;
             top: 20px;
@@ -209,26 +185,21 @@
             z-index: 1002;
             transition: all 0.3s ease;
         }
-
         .back-button:hover {
             background: var(--secondary);
             transform: scale(1.05);
         }
-
         @media (max-width: 768px) {
             .shows-grid {
                 grid-template-columns: 1fr;
             }
-
             .episode-card {
                 flex-direction: column;
             }
-
             .episode-thumbnail {
                 width: 100%;
                 height: 200px;
             }
-
             .show-title-large {
                 font-size: 2rem;
             }
@@ -240,17 +211,15 @@
         <span>🏠</span>
         Home
     </a>
-
     <div class="shows-grid">
         <div class="show-card" onclick="showEpisodes('The Boys')">
-            <img src="https://images.justwatch.com/poster/139452420/s718/season-1.%7Bformat%7D" alt="The Boys" class="show-poster">
+            <img src="https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg" alt="The Boys" class="show-poster">
             <div class="show-info">
                 <h2 class="show-title">The Boys</h2>
                 <div class="show-meta">4 Seasons • Action • Comedy • Crime • Drama • Sci-Fi</div>
             </div>
         </div>
     </div>
-
     <div id="episodesView" class="episodes-view">
         <button class="back-button" onclick="hideEpisodes()">Close</button>
         <div class="show-header">
@@ -264,56 +233,55 @@
         </div>
         <div class="episodes-list"></div>
     </div>
-
     <script>
         const episodes = {
             'season1': [
                 {
                     title: "The Name of the Game",
                     episode: 1,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "The-Name-of-the-Game.html"
                 },
                 {
                     title: "Cherry",
                     episode: 2,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Cherry.html"
                 },
                 {
                     title: "Get Some",
                     episode: 3,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Get-Some.html"
                 },
                 {
                     title: "The Female of the Species",
                     episode: 4,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk0OWNiZjktZmM5NC00ZjNiLTg4YjAtZDY1NjM4NjQ3MjY4XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "The-Female-of-the-Species.html"
                 },
                 {
                     title: "Good for the Soul",
                     episode: 5,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Good-for-the-Soul.html"
                 },
                 {
                     title: "The Innocents",
                     episode: 6,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "The-Innocents.html"
                 },
                 {
                     title: "The Self-Preservation Society",
                     episode: 7,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "The-Self-Preservation-Society.html"
                 },
                 {
                     title: "You Found Me",
                     episode: 8,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "You-Found-Me.html"
                 }
             ],
@@ -321,49 +289,49 @@
                 {
                     title: "The Big Ride",
                     episode: 1,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BYmU3OGFhZDItMjhlZi00ZjY4LTg2YzUtOWIxZGU5YmVjM2YyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "The-Big-Ride.html"
                 },
                 {
                     title: "Proper Preparation and Planning",
                     episode: 2,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Proper-Preparation-and-Planning.html"
                 },
                 {
                     title: "Over the Hill with the Swords of a Thousand Men",
                     episode: 3,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Over-the-Hill-with-the-Swords-of-a-Thousand-Men.html"
                 },
                 {
                     title: "Nothing Like It in the World",
                     episode: 4,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Nothing-Like-It-in-the-World.html"
                 },
                 {
                     title: "We Gotta Go Now",
                     episode: 5,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "We-Gotta-Go-Now.html"
                 },
                 {
                     title: "The Bloody Doors Off",
                     episode: 6,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "The-Bloody-Doors-Off.html"
                 },
-                                {
+                {
                     title: "Butcher, Baker, Candlestick Maker",
                     episode: 7,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Butcher-Baker-Candlestick-Maker.html"
                 },
                 {
                     title: "What I Know",
                     episode: 8,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "What-I-Know.html"
                 }
             ],
@@ -371,49 +339,49 @@
                 {
                     title: "Payback",
                     episode: 1,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Payback.html"
                 },
                 {
                     title: "The Only Man in the Sky",
                     episode: 2,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "The-Only-Man-in-the-Sky.html"
                 },
                 {
                     title: "Barbary Coast",
                     episode: 3,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Barbary-Coast.html"
                 },
                 {
                     title: "Glorious Five Year Plan",
                     episode: 4,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Glorious-Five-Year-Plan.html"
                 },
                 {
                     title: "The Last Time to Look on This World of Lies",
                     episode: 5,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "The-Last-Time-to-Look-on-This-World-of-Lies.html"
                 },
                 {
                     title: "Herogasm",
                     episode: 6,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Herogasm.html"
                 },
                 {
                     title: "Here Comes a Candle to Light You to Bed",
                     episode: 7,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Here-Comes-a-Candle-to-Light-You-to-Bed.html"
                 },
                 {
                     title: "The Instant White-Hot Wild",
                     episode: 8,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BOTEyNDJhMDAtY2U5ZS00OTMzLTkwODktMjU3MjFkZWVlMGYyXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "The-Instant-White-Hot-Wild.html"
                 }
             ],
@@ -421,19 +389,19 @@
                 {
                     title: "Department of Dirty Tricks",
                     episode: 1,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzY1NDE2MzItMGJlMi00ZTM0LWFiYjItYjZlYzNhOWZmZTBiXkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Department-of-Dirty-Tricks.html"
                 },
                 {
                     title: "Do You Know Who You Are?",
                     episode: 2,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BMTU0NzI5ODc3N15BMl5BanBnXkFtZTgwODE3ODgwNzM@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Do-You-Know-Who-You-Are.html"
                 },
                 {
                     title: "Symptoms",
                     episode: 3,
-                    thumbnail: "https://m.media-amazon.com/images/M/MV5BNzk3ZTQ0MzEtNmZkNS00NzZlLTg3NDgtNjEwZjg3MDI3NjE1XkEyXkFqcGdeQXVyMTkxNjUyNQ@@._V1_.jpg",
+                    thumbnail: "https://storage.googleapis.com/stc.zcdn.link/hdf/3/ec/1738228038458157889/poster-org-1604074807866-the.boys.season1-poster.jpg",
                     link: "Symptoms.html"
                 }
             ]
