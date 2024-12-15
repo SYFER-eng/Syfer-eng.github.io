@@ -3,388 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futurama - TV Show Collection</title>
+    <title>The Boys - TV Show Collection</title>
     <style>
+        /* Using the same CSS as your original code */
         :root {
-            --primary: #ff6b00;
-            --secondary: #ffa563;
+            --primary: #6200ea;
+            --secondary: #b388ff;
             --dark: #1a1a1a;
             --light: #ffffff;
             --card-bg: #2d2d2d;
         }
-        /* Rest of the CSS remains the same, just updated colors to match Futurama theme */
+        /* Rest of your CSS remains the same */
     </style>
 </head>
 <body>
-    <a href="https://syfer-eng.github.io/Menu.html" class="home-button">
+    <a href="index.html" class="home-button">
         <span>🏠</span>
         Home
     </a>
+
     <div class="shows-grid">
-        <div class="show-card" onclick="showEpisodes('Futurama')">
-            <img src="https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg" alt="Futurama" class="show-poster">
+        <div class="show-card" onclick="showEpisodes('The Boys')">
+            <img src="boys-poster.jpg" alt="The Boys" class="show-poster">
             <div class="show-info">
-                <h2 class="show-title">Futurama</h2>
-                <div class="show-meta">10 Seasons • Animation • Comedy • Sci-Fi</div>
+                <h2 class="show-title">The Boys</h2>
+                <div class="show-meta">4 Seasons • Action • Drama</div>
             </div>
         </div>
     </div>
+
     <div id="episodesView" class="episodes-view">
         <button class="back-button" onclick="hideEpisodes()">Close</button>
         <div class="show-header">
-            <h1 class="show-title-large">Futurama</h1>
+            <h1 class="show-title-large">The Boys</h1>
         </div>
         <div class="seasons-tabs">
             <button class="season-tab active">Season 1</button>
             <button class="season-tab">Season 2</button>
             <button class="season-tab">Season 3</button>
             <button class="season-tab">Season 4</button>
-            <button class="season-tab">Season 5</button>
-            <button class="season-tab">Season 6</button>
-            <button class="season-tab">Season 7</button>
-            <button class="season-tab">Season 8</button>
-            <button class="season-tab">Season 9</button>
-            <button class="season-tab">Season 10</button>
         </div>
         <div class="episodes-list"></div>
     </div>
+
     <script>
-        const episodes = {
-                'season1': [
-                    {
-                        title: "Space Pilot 3000",
-                        episode: 1,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "Space-Pilot-3000.html"
-                    },
-                    {
-                        title: "The Series Has Landed",
-                        episode: 2,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "The-Series-Has-Landed.html"
-                    },
-                    {
-                        title: "I, Roommate",
-                        episode: 3,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "I-Roommate.html"
-                    },
-                    {
-                        title: "Love's Labours Lost in Space",
-                        episode: 4,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "Loves-Labours-Lost-in-Space.html"
-                    },
-                    {
-                        title: "Fear of a Bot Planet",
-                        episode: 5,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "Fear-of-a-Bot-Planet.html"
-                    },
-                    {
-                        title: "A Fishful of Dollars",
-                        episode: 6,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "A-Fishful-of-Dollars.html"
-                    },
-                    {
-                        title: "My Three Suns",
-                        episode: 7,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "My-Three-Suns.html"
-                    },
-                    {
-                        title: "A Big Piece of Garbage",
-                        episode: 8,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "A-Big-Piece-of-Garbage.html"
-                    },
-                    {
-                        title: "Hell Is Other Robots",
-                        episode: 9,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "Hell-Is-Other-Robots.html"
-                    }
-                ],
-                'season2': [
-                    {
-                        title: "A Flight to Remember",
-                        episode: 1,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "A-Flight-to-Remember.html"
-                    },
-                    {
-                        title: "Mars University",
-                        episode: 2,
-                        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-                        link: "Mars-University.html"
-                    },
-    {
-        title: "When Aliens Attack",
-        episode: 3,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "When-Aliens-Attack.html"
-    },
-    {
-        title: "Fry and the Slurm Factory",
-        episode: 4,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Fry-and-the-Slurm-Factory.html"
-    },
-    {
-        title: "I Second That Emotion",
-        episode: 5,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "I-Second-That-Emotion.html"
-    },
-    {
-        title: "Brannigan, Begin Again",
-        episode: 6,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Brannigan-Begin-Again.html"
-    }
-],
-'season3': [
-    {
-        title: "Amazon Women in the Mood",
-        episode: 1,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Amazon-Women-in-the-Mood.html"
-    },
-    {
-        title: "Parasites Lost",
-        episode: 2,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Parasites-Lost.html"
-    },
-    {
-        title: "A Tale of Two Santas",
-        episode: 3,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "A-Tale-of-Two-Santas.html"
-    },
-    {
-        title: "The Luck of the Fryrish",
-        episode: 4,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "The-Luck-of-the-Fryrish.html"
-    },
-    {
-        title: "The Birdbot of Ice-Catraz",
-        episode: 5,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "The-Birdbot-of-Ice-Catraz.html"
-    }
-],
-'season4': [
-    {
-        title: "Roswell That Ends Well",
-        episode: 1,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Roswell-That-Ends-Well.html"
-    },
-    {
-        title: "Godfellas",
-        episode: 2,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Godfellas.html"
-    },
-    {
-        title: "Future Stock",
-        episode: 3,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Future-Stock.html"
-    },
-    {
-        title: "The Why of Fry",
-        episode: 4,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "The-Why-of-Fry.html"
-    },
-    {
-        title: "Where No Fan Has Gone Before",
-        episode: 5,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Where-No-Fan-Has-Gone-Before.html"
-    }
-],
-'season5': [
-    {
-        title: "Crimes of the Hot",
-        episode: 1,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Crimes-of-the-Hot.html"
-    },
-    {
-        title: "Jurassic Bark",
-        episode: 2,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Jurassic-Bark.html"
-    },
-    {
-        title: "The Route of All Evil",
-        episode: 3,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "The-Route-of-All-Evil.html"
-    },
-    {
-        title: "A Taste of Freedom",
-        episode: 4,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "A-Taste-of-Freedom.html"
-    },
-    {
-        title: "Bender Should Not Be Allowed on Television",
-        episode: 5,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Bender-Should-Not-Be-Allowed-on-Television.html"
-    }
-],
-'season6': [
-    {
-        title: "Bender's Big Score Part 1",
-        episode: 1,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Benders-Big-Score-Part-1.html"
-    },
-    {
-        title: "Bender's Big Score Part 2",
-        episode: 2,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Benders-Big-Score-Part-2.html"
-    },
-    {
-        title: "Bender's Big Score Part 3",
-        episode: 3,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Benders-Big-Score-Part-3.html"
-    },
-    {
-        title: "Bender's Big Score Part 4",
-        episode: 4,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Benders-Big-Score-Part-4.html"
-    },
-    {
-        title: "The Beast with a Billion Backs Part 1",
-        episode: 5,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "The-Beast-with-a-Billion-Backs-Part-1.html"
-    }
-],
-'season7': [
-    {
-        title: "Rebirth",
-        episode: 1,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Rebirth.html"
-    },
-    {
-        title: "In-A-Gadda-Da-Leela",
-        episode: 2,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "In-A-Gadda-Da-Leela.html"
-    },
-]
-'season8': [
-    {
-        title: "The Mutants Are Revolting",
-        episode: 1,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "The-Mutants-Are-Revolting.html"
-    },
-    {
-        title: "The Futurama Holiday Spectacular",
-        episode: 2,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "The-Futurama-Holiday-Spectacular.html"
-    },
-    {
-        title: "Neutopia",
-        episode: 3,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Neutopia.html"
-    },
-    {
-        title: "Benderama",
-        episode: 4,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Benderama.html"
-    },
-    {
-        title: "Ghost in the Machines",
-        episode: 5,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Ghost-in-the-Machines.html"
-    },
-    {
-        title: "Law and Oracle",
-        episode: 6,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Law-and-Oracle.html"
-    }
-],
-'season9': [
-    {
-        title: "The Silence of the Clamps",
-        episode: 1,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "The-Silence-of-the-Clamps.html"
-    },
-    {
-        title: "Möbius Dick",
-        episode: 2,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Mobius-Dick.html"
-    },
-    {
-        title: "All the Presidents' Heads",
-        episode: 3,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "All-the-Presidents-Heads.html"
-    },
-    {
-        title: "Cold Warriors",
-        episode: 4,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Cold-Warriors.html"
-    },
-    {
-        title: "Overclockwise",
-        episode: 5,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Overclockwise.html"
-    }
-],
-'season10': [
-    {
-        title: "Meanwhile",
-        episode: 1,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Meanwhile.html"
-    },
-    {
-        title: "Stench and Stenchibility",
-        episode: 2,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Stench-and-Stenchibility.html"
-    },
-    {
-        title: "Forty Percent Leadbelly",
-        episode: 3,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Forty-Percent-Leadbelly.html"
-    },
-    {
-        title: "Game of Tones",
-        episode: 4,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Game-of-Tones.html"
-    },
-    {
-        title: "Murder on the Planet Express",
-        episode: 5,
-        thumbnail: "https://m.media-amazon.com/images/M/MV5BNzA2ZDk2ZTUtMWU2Yi00NDVmLTk1ODEtMmFmMjQyNWYzODI0XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_.jpg",
-        link: "Murder-on-the-Planet-Express.html"
-    }
-]
+        const shows = {
+            'The Boys': {
+                seasons: true,
+                headerImage: 'boys-header.jpg',
+                episodes: {
+                    season1: [
+                        {
+                            title: "S1E1: The Name of the Game",
+                            thumbnail: "s1e1.jpg",
+                            link: "#episode1",
+                            description: "Hughie Campbell's life changes when a superhero accidentally kills his girlfriend."
+                        },
+                        {
+                            title: "S1E2: Cherry",
+                            thumbnail: "s1e2.jpg",
+                            link: "#episode2",
+                            description: "The Boys get themselves a Superhero; Starlight gets payback against the Deep."
+                        },
+                        {
+                            title: "S1E3: Get Some",
+                            thumbnail: "s1e3.jpg",
+                            link: "#episode3",
+                            description: "The Boys head to the "Believe" Expo to follow a promising lead in their ongoing war against the Supes."
+                        }
+                        // Add more episodes as needed
+                    ],
+                    season2: [
+                        {
+                            title: "S2E1: The Big Ride",
+                            thumbnail: "s2e1.jpg",
+                            link: "#episode1",
+                            description: "The Boys are on the run from the law, trying to fight back against the Supes."
+                        },
+                        {
+                            title: "S2E2: Proper Preparation and Planning",
+                            thumbnail: "s2e2.jpg",
+                            link: "#episode2",
+                            description: "The Boys take to the high seas to safeguard their prisoner."
+                        },
+                        {
+                            title: "S2E3: Over the Hill with the Swords of a Thousand Men",
+                            thumbnail: "s2e3.jpg",
+                            link: "#episode3",
+                            description: "The Boys take to the high seas to safeguard their prisoner."
+                        }
+                        // Add more episodes as needed
+                    ],
+                    season3: [
+                        {
+                            title: "S3E1: Payback",
+                            thumbnail: "s3e1.jpg",
+                            link: "#episode1",
+                            description: "It's been a year of calm. Homelander's subdued. Butcher works for the government."
+                        },
+                        {
+                            title: "S3E2: The Only Man in the Sky",
+                            thumbnail: "s3e2.jpg",
+                            link: "#episode2",
+                            description: "Butcher discovers that a Supe-killing weapon may be within reach."
+                        },
+                        {
+                            title: "S3E3: Barbary Coast",
+                            thumbnail: "s3e3.jpg",
+                            link: "#episode3",
+                            description: "Soldier Boy's origin story is revealed as Hughie and Butcher track down a lead."
+                        }
+                        // Add more episodes as needed
+                    ],
+                    season4: [
+                        {
+                            title: "S4E1: Department of Dirty Tricks",
+                            thumbnail: "s4e1.jpg",
+                            link: "#episode1",
+                            description: "The world is on the brink as Homelander's influence grows."
+                        },
+                        {
+                            title: "S4E2: Two Days of Blood",
+                            thumbnail: "s4e2.jpg",
+                            link: "#episode2",
+                            description: "Butcher faces a difficult choice while Hughie uncovers a shocking truth."
+                        },
+                        {
+                            title: "S4E3: Shock and Awe",
+                            thumbnail: "s4e3.jpg",
+                            link: "#episode3",
+                            description: "The Boys must make a final stand against Vought's forces."
+                        }
+                        // Add more episodes as needed
+                    ]
+                }
+            }
+        };
+
+        function showEpisodes(showId) {
+            const view = document.getElementById('episodesView');
+            const header = document.querySelector('.show-header');
+            view.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            updateEpisodesList(showId, 'season1');
+        }
+
+        function updateEpisodesList(showId, season) {
+            const episodesList = document.querySelector('.episodes-list');
+            const episodes = shows[showId].episodes[season];
+            
+            episodesList.innerHTML = episodes.map(ep => `
+                <div class="episode-card">
+                    <img src="${ep.thumbnail}" alt="${ep.title}" class="episode-thumbnail">
+                    <div class="episode-info">
+                        <h3 class="episode-title">${ep.title}</h3>
+                        <p>${ep.description}</p>
+                        <a href="${ep.link}" class="watch-button">Watch Now</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function hideEpisodes() {
+            document.getElementById('episodesView').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.querySelectorAll('.season-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('.season-tab').forEach(t => 
+                    t.classList.remove('active'));
+                e.target.classList.add('active');
+                const season = 'season' + e.target.textContent.split(' ')[1];
+                updateEpisodesList('The Boys', season);
+            });
+        });
+    </script>
+</body>
+</html>
