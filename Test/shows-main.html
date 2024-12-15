@@ -12,6 +12,7 @@
             --background-dark: #000000;
             --card-background: #2d2d2d;
             --text-color: #ffffff;
+            --hover-color: #ff3333;
         }
 
         * {
@@ -26,12 +27,13 @@
             color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            padding: 20px;
+            line-height: 1.6;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 20px;
         }
 
         .show-header {
@@ -63,107 +65,66 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .season-navigation {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .season-button {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .season-button.active {
-            background: var(--accent-color);
-            transform: scale(1.05);
-        }
-
-        .season-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(227, 20, 20, 0.4);
-        }
-
-        .episodes-container {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        .season-header {
-            color: var(--accent-color);
-            font-size: 2em;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--accent-color);
-        }
-
-        .episodes-grid {
+        .season-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 25px;
-            padding: 20px 0;
+            padding: 20px;
         }
 
-        .episode-card {
+        .season-card {
             background: var(--card-background);
-            border-radius: 12px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            border: 2px solid transparent;
         }
 
-        .episode-card:hover {
-            transform: translateY(-5px);
+        .season-card:hover {
+            transform: translateY(-10px);
             border-color: var(--accent-color);
+            box-shadow: 0 10px 25px rgba(227, 20, 20, 0.4);
         }
 
-        .episode-thumbnail {
+        .season-image {
             width: 100%;
-            height: 180px;
+            height: 200px;
             object-fit: cover;
         }
 
-        .episode-info {
+        .season-info {
             padding: 20px;
+            text-align: center;
         }
 
-        .episode-title {
+        .season-title {
+            font-size: 1.5em;
             color: var(--accent-color);
             margin-bottom: 10px;
-            font-size: 1.2em;
         }
 
-        .episode-description {
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 20px;
-            line-height: 1.5;
+        .season-episodes {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
         }
 
-        .watch-button {
+        .view-button {
             display: inline-block;
             background: var(--primary-color);
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 12px 25px;
+            border-radius: 8px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            text-align: center;
             width: 100%;
+            text-align: center;
         }
 
-        .watch-button:hover {
-            background: var(--accent-color);
+        .view-button:hover {
+            background: var(--hover-color);
             transform: scale(1.05);
         }
 
@@ -176,10 +137,6 @@
             .show-title {
                 font-size: 2.5em;
             }
-
-            .season-navigation {
-                justify-content: center;
-            }
         }
     </style>
 </head>
@@ -189,24 +146,54 @@
             <img src="https://th.bing.com/th/id/OIP.FuKoEELFg9QWhncsGsqdjQAAAA?w=306&h=450&rs=1&pid=ImgDetMain" alt="The Boys" class="show-image">
             <div class="show-info">
                 <h1 class="show-title">The Boys</h1>
-                <div class="season-navigation">
-                    <button class="season-button" data-season="1">Season 1</button>
-                    <button class="season-button" data-season="2">Season 2</button>
-                    <button class="season-button" data-season="3">Season 3</button>
-                    <button class="season-button" data-season="4">Season 4</button>
+            </div>
+        </div>
+        
+        <div class="season-grid">
+            <div class="season-card" onclick="location.href='season1.html'">
+                <img src="season1.jpg" alt="Season 1" class="season-image" onerror="this.src='placeholder.jpg'">
+                <div class="season-info">
+                    <h2 class="season-title">Season 1</h2>
+                    <p class="season-episodes">8 Episodes</p>
+                    <a href="season1.html" class="view-button">View Episodes</a>
+                </div>
+            </div>
+            
+            <div class="season-card" onclick="location.href='season2.html'">
+                <img src="season2.jpg" alt="Season 2" class="season-image" onerror="this.src='placeholder.jpg'">
+                <div class="season-info">
+                    <h2 class="season-title">Season 2</h2>
+                    <p class="season-episodes">8 Episodes</p>
+                    <a href="season2.html" class="view-button">View Episodes</a>
+                </div>
+            </div>
+            
+            <div class="season-card" onclick="location.href='season3.html'">
+                <img src="season3.jpg" alt="Season 3" class="season-image" onerror="this.src='placeholder.jpg'">
+                <div class="season-info">
+                    <h2 class="season-title">Season 3</h2>
+                    <p class="season-episodes">8 Episodes</p>
+                    <a href="season3.html" class="view-button">View Episodes</a>
+                </div>
+            </div>
+            
+            <div class="season-card" onclick="location.href='season4.html'">
+                <img src="season4.jpg" alt="Season 4" class="season-image" onerror="this.src='placeholder.jpg'">
+                <div class="season-info">
+                    <h2 class="season-title">Season 4</h2>
+                    <p class="season-episodes">8 Episodes</p>
+                    <a href="season4.html" class="view-button">View Episodes</a>
                 </div>
             </div>
         </div>
-        <div class="episodes-container" id="episodesContainer"></div>
     </div>
 
     <script>
-        // Your shows data object here
         const shows = {
             'The Boys': {
                 seasons: true,
-                headerImage: 'https://th.bing.com/th/id/OIP.FuKoEELFg9QWhncsGsqdjQAAAA?w=306&h=450&rs=1&pid=ImgDetMain',
-        episodes: {
+
+                episodes: {
 season1: [
                 {
                     title: "S1E1: The Name of the Game",
@@ -410,59 +397,6 @@ season1: [
         }
     }
 };
-
-        function updateSeasonDisplay(seasonNum) {
-            const container = document.getElementById('episodesContainer');
-            container.style.opacity = '0';
-            
-            setTimeout(() => {
-                container.innerHTML = '';
-                const seasonKey = `season${seasonNum}`;
-                const episodes = shows['The Boys'].episodes[seasonKey];
-                
-                const seasonHeader = document.createElement('div');
-                seasonHeader.className = 'season-header';
-                seasonHeader.innerHTML = `<h2>Season ${seasonNum}</h2>`;
-                container.appendChild(seasonHeader);
-                
-                const episodeGrid = document.createElement('div');
-                episodeGrid.className = 'episodes-grid';
-                
-                episodes.forEach(episode => {
-                    const episodeCard = document.createElement('div');
-                    episodeCard.className = 'episode-card';
-                    episodeCard.innerHTML = `
-                        <img src="${episode.thumbnail}" alt="${episode.title}" class="episode-thumbnail" onerror="this.src='placeholder.jpg'">
-                        <div class="episode-info">
-                            <h3 class="episode-title">${episode.title}</h3>
-                            <p class="episode-description">${episode.description}</p>
-                            <a href="${episode.link}" class="watch-button">Watch Now</a>
-                        </div>
-                    `;
-                    episodeGrid.appendChild(episodeCard);
-                });
-                
-                container.appendChild(episodeGrid);
-                container.style.opacity = '1';
-            }, 300);
-            
-            document.querySelectorAll('.season-button').forEach(button => {
-                button.classList.remove('active');
-                if (button.getAttribute('data-season') == seasonNum) {
-                    button.classList.add('active');
-                }
-            });
-        }
-
-        document.querySelectorAll('.season-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const seasonNum = button.getAttribute('data-season');
-                updateSeasonDisplay(seasonNum);
-            });
-        });
-
-        // Initialize with Season 1
-        updateSeasonDisplay(1);
     </script>
 </body>
 </html>
