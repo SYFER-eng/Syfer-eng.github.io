@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Boys - TV Show Collection</title>
+    <title>TV Shows Collection</title>
     <style>
         :root {
             --primary-color: #e31414;
@@ -12,12 +13,14 @@
             --card-bg: #2d2d2d;
             --transition: all 0.3s ease;
         }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             transition: var(--transition);
         }
+
         body {
             background: linear-gradient(135deg, var(--dark), #000000);
             color: var(--light);
@@ -25,6 +28,7 @@
             min-height: 100vh;
             position: relative;
         }
+
         .home-button {
             position: fixed;
             top: 20px;
@@ -40,15 +44,16 @@
             z-index: 1000;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-        .home-button:hover {
-            transform: translateY(-2px);
-            background: var(--secondary-color);
-        }
+
         .shows-grid {
             padding: 80px 20px 20px;
             max-width: 1400px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
+
         .show-card {
             background: var(--card-bg);
             border-radius: 15px;
@@ -57,31 +62,23 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
             border: 2px solid transparent;
         }
-        .show-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary-color);
-        }
+
         .show-poster {
             width: 100%;
             height: 400px;
             object-fit: cover;
-            cursor: pointer;
-            transition: transform 0.3s ease;
         }
-        .show-poster:hover {
-            transform: scale(1.05);
-        }
+
         .show-info {
             padding: 20px;
         }
+
         .show-title {
             font-size: 1.8em;
             color: var(--secondary-color);
             margin-bottom: 10px;
         }
-        .show-meta {
-            color: rgba(255, 255, 255, 0.8);
-        }
+
         .episodes-view {
             display: none;
             position: fixed;
@@ -94,6 +91,7 @@
             overflow-y: auto;
             padding: 20px;
         }
+
         .back-button {
             position: fixed;
             top: 20px;
@@ -107,27 +105,14 @@
             font-weight: bold;
             z-index: 1001;
         }
-        .back-button:hover {
-            background: var(--secondary-color);
-            transform: scale(1.05);
-        }
-        .show-header {
-            text-align: center;
-            padding: 40px 0;
-        }
-        .show-title-large {
-            font-size: 3em;
-            color: var(--secondary-color);
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
+
         .seasons-tabs {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            margin: 20px 0;
         }
+
         .season-tab {
             background: var(--card-bg);
             color: var(--light);
@@ -135,355 +120,147 @@
             padding: 12px 24px;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            min-width: 120px;
         }
+
         .season-tab.active {
             background: var(--primary-color);
         }
-        .season-tab:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-        }
+
         .episodes-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            max-width: 1400px;
-            margin: 0 auto;
+            gap: 20px;
+            padding: 20px;
         }
+
         .episode-card {
             background: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
+
         .episode-thumbnail {
             width: 100%;
             height: 180px;
             object-fit: cover;
         }
+
         .episode-info {
-            padding: 20px;
+            padding: 15px;
         }
-        .episode-title {
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
+
         .watch-button {
-            display: inline-block;
+            display: block;
             background: var(--primary-color);
             color: var(--light);
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            margin-top: 15px;
-            width: 100%;
+            padding: 10px;
             text-align: center;
-            font-weight: bold;
-        }
-        .watch-button:hover {
-            background: var(--secondary-color);
-            transform: scale(1.05);
-        }
-        @media (max-width: 768px) {
-            .show-title-large {
-                font-size: 2em;
-            }
-            .seasons-tabs {
-                padding: 0 10px;
-            }
-            .season-tab {
-                padding: 10px 16px;
-                min-width: auto;
-            }
+            border-radius: 6px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <a href="index.html" class="home-button">
-        <span>🏠</span>
-        Home
+    <a href="https://Syfer-eng.github.io/Menu.html" class="home-button">
+        <span>🏠</span> Home
     </a>
+
     <div class="shows-grid">
-        <div class="show-card">
-            <img src="https://i.ibb.co/486Bt50/resizecom-maxresdefault.jpg" 
-                 alt="The Boys" 
-                 class="show-poster"
-                 onclick="showEpisodes('The Boys')">
-            <div class="show-info" onclick="showEpisodes('The Boys')">
+        <!-- The Boys Card -->
+        <div class="show-card" onclick="showEpisodes('TheBoys')">
+            <img src="https://i.ibb.co/486Bt50/resizecom-maxresdefault.jpg" alt="The Boys" class="show-poster">
+            <div class="show-info">
                 <h2 class="show-title">The Boys</h2>
                 <div class="show-meta">4 Seasons • Action • Drama</div>
             </div>
         </div>
+
+        <!-- Pink Panther Card -->
+        <div class="show-card" onclick="showEpisodes('PinkPanther')">
+            <img src="https://example.com/pink-panther.jpg" alt="Pink Panther" class="show-poster">
+            <div class="show-info">
+                <h2 class="show-title">Pink Panther</h2>
+                <div class="show-meta">2 Seasons • Comedy • Animation</div>
+            </div>
+        </div>
     </div>
+
     <div id="episodesView" class="episodes-view">
         <button class="back-button" onclick="hideEpisodes()">Close</button>
-        <div class="show-header">
-            <h1 class="show-title-large">The Boys</h1>
-        </div>
-        <div class="seasons-tabs">
-            <button class="season-tab active">Season 1</button>
-            <button class="season-tab">Season 2</button>
-            <button class="season-tab">Season 3</button>
-            <button class="season-tab">Season 4</button>
-        </div>
-        <div class="episodes-list"></div>
+        <div id="showTitle" class="show-title"></div>
+        <div class="seasons-tabs" id="seasonsTabs"></div>
+        <div class="episodes-list" id="episodesList"></div>
     </div>
 
     <script>
         const shows = {
-            "The Boys": {
+            TheBoys: {
+                title: "The Boys",
+                seasons: 4,
                 episodes: {
                     season1: [
-                {
-                    title: "S1E1: The Name of the Game",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-name-of-the-game.html",
-                    description: "Hughie Campbell's life changes when a superhero accidentally kills his girlfriend."
-                },
-                {
-                    title: "S1E2: Cherry",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "cherry.html",
-                    description: "The Boys get themselves a Superhero; Starlight gets payback against the Deep."
-                },
-                {
-                    title: "S1E3: Get Some",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "get-some.html",
-                    description: "The Boys head to the 'Believe' Expo to follow a promising lead in their ongoing war against the Supes."
-                },
-                {
-                    title: "S1E4: The Female of the Species",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-female-of-the-species.html",
-                    description: "The Boys track down a mysterious Supe with the ability to cause people's heads to explode."
-                },
-                {
-                    title: "S1E5: Good for the Soul",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "good-for-the-soul.html",
-                    description: "The Boys plan their next move while Starlight faces a crisis of faith."
-                },
-                {
-                    title: "S1E6: The Innocents",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-innocents.html",
-                    description: "A trip to the past reveals secrets about Vought and Compound V."
-                },
-                {
-                    title: "S1E7: The Self-Preservation Society",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-self-preservation-society.html",
-                    description: "The Boys face a major crisis as secrets come to light."
-                },
-                {
-                    title: "S1E8: You Found Me",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "you-found-me.html",
-                    description: "Season finale. The Boys and Homelander face off in an explosive confrontation."
-                }
-            ],
-            season2: [
-                {
-                    title: "S2E1: The Big Ride",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-big-ride.html",
-                    description: "The Boys are on the run from the law, trying to fight back against the Supes."
-                },
-                {
-                    title: "S2E2: Proper Preparation and Planning",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "proper-preparation-and-planning.html",
-                    description: "The Boys take to the high seas to safeguard their prisoner."
-                },
-                {
-                    title: "S2E3: Over the Hill with the Swords of a Thousand Men",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "over-the-hill-with-the-swords-of-a-thousand-men.html",
-                    description: "Stormfront proves to be a force to be reckoned with."
-                },
-                {
-                    title: "S2E4: Nothing Like It in the World",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "nothing-like-it-in-the-world.html",
-                    description: "Hughie and Annie face moral dilemmas while Butcher searches for Becca."
-                },
-                {
-                    title: "S2E5: We Gotta Go Now",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "we-gotta-go-now.html",
-                    description: "The Boys plan to expose Vought's secrets while filming a superhero movie."
-                },
-                {
-                    title: "S2E6: The Bloody Doors Off",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-bloody-doors-off.html",
-                    description: "The Boys infiltrate a Sage Grove facility and discover horrifying experiments."
-                },
-                {
-                    title: "S2E7: Butcher, Baker, Candlestick Maker",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "butcher-baker-candlestick-maker.html",
-                    description: "A Congressional hearing into Vought takes an unexpected turn."
-                },
-                {
-                    title: "S2E8: What I Know",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "what-i-know.html",
-                    description: "Season finale. The Boys face off against Stormfront while Butcher makes a choice."
-                }
-            ],
-            season3: [
-                {
-                    title: "S3E1: Payback",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "payback.html",
-                    description: "It's been a year of calm. Homelander's subdued. Butcher works for the government."
-                },
-                {
-                    title: "S3E2: The Only Man in the Sky",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-only-man-in-the-sky.html",
-                    description: "Homelander's birthday celebration doesn't go as planned."
-                },
-                {
-                    title: "S3E3: Barbary Coast",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "barbary-coast.html",
-                    description: "The legend of Soldier Boy is revealed as the Boys track down a new lead."
-                },
-                {
-                    title: "S3E4: Glorious Five Year Plan",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "glorious-five-year-plan.html",
-                    description: "The Boys travel to Russia in search of a weapon to defeat Homelander."
-                },
-                {
-                    title: "S3E5: The Last Time to Look on This World of Lies",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-last-time-to-look-on-this-world-of-lies.html",
-                    description: "Soldier Boy's return changes everything as new alliances form."
-                },
-                {
-                    title: "S3E6: Herogasm",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "herogasm.html",
-                    description: "The Boys infiltrate a secret superhero party with explosive results."
-                },
-                {
-                    title: "S3E7: Here Comes a Candle to Light You to Bed",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "here-comes-a-candle-to-light-you-to-bed.html",
-                    description: "Shocking revelations about Soldier Boy lead to difficult choices."
-                },
-                {
-                    title: "S3E8: The Instant White-Hot Wild",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-instant-white-hot-wild.html",
-                    description: "Season finale. The Boys, Soldier Boy, and Homelander face off in an epic battle."
-                }
-            ],
-            season4: [
-                {
-                    title: "S4E1: Department of Dirty Tricks",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "department-of-dirty-tricks.html",
-                    description: "The world is on the brink as Homelander's influence grows."
-                },
-                {
-                    title: "S4E2: Where the Crawdads Sing",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "where-the-crawdads-sing.html",
-                    description: "Victoria Neuman's presidential campaign gains momentum."
-                },
-                {
-                    title: "S4E3: Damage Theory",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "damage-theory.html",
-                    description: "The Boys uncover a conspiracy within the government."
-                },
-                {
-                    title: "S4E4: Cold Hard Truth",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "cold-hard-truth.html",
-                    description: "Starlight and Hughie face a new threat while Butcher's time runs short."
-                },
-                {
-                    title: "S4E5: In the Eye of the Storm",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "in-the-eye-of-the-storm.html",
-                    description: "A new Supe emerges as Homelander's plans take shape."
-                },
-                {
-                    title: "S4E6: The Crossing",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-crossing.html",
-                    description: "The Boys must make difficult alliances to stop a greater threat."
-                },
-                {
-                    title: "S4E7: Point of No Return",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "point-of-no-return.html",
-                    description: "Everything comes to a head as secrets are revealed."
-                },
-                {
-                    title: "S4E8: The Final Stand",
-                    thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
-                    link: "the-final-stand.html",
-                    description: "Season finale. The fate of the world hangs in the balance."
+                        {
+                            title: "The Name of the Game",
+                            thumbnail: "https://example.com/ep1.jpg",
+                            link: "episodes/the-boys-s01e01.html",
+                            description: "Hughie Campbell's life changes forever."
                         },
-                        // Add all other episodes here
+                        // Add more episodes
+                    ]
+                }
+            },
+            PinkPanther: {
+                title: "Pink Panther",
+                seasons: 2,
+                episodes: {
+                    season1: [
+                        {
+                            title: "Pink Premiere",
+                            thumbnail: "https://example.com/pp-ep1.jpg",
+                            link: "episodes/pink-panther-s01e01.html",
+                            description: "The Pink Panther's first adventure."
+                        },
+                        // Add more episodes
                     ]
                 }
             }
         };
 
-
         function showEpisodes(showId) {
-            const view = document.getElementById('episodesView');
-            const header = document.querySelector('.show-header');
-            view.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            updateEpisodesList(showId, 'season1');
+            const show = shows[showId];
+            document.getElementById('episodesView').style.display = 'block';
+            document.getElementById('showTitle').textContent = show.title;
+            
+            // Create season tabs
+            const tabsHtml = Array.from({length: show.seasons}, (_, i) => 
+                `<button class="season-tab ${i === 0 ? 'active' : ''}" 
+                 onclick="changeSeason('${showId}', ${i + 1})">Season ${i + 1}</button>`
+            ).join('');
+            
+            document.getElementById('seasonsTabs').innerHTML = tabsHtml;
+            changeSeason(showId, 1);
         }
 
-        function updateEpisodesList(showId, season) {
-            const episodesList = document.querySelector('.episodes-list');
-            const episodes = shows[showId].episodes[season];
-            
-            episodesList.innerHTML = episodes.map(ep => `
+        function changeSeason(showId, seasonNum) {
+            const episodes = shows[showId].episodes[`season${seasonNum}`];
+            const episodesHtml = episodes.map(ep => `
                 <div class="episode-card">
-                    <img src="${ep.thumbnail}" alt="${ep.title}" class="episode-thumbnail">
+                    <img src="${ep.thumbnail}" class="episode-thumbnail" alt="${ep.title}">
                     <div class="episode-info">
-                        <h3 class="episode-title">${ep.title}</h3>
+                        <h3>${ep.title}</h3>
                         <p>${ep.description}</p>
                         <a href="${ep.link}" class="watch-button">Watch Now</a>
                     </div>
                 </div>
             `).join('');
+            
+            document.getElementById('episodesList').innerHTML = episodesHtml;
         }
 
         function hideEpisodes() {
             document.getElementById('episodesView').style.display = 'none';
-            document.body.style.overflow = 'auto';
         }
-
-        document.querySelectorAll('.season-tab').forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                document.querySelectorAll('.season-tab').forEach(t => 
-                    t.classList.remove('active'));
-                e.target.classList.add('active');
-                const season = 'season' + e.target.textContent.split(' ')[1];
-                updateEpisodesList('The Boys', season);
-            });
-        });
-
-        document.querySelector('.show-poster').addEventListener('click', () => {
-            showEpisodes('The Boys');
-        });
     </script>
 </body>
 </html>
