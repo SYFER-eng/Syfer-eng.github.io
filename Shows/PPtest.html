@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Shows Collection</title>
+    <style>
+        :root {
+            --primary-color: #e31414;
+            --secondary-color: #ff1818;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+            --card-bg: #2d2d2d;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark), #000000);
+            color: var(--light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--primary-color);
+            color: var(--light);
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .home-button:hover {
+            transform: translateY(-2px);
+            background: var(--secondary-color);
+        }
+
+        .shows-grid {
+            padding: 80px 20px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .show-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            border: 2px solid transparent;
+        }
+
+        .show-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
+        }
+
+        .show-poster {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .show-info {
+            padding: 20px;
+        }
+
+        .show-title {
+            font-size: 1.8em;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .show-meta {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .episodes-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: var(--light);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1001;
+        }
+
+        .show-header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .show-title-large {
+            font-size: 3em;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .seasons-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .season-tab {
+            background: var(--card-bg);
+            color: var(--light);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            min-width: 120px;
+        }
+
+        .season-tab.active {
+            background: var(--primary-color);
+        }
+
+        .episodes-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .episode-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .episode-thumbnail {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .episode-info {
+            padding: 20px;
+        }
+
+        .episode-title {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .watch-button {
+            display: inline-block;
+            background: var(--primary-color);
+            color: var(--light);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin-top: 15px;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .watch-button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .show-title-large {
+                font-size: 2em;
+            }
+            .seasons-tabs {
+                padding: 0 10px;
+            }
+            .season-tab {
+                padding: 10px 16px;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://Syfer-eng.github.io/Menu.html" class="home-button">
+        <span>🏠</span>
+        Home
+    </a>
+
+    <div class="shows-grid">
+        <div class="show-card">
+            <img src="https://i.ibb.co/486Bt50/resizecom-maxresdefault.jpg" 
+                 alt="The Boys" 
+                 class="show-poster"
+                 onclick="showEpisodes('The Boys')">
+            <div class="show-info" onclick="showEpisodes('The Boys')">
+                <h2 class="show-title">The Boys</h2>
+                <div class="show-meta">4 Seasons • Action • Drama</div>
+            </div>
+        </div>
+
+        <div class="show-card">
+            <img src="https://example.com/pink-panther.jpg" 
+                 alt="Pink Panther" 
+                 class="show-poster"
+                 onclick="showEpisodes('Pink Panther')">
+            <div class="show-info" onclick="showEpisodes('Pink Panther')">
+                <h2 class="show-title">Pink Panther</h2>
+                <div class="show-meta">Classic • Animation • Comedy</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="episodesView" class="episodes-view">
+        <button class="back-button" onclick="hideEpisodes()">Close</button>
+        <div class="show-header">
+            <h1 class="show-title-large"></h1>
+        </div>
+        <div class="seasons-tabs"></div>
+        <div class="episodes-list"></div>
+    </div>
+
+    <script>
+        const shows = {
+            "The Boys": {
+                title: "The Boys",
+                seasons: 4,
+                episodes: {
+                    // Your existing The Boys episodes data
+                }
+            },
+            "Pink Panther": {
+                title: "Pink Panther",
+                seasons: 1,
+                episodes: {
+                    season1: [
+                        {
+                            title: "Episode 1: Pink Punch",
+                            thumbnail: "path/to/thumbnail.jpg",
+                            link: "Pink-Panther/Episode1.html",
+                            description: "The first adventure of Pink Panther"
+                        },
+                        // Add more episodes
+                    ]
+                }
+            }
+        };
+
+        function showEpisodes(showId) {
+            const view = document.getElementById('episodesView');
+            const header = document.querySelector('.show-title-large');
+            const seasonsTabs = document.querySelector('.seasons-tabs');
+            
+            header.textContent = shows[showId].title;
+            
+            // Generate season tabs
+            seasonsTabs.innerHTML = '';
+            for(let i = 1; i <= shows[showId].seasons; i++) {
+                seasonsTabs.innerHTML += `
+                    <button class="season-tab ${i === 1 ? 'active' : ''}" 
+                            onclick="changeSeason('${showId}', ${i})">
+                        Season ${i}
+                    </button>`;
+            }
+            
+            view.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            updateEpisodesList(showId, 'season1');
+        }
+
+        function changeSeason(showId, seasonNum) {
+            document.querySelectorAll('.season-tab').forEach(tab => 
+                tab.classList.remove('active'));
+            event.target.classList.add('active');
+            updateEpisodesList(showId, `season${seasonNum}`);
+        }
+
+        function updateEpisodesList(showId, season) {
+            const episodesList = document.querySelector('.episodes-list');
+            const episodes = shows[showId].episodes[season];
+            
+            episodesList.innerHTML = episodes.map(ep => `
+                <div class="episode-card">
+                    <img src="${ep.thumbnail}" alt="${ep.title}" class="episode-thumbnail">
+                    <div class="episode-info">
+                        <h3 class="episode-title">${ep.title}</h3>
+                        <p>${ep.description}</p>
+                        <a href="${ep.link}" class="watch-button">Watch Now</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function hideEpisodes() {
+            document.getElementById('episodesView').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+</body>
+</html>
