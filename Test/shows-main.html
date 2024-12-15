@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -97,11 +98,23 @@
             overflow: hidden;
             transition: transform 0.3s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
+        }
+
+        .show-card a {
+            display: block;
+            height: 100%;
+            width: 100%;
+            text-decoration: none;
+            color: inherit;
         }
 
         .show-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .show-card, .show-card * {
+            cursor: pointer;
         }
 
         .show-poster {
@@ -230,18 +243,19 @@
                 <span>Home</span>
             </a>
             <div class="menu-items">
-
             </div>
         </div>
     </nav>
 
     <div class="shows-grid">
-        <div class="show-card" onclick="showEpisodes('The Boys')">
-            <img src="images/boys-poster.jpg" alt="The Boys" class="show-poster">
-            <div class="show-info">
-                <h2 class="show-title">The Boys</h2>
-                <div class="show-meta">4 Seasons • Action • Drama</div>
-            </div>
+        <div class="show-card">
+            <a href="#episodes" onclick="showEpisodes('The Boys')">
+                <img src="images/boys-poster.jpg" alt="The Boys" class="show-poster">
+                <div class="show-info">
+                    <h2 class="show-title">The Boys</h2>
+                    <div class="show-meta">4 Seasons • Action • Drama</div>
+                </div>
+            </a>
         </div>
     </div>
 
@@ -474,11 +488,13 @@
             view.style.display = 'block';
             document.body.style.overflow = 'hidden';
             updateEpisodesList(showId, 'season1');
+            window.location.hash = 'episodes';
         }
 
         function hideEpisodes() {
             document.getElementById('episodesView').style.display = 'none';
             document.body.style.overflow = 'auto';
+            window.location.hash = '';
         }
 
         function updateEpisodesList(showId, season) {
@@ -496,6 +512,12 @@
                 </div>
             `).join('');
         }
+
+        window.addEventListener('hashchange', function() {
+            if (window.location.hash !== '#episodes') {
+                hideEpisodes();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.season-tab').forEach(tab => {
