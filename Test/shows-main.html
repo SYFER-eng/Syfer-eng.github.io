@@ -1,534 +1,190 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Boys - TV Show Collection</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Episode Picker</title>
     <style>
-        :root {
-            --purple-primary: #6200ea;
-            --purple-secondary: #b388ff;
-            --purple-accent: #9c27b0;
-            --dark-bg: #121212;
-            --dark-surface: #1e1e1e;
-            --text-light: #ffffff;
-            --text-dim: rgba(255, 255, 255, 0.87);
-            --card-bg: #2d2d2d;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            background-color: var(--dark-bg);
-            color: var(--text-light);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-        }
-
-        .nav-menu {
-            background-color: var(--dark-surface);
-            padding: 1rem;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .menu-content {
-            max-width: 1200px;
-            margin: 0 auto;
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: Arial, sans-serif;
             display: flex;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
+            min-height: 100vh;
+            margin: 0;
         }
 
-        .menu-items {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .menu-link {
-            color: var(--text-light);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .menu-link:hover {
-            background-color: var(--purple-primary);
+        .episode-picker {
+            background-color: #2d2d2d;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(128, 0, 128, 0.3);
+            min-width: 320px;
         }
 
         .home-button {
-            background: var(--purple-primary);
-            color: var(--text-light);
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: transform 0.2s, background 0.2s;
+            background-color: #800080;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
         }
 
         .home-button:hover {
-            background: var(--purple-accent);
-            transform: translateY(-2px);
+            background-color: #a020f0;
         }
 
-        .shows-grid {
-            margin-top: 80px;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 100px auto 0;
-        }
-
-        .show-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .show-card a {
-            display: block;
-            height: 100%;
-            width: 100%;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .show-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .show-card, .show-card * {
-            cursor: pointer;
-        }
-
-        .show-poster {
-            width: 100%;
-            height: 380px;
-            object-fit: cover;
-        }
-
-        .show-info {
-            padding: 1.5rem;
-        }
-
-        .show-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--purple-secondary);
-        }
-
-        .show-meta {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
-
-        .episodes-view {
+        .season-container {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--dark-bg);
-            z-index: 1000;
-            overflow-y: auto;
-            padding: 2rem;
+            grid-gap: 10px;
         }
 
-        .back-button {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--purple-primary);
-            color: var(--text-light);
+        .season-container.active {
+            display: grid;
+        }
+
+        .season-button {
+            background-color: #4b0082;
+            color: white;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
+            padding: 15px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .seasons-tabs {
-            display: flex;
-            gap: 1rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
+        .season-button:hover {
+            background-color: #800080;
+            transform: scale(1.05);
         }
 
-        .season-tab {
-            background: var(--dark-surface);
-            color: var(--text-light);
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .season-tab.active {
-            background: var(--purple-primary);
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .episode-card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            margin-bottom: 1rem;
+            background-color: #4b0082;
+            border-radius: 5px;
+            padding: 15px;
             display: flex;
-            overflow: hidden;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
         }
 
-        .episode-thumbnail {
-            width: 200px;
-            height: 120px;
-            object-fit: cover;
+        .episode-card:hover {
+            background-color: #800080;
+            transform: scale(1.02);
         }
 
         .episode-info {
-            padding: 1rem;
-            flex: 1;
+            flex-grow: 1;
+        }
+
+        .episode-number {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .episode-title {
+            font-size: 0.9em;
+            opacity: 0.9;
         }
 
         .watch-button {
-            display: inline-block;
-            background: var(--purple-primary);
-            color: var(--text-light);
+            background-color: #a020f0;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 15px;
+            transition: background-color 0.3s;
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
         }
 
-        @media (max-width: 768px) {
-            .menu-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .menu-items {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .episode-card {
-                flex-direction: column;
-            }
-            
-            .episode-thumbnail {
-                width: 100%;
-                height: 200px;
-            }
+        .watch-button:hover {
+            background-color: #c040ff;
         }
     </style>
 </head>
 <body>
-    <nav class="nav-menu">
-        <div class="menu-content">
-            <a href="/" class="home-button">
-                <span>🏠</span>
-                <span>Home</span>
-            </a>
-            <div class="menu-items">
+    <div class="episode-picker">
+        <button class="home-button" onclick="toggleSeasonView()">Home</button>
+        <div class="season-container" id="seasonContainer">
+            <div class="episodes-grid">
+                <button class="season-button" onclick="showEpisodes(1)">Season 1</button>
+                <button class="season-button" onclick="showEpisodes(2)">Season 2</button>
+                <button class="season-button" onclick="showEpisodes(3)">Season 3</button>
+                <button class="season-button" onclick="showEpisodes(4)">Season 4</button>
             </div>
         </div>
-    </nav>
-
-    <div class="shows-grid">
-        <div class="show-card">
-            <a href="#episodes" onclick="showEpisodes('The Boys')">
-                <img src="images/boys-poster.jpg" alt="The Boys" class="show-poster">
-                <div class="show-info">
-                    <h2 class="show-title">The Boys</h2>
-                    <div class="show-meta">4 Seasons • Action • Drama</div>
-                </div>
-            </a>
-        </div>
-    </div>
-
-    <div id="episodesView" class="episodes-view">
-        <button class="back-button" onclick="hideEpisodes()">Close</button>
-        <div class="show-header">
-            <h1 class="show-title-large">The Boys</h1>
-        </div>
-        <div class="seasons-tabs">
-            <button class="season-tab active">Season 1</button>
-            <button class="season-tab">Season 2</button>
-            <button class="season-tab">Season 3</button>
-            <button class="season-tab">Season 4</button>
-        </div>
-        <div class="episodes-list"></div>
+        <div class="episodes-grid" id="episodeContainer"></div>
     </div>
 
     <script>
-        const shows = {
-            'The Boys': {
-                seasons: true,
-                headerImage: 'https://th.bing.com/th/id/OIP.FuKoEELFg9QWhncsGsqdjQAAAA?w=306&h=450&rs=1&pid=ImgDetMain',
-        episodes: {
-            season1: [
-                {
-                    title: "S1E1: The Name of the Game",
-                    thumbnail: "s1e1.jpg",
-                    link: "the-name-of-the-game.html",
-                    description: "Hughie Campbell's life changes when a superhero accidentally kills his girlfriend."
-                },
-                {
-                    title: "S1E2: Cherry",
-                    thumbnail: "s1e2.jpg",
-                    link: "cherry.html",
-                    description: "The Boys get themselves a Superhero; Starlight gets payback against the Deep."
-                },
-                {
-                    title: "S1E3: Get Some",
-                    thumbnail: "s1e3.jpg",
-                    link: "get-some.html",
-                    description: "The Boys head to the "Believe" Expo to follow a promising lead in their ongoing war against the Supes."
-                },
-                {
-                    title: "S1E4: The Female of the Species",
-                    thumbnail: "s1e4.jpg",
-                    link: "the-female-of-the-species.html",
-                    description: "The Boys track down a mysterious Supe with the ability to cause people's heads to explode."
-                },
-                {
-                    title: "S1E5: Good for the Soul",
-                    thumbnail: "s1e5.jpg",
-                    link: "good-for-the-soul.html",
-                    description: "The Boys plan their next move while Starlight faces a crisis of faith."
-                },
-                {
-                    title: "S1E6: The Innocents",
-                    thumbnail: "s1e6.jpg",
-                    link: "the-innocents.html",
-                    description: "A trip to the past reveals secrets about Vought and Compound V."
-                },
-                {
-                    title: "S1E7: The Self-Preservation Society",
-                    thumbnail: "s1e7.jpg",
-                    link: "the-self-preservation-society.html",
-                    description: "The Boys face a major crisis as secrets come to light."
-                },
-                {
-                    title: "S1E8: You Found Me",
-                    thumbnail: "s1e8.jpg",
-                    link: "you-found-me.html",
-                    description: "Season finale. The Boys and Homelander face off in an explosive confrontation."
-                }
-            ],
-            season2: [
-                {
-                    title: "S2E1: The Big Ride",
-                    thumbnail: "s2e1.jpg",
-                    link: "the-big-ride.html",
-                    description: "The Boys are on the run from the law, trying to fight back against the Supes."
-                },
-                {
-                    title: "S2E2: Proper Preparation and Planning",
-                    thumbnail: "s2e2.jpg",
-                    link: "proper-preparation-and-planning.html",
-                    description: "The Boys take to the high seas to safeguard their prisoner."
-                },
-                {
-                    title: "S2E3: Over the Hill with the Swords of a Thousand Men",
-                    thumbnail: "s2e3.jpg",
-                    link: "over-the-hill-with-the-swords-of-a-thousand-men.html",
-                    description: "Stormfront proves to be a force to be reckoned with."
-                },
-                {
-                    title: "S2E4: Nothing Like It in the World",
-                    thumbnail: "s2e4.jpg",
-                    link: "nothing-like-it-in-the-world.html",
-                    description: "Hughie and Annie face moral dilemmas while Butcher searches for Becca."
-                },
-                {
-                    title: "S2E5: We Gotta Go Now",
-                    thumbnail: "s2e5.jpg",
-                    link: "we-gotta-go-now.html",
-                    description: "The Boys plan to expose Vought's secrets while filming a superhero movie."
-                },
-                {
-                    title: "S2E6: The Bloody Doors Off",
-                    thumbnail: "s2e6.jpg",
-                    link: "the-bloody-doors-off.html",
-                    description: "The Boys infiltrate a Sage Grove facility and discover horrifying experiments."
-                },
-                {
-                    title: "S2E7: Butcher, Baker, Candlestick Maker",
-                    thumbnail: "s2e7.jpg",
-                    link: "butcher-baker-candlestick-maker.html",
-                    description: "A Congressional hearing into Vought takes an unexpected turn."
-                },
-                {
-                    title: "S2E8: What I Know",
-                    thumbnail: "s2e8.jpg",
-                    link: "what-i-know.html",
-                    description: "Season finale. The Boys face off against Stormfront while Butcher makes a choice."
-                }
-            ],
-            season3: [
-                {
-                    title: "S3E1: Payback",
-                    thumbnail: "s3e1.jpg",
-                    link: "payback.html",
-                    description: "It's been a year of calm. Homelander's subdued. Butcher works for the government."
-                },
-                {
-                    title: "S3E2: The Only Man in the Sky",
-                    thumbnail: "s3e2.jpg",
-                    link: "the-only-man-in-the-sky.html",
-                    description: "Homelander's birthday celebration doesn't go as planned."
-                },
-                {
-                    title: "S3E3: Barbary Coast",
-                    thumbnail: "s3e3.jpg",
-                    link: "barbary-coast.html",
-                    description: "The legend of Soldier Boy is revealed as the Boys track down a new lead."
-                },
-                {
-                    title: "S3E4: Glorious Five Year Plan",
-                    thumbnail: "s3e4.jpg",
-                    link: "glorious-five-year-plan.html",
-                    description: "The Boys travel to Russia in search of a weapon to defeat Homelander."
-                },
-                {
-                    title: "S3E5: The Last Time to Look on This World of Lies",
-                    thumbnail: "s3e5.jpg",
-                    link: "the-last-time-to-look-on-this-world-of-lies.html",
-                    description: "Soldier Boy's return changes everything as new alliances form."
-                },
-                {
-                    title: "S3E6: Herogasm",
-                    thumbnail: "s3e6.jpg",
-                    link: "herogasm.html",
-                    description: "The Boys infiltrate a secret superhero party with explosive results."
-                },
-                {
-                    title: "S3E7: Here Comes a Candle to Light You to Bed",
-                    thumbnail: "s3e7.jpg",
-                    link: "here-comes-a-candle-to-light-you-to-bed.html",
-                    description: "Shocking revelations about Soldier Boy lead to difficult choices."
-                },
-                {
-                    title: "S3E8: The Instant White-Hot Wild",
-                    thumbnail: "s3e8.jpg",
-                    link: "the-instant-white-hot-wild.html",
-                    description: "Season finale. The Boys, Soldier Boy, and Homelander face off in an epic battle."
-                }
-            ],
-            season4: [
-                {
-                    title: "S4E1: Department of Dirty Tricks",
-                    thumbnail: "s4e1.jpg",
-                    link: "department-of-dirty-tricks.html",
-                    description: "The world is on the brink as Homelander's influence grows."
-                },
-                {
-                    title: "S4E2: Where the Crawdads Sing",
-                    thumbnail: "s4e2.jpg",
-                    link: "where-the-crawdads-sing.html",
-                    description: "Victoria Neuman's presidential campaign gains momentum."
-                },
-                {
-                    title: "S4E3: Damage Theory",
-                    thumbnail: "s4e3.jpg",
-                    link: "damage-theory.html",
-                    description: "The Boys uncover a conspiracy within the government."
-                },
-                {
-                    title: "S4E4: Cold Hard Truth",
-                    thumbnail: "s4e4.jpg",
-                    link: "cold-hard-truth.html",
-                    description: "Starlight and Hughie face a new threat while Butcher's time runs short."
-                },
-                {
-                    title: "S4E5: In the Eye of the Storm",
-                    thumbnail: "s4e5.jpg",
-                    link: "in-the-eye-of-the-storm.html",
-                    description: "A new Supe emerges as Homelander's plans take shape."
-                },
-                {
-                    title: "S4E6: The Crossing",
-                    thumbnail: "s4e6.jpg",
-                    link: "the-crossing.html",
-                    description: "The Boys must make difficult alliances to stop a greater threat."
-                },
-                {
-                    title: "S4E7: Point of No Return",
-                    thumbnail: "s4e7.jpg",
-                    link: "point-of-no-return.html",
-                    description: "Everything comes to a head as secrets are revealed."
-                },
-                {
-                    title: "S4E8: The Final Stand",
-                    thumbnail: "s4e8.jpg",
-                    link: "the-final-stand.html",
-                    description: "Season finale. The fate of the world hangs in the balance."
-                }
-            ]
-        }
-    }
-};
+        const season1Episodes = [
+            "Pilot",
+            "The Mystery Begins",
+            "Dark Secrets",
+            "The Revelation",
+            "Hidden Truths",
+            "The Confrontation",
+            "Breaking Point",
+            "Season Finale"
+        ];
 
-        function showEpisodes(showId) {
-            const view = document.getElementById('episodesView');
-            view.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            updateEpisodesList(showId, 'season1');
-            window.location.hash = 'episodes';
+        function toggleSeasonView() {
+            const seasonContainer = document.getElementById('seasonContainer');
+            const episodeContainer = document.getElementById('episodeContainer');
+            seasonContainer.classList.toggle('active');
+            episodeContainer.innerHTML = '';
         }
 
-        function hideEpisodes() {
-            document.getElementById('episodesView').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            window.location.hash = '';
-        }
-
-        function updateEpisodesList(showId, season) {
-            const episodesList = document.querySelector('.episodes-list');
-            const episodes = shows[showId].episodes[season];
+        function showEpisodes(season) {
+            const episodeContainer = document.getElementById('episodeContainer');
+            episodeContainer.innerHTML = '';
             
-            episodesList.innerHTML = episodes.map(ep => `
-                <div class="episode-card">
-                    <img src="${ep.thumbnail}" alt="${ep.title}" class="episode-thumbnail">
-                    <div class="episode-info">
-                        <h3 class="episode-title">${ep.title}</h3>
-                        <p>${ep.description}</p>
-                        <a href="${ep.link}" class="watch-button">Watch Now</a>
-                    </div>
-                </div>
-            `).join('');
+            for (let i = 1; i <= 8; i++) {
+                const episodeCard = document.createElement('div');
+                episodeCard.className = 'episode-card';
+                
+                const episodeInfo = document.createElement('div');
+                episodeInfo.className = 'episode-info';
+                
+                const episodeNumber = document.createElement('span');
+                episodeNumber.className = 'episode-number';
+                episodeNumber.textContent = `S${season}E${i}`;
+                
+                const episodeTitle = document.createElement('span');
+                episodeTitle.className = 'episode-title';
+                episodeTitle.textContent = season === 1 ? season1Episodes[i-1] : `Episode ${i}`;
+                
+                const watchButton = document.createElement('a');
+                watchButton.href = `episode.html?season=${season}&episode=${i}`;
+                watchButton.className = 'watch-button';
+                watchButton.textContent = 'Watch Now';
+                
+                episodeInfo.appendChild(episodeNumber);
+                episodeInfo.appendChild(episodeTitle);
+                episodeCard.appendChild(episodeInfo);
+                episodeCard.appendChild(watchButton);
+                
+                episodeContainer.appendChild(episodeCard);
+            }
         }
 
-        window.addEventListener('hashchange', function() {
-            if (window.location.hash !== '#episodes') {
-                hideEpisodes();
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.season-tab').forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    document.querySelectorAll('.season-tab').forEach(t => 
-                        t.classList.remove('active'));
-                    e.target.classList.add('active');
-                    const season = 'season' + e.target.textContent.split(' ')[1];
-                    updateEpisodesList('The Boys', season);
-                });
-            });
-        });
+        // Show seasons view by default
+        document.getElementById('seasonContainer').classList.add('active');
     </script>
 </body>
 </html>
