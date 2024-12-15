@@ -13,14 +13,12 @@
             --card-bg: #2d2d2d;
             --transition: all 0.3s ease;
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             transition: var(--transition);
         }
-
         body {
             background: linear-gradient(135deg, var(--dark), #000000);
             color: var(--light);
@@ -28,7 +26,6 @@
             min-height: 100vh;
             position: relative;
         }
-
         .home-button {
             position: fixed;
             top: 20px;
@@ -44,18 +41,15 @@
             z-index: 1000;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-
         .home-button:hover {
             transform: translateY(-2px);
             background: var(--secondary-color);
         }
-
         .shows-grid {
             padding: 80px 20px 20px;
             max-width: 1400px;
             margin: 0 auto;
         }
-
         .show-card {
             background: var(--card-bg);
             border-radius: 15px;
@@ -64,32 +58,31 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
             border: 2px solid transparent;
         }
-
         .show-card:hover {
             transform: translateY(-10px);
             border-color: var(--primary-color);
         }
-
         .show-poster {
             width: 100%;
             height: 400px;
             object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
-
+        .show-poster:hover {
+            transform: scale(1.05);
+        }
         .show-info {
             padding: 20px;
         }
-
         .show-title {
             font-size: 1.8em;
             color: var(--secondary-color);
             margin-bottom: 10px;
         }
-
         .show-meta {
             color: rgba(255, 255, 255, 0.8);
         }
-
         .episodes-view {
             display: none;
             position: fixed;
@@ -102,7 +95,6 @@
             overflow-y: auto;
             padding: 20px;
         }
-
         .back-button {
             position: fixed;
             top: 20px;
@@ -116,24 +108,20 @@
             font-weight: bold;
             z-index: 1001;
         }
-
         .back-button:hover {
             background: var(--secondary-color);
             transform: scale(1.05);
         }
-
         .show-header {
             text-align: center;
             padding: 40px 0;
         }
-
         .show-title-large {
             font-size: 3em;
             color: var(--secondary-color);
             margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
-
         .seasons-tabs {
             display: flex;
             justify-content: center;
@@ -141,7 +129,6 @@
             margin-bottom: 30px;
             flex-wrap: wrap;
         }
-
         .season-tab {
             background: var(--card-bg);
             color: var(--light);
@@ -152,16 +139,13 @@
             font-weight: bold;
             min-width: 120px;
         }
-
         .season-tab.active {
             background: var(--primary-color);
         }
-
         .season-tab:hover {
             background: var(--secondary-color);
             transform: translateY(-2px);
         }
-
         .episodes-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -169,30 +153,25 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-
         .episode-card {
             background: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-
         .episode-thumbnail {
             width: 100%;
             height: 180px;
             object-fit: cover;
         }
-
         .episode-info {
             padding: 20px;
         }
-
         .episode-title {
             color: var(--secondary-color);
             margin-bottom: 10px;
             font-size: 1.2em;
         }
-
         .watch-button {
             display: inline-block;
             background: var(--primary-color);
@@ -205,37 +184,21 @@
             text-align: center;
             font-weight: bold;
         }
-
         .watch-button:hover {
             background: var(--secondary-color);
             transform: scale(1.05);
         }
-
         @media (max-width: 768px) {
             .show-title-large {
                 font-size: 2em;
             }
-
             .seasons-tabs {
                 padding: 0 10px;
             }
-
             .season-tab {
                 padding: 10px 16px;
                 min-width: auto;
             }
-        }
-        /* Adding new hover effect for the poster */
-        .show-poster {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .show-poster:hover {
-            transform: scale(1.05);
         }
     </style>
 </head>
@@ -244,7 +207,6 @@
         <span>🏠</span>
         Home
     </a>
-
     <div class="shows-grid">
         <div class="show-card">
             <img src="https://i.ibb.co/486Bt50/resizecom-maxresdefault.jpg" 
@@ -257,7 +219,6 @@
             </div>
         </div>
     </div>
-
     <div id="episodesView" class="episodes-view">
         <button class="back-button" onclick="hideEpisodes()">Close</button>
         <div class="show-header">
@@ -273,7 +234,212 @@
     </div>
 
     <script>
-
+        const shows = {
+            "The Boys": {
+                episodes: {
+                    season1: [
+                {
+                    title: "S1E1: The Name of the Game",
+                    thumbnail: "s1e1.jpg",
+                    link: "the-name-of-the-game.html",
+                    description: "Hughie Campbell's life changes when a superhero accidentally kills his girlfriend."
+                },
+                {
+                    title: "S1E2: Cherry",
+                    thumbnail: "s1e2.jpg",
+                    link: "cherry.html",
+                    description: "The Boys get themselves a Superhero; Starlight gets payback against the Deep."
+                },
+                {
+                    title: "S1E3: Get Some",
+                    thumbnail: "s1e3.jpg",
+                    link: "get-some.html",
+                    description: "The Boys head to the "Believe" Expo to follow a promising lead in their ongoing war against the Supes."
+                },
+                {
+                    title: "S1E4: The Female of the Species",
+                    thumbnail: "s1e4.jpg",
+                    link: "the-female-of-the-species.html",
+                    description: "The Boys track down a mysterious Supe with the ability to cause people's heads to explode."
+                },
+                {
+                    title: "S1E5: Good for the Soul",
+                    thumbnail: "s1e5.jpg",
+                    link: "good-for-the-soul.html",
+                    description: "The Boys plan their next move while Starlight faces a crisis of faith."
+                },
+                {
+                    title: "S1E6: The Innocents",
+                    thumbnail: "s1e6.jpg",
+                    link: "the-innocents.html",
+                    description: "A trip to the past reveals secrets about Vought and Compound V."
+                },
+                {
+                    title: "S1E7: The Self-Preservation Society",
+                    thumbnail: "s1e7.jpg",
+                    link: "the-self-preservation-society.html",
+                    description: "The Boys face a major crisis as secrets come to light."
+                },
+                {
+                    title: "S1E8: You Found Me",
+                    thumbnail: "s1e8.jpg",
+                    link: "you-found-me.html",
+                    description: "Season finale. The Boys and Homelander face off in an explosive confrontation."
+                },
+                    ],
+                    season2: [
+                {
+                    title: "S2E1: The Big Ride",
+                    thumbnail: "s2e1.jpg",
+                    link: "the-big-ride.html",
+                    description: "The Boys are on the run from the law, trying to fight back against the Supes."
+                },
+                {
+                    title: "S2E2: Proper Preparation and Planning",
+                    thumbnail: "s2e2.jpg",
+                    link: "proper-preparation-and-planning.html",
+                    description: "The Boys take to the high seas to safeguard their prisoner."
+                },
+                {
+                    title: "S2E3: Over the Hill with the Swords of a Thousand Men",
+                    thumbnail: "s2e3.jpg",
+                    link: "over-the-hill-with-the-swords-of-a-thousand-men.html",
+                    description: "Stormfront proves to be a force to be reckoned with."
+                },
+                {
+                    title: "S2E4: Nothing Like It in the World",
+                    thumbnail: "s2e4.jpg",
+                    link: "nothing-like-it-in-the-world.html",
+                    description: "Hughie and Annie face moral dilemmas while Butcher searches for Becca."
+                },
+                {
+                    title: "S2E5: We Gotta Go Now",
+                    thumbnail: "s2e5.jpg",
+                    link: "we-gotta-go-now.html",
+                    description: "The Boys plan to expose Vought's secrets while filming a superhero movie."
+                },
+                {
+                    title: "S2E6: The Bloody Doors Off",
+                    thumbnail: "s2e6.jpg",
+                    link: "the-bloody-doors-off.html",
+                    description: "The Boys infiltrate a Sage Grove facility and discover horrifying experiments."
+                },
+                {
+                    title: "S2E7: Butcher, Baker, Candlestick Maker",
+                    thumbnail: "s2e7.jpg",
+                    link: "butcher-baker-candlestick-maker.html",
+                    description: "A Congressional hearing into Vought takes an unexpected turn."
+                },
+                {
+                    title: "S2E8: What I Know",
+                    thumbnail: "s2e8.jpg",
+                    link: "what-i-know.html",
+                    description: "Season finale. The Boys face off against Stormfront while Butcher makes a choice."
+                },
+                    ],
+                    season3: [
+                {
+                    title: "S3E1: Payback",
+                    thumbnail: "s3e1.jpg",
+                    link: "payback.html",
+                    description: "It's been a year of calm. Homelander's subdued. Butcher works for the government."
+                },
+                {
+                    title: "S3E2: The Only Man in the Sky",
+                    thumbnail: "s3e2.jpg",
+                    link: "the-only-man-in-the-sky.html",
+                    description: "Homelander's birthday celebration doesn't go as planned."
+                },
+                {
+                    title: "S3E3: Barbary Coast",
+                    thumbnail: "s3e3.jpg",
+                    link: "barbary-coast.html",
+                    description: "The legend of Soldier Boy is revealed as the Boys track down a new lead."
+                },
+                {
+                    title: "S3E4: Glorious Five Year Plan",
+                    thumbnail: "s3e4.jpg",
+                    link: "glorious-five-year-plan.html",
+                    description: "The Boys travel to Russia in search of a weapon to defeat Homelander."
+                },
+                {
+                    title: "S3E5: The Last Time to Look on This World of Lies",
+                    thumbnail: "s3e5.jpg",
+                    link: "the-last-time-to-look-on-this-world-of-lies.html",
+                    description: "Soldier Boy's return changes everything as new alliances form."
+                },
+                {
+                    title: "S3E6: Herogasm",
+                    thumbnail: "s3e6.jpg",
+                    link: "herogasm.html",
+                    description: "The Boys infiltrate a secret superhero party with explosive results."
+                },
+                {
+                    title: "S3E7: Here Comes a Candle to Light You to Bed",
+                    thumbnail: "s3e7.jpg",
+                    link: "here-comes-a-candle-to-light-you-to-bed.html",
+                    description: "Shocking revelations about Soldier Boy lead to difficult choices."
+                },
+                {
+                    title: "S3E8: The Instant White-Hot Wild",
+                    thumbnail: "s3e8.jpg",
+                    link: "the-instant-white-hot-wild.html",
+                    description: "Season finale. The Boys, Soldier Boy, and Homelander face off in an epic battle."
+                },
+                    ],
+                    season4: [
+                {
+                    title: "S4E1: Department of Dirty Tricks",
+                    thumbnail: "s4e1.jpg",
+                    link: "department-of-dirty-tricks.html",
+                    description: "The world is on the brink as Homelander's influence grows."
+                },
+                {
+                    title: "S4E2: Where the Crawdads Sing",
+                    thumbnail: "s4e2.jpg",
+                    link: "where-the-crawdads-sing.html",
+                    description: "Victoria Neuman's presidential campaign gains momentum."
+                },
+                {
+                    title: "S4E3: Damage Theory",
+                    thumbnail: "s4e3.jpg",
+                    link: "damage-theory.html",
+                    description: "The Boys uncover a conspiracy within the government."
+                },
+                {
+                    title: "S4E4: Cold Hard Truth",
+                    thumbnail: "s4e4.jpg",
+                    link: "cold-hard-truth.html",
+                    description: "Starlight and Hughie face a new threat while Butcher's time runs short."
+                },
+                {
+                    title: "S4E5: In the Eye of the Storm",
+                    thumbnail: "s4e5.jpg",
+                    link: "in-the-eye-of-the-storm.html",
+                    description: "A new Supe emerges as Homelander's plans take shape."
+                },
+                {
+                    title: "S4E6: The Crossing",
+                    thumbnail: "s4e6.jpg",
+                    link: "the-crossing.html",
+                    description: "The Boys must make difficult alliances to stop a greater threat."
+                },
+                {
+                    title: "S4E7: Point of No Return",
+                    thumbnail: "s4e7.jpg",
+                    link: "point-of-no-return.html",
+                    description: "Everything comes to a head as secrets are revealed."
+                },
+                {
+                    title: "S4E8: The Final Stand",
+                    thumbnail: "s4e8.jpg",
+                    link: "the-final-stand.html",
+                    description: "Season finale. The fate of the world hangs in the balance."
+                }
+            ]
+        }
+    }
+};
 
         function showEpisodes(showId) {
             const view = document.getElementById('episodesView');
@@ -304,7 +470,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Event listeners for season tabs
         document.querySelectorAll('.season-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 document.querySelectorAll('.season-tab').forEach(t => 
@@ -315,7 +480,6 @@
             });
         });
 
-        // Add click event listener to the poster
         document.querySelector('.show-poster').addEventListener('click', () => {
             showEpisodes('The Boys');
         });
