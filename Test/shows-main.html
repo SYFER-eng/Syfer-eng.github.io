@@ -61,6 +61,12 @@
             cursor: pointer;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
             border: 2px solid transparent;
+            transition: transform 0.3s ease;
+        }
+
+        .show-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-color);
         }
 
         .show-poster {
@@ -92,6 +98,18 @@
             padding: 20px;
         }
 
+        .show-header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .show-title-large {
+            font-size: 3em;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
         .back-button {
             position: fixed;
             top: 20px;
@@ -111,6 +129,7 @@
             justify-content: center;
             gap: 15px;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
 
         .season-tab {
@@ -120,23 +139,32 @@
             padding: 12px 24px;
             border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
+            min-width: 120px;
         }
 
         .season-tab.active {
             background: var(--primary-color);
         }
 
+        .season-tab:hover {
+            background: var(--secondary-color);
+        }
+
         .episodes-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 25px;
             padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .episode-card {
             background: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .episode-thumbnail {
@@ -146,7 +174,13 @@
         }
 
         .episode-info {
-            padding: 15px;
+            padding: 20px;
+        }
+
+        .episode-title {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 1.2em;
         }
 
         .watch-button {
@@ -157,7 +191,13 @@
             padding: 10px;
             text-align: center;
             border-radius: 6px;
-            margin-top: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .watch-button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -167,7 +207,6 @@
     </a>
 
     <div class="shows-grid">
-        <!-- The Boys Card -->
         <div class="show-card" onclick="showEpisodes('TheBoys')">
             <img src="https://i.ibb.co/486Bt50/resizecom-maxresdefault.jpg" alt="The Boys" class="show-poster">
             <div class="show-info">
@@ -176,7 +215,6 @@
             </div>
         </div>
 
-        <!-- Pink Panther Card -->
         <div class="show-card" onclick="showEpisodes('PinkPanther')">
             <img src="https://example.com/pink-panther.jpg" alt="Pink Panther" class="show-poster">
             <div class="show-info">
@@ -188,7 +226,9 @@
 
     <div id="episodesView" class="episodes-view">
         <button class="back-button" onclick="hideEpisodes()">Close</button>
-        <div id="showTitle" class="show-title"></div>
+        <div class="show-header">
+            <h1 class="show-title-large"></h1>
+        </div>
         <div class="seasons-tabs" id="seasonsTabs"></div>
         <div class="episodes-list" id="episodesList"></div>
     </div>
@@ -201,12 +241,39 @@
                 episodes: {
                     season1: [
                         {
-                            title: "The Name of the Game",
-                            thumbnail: "https://example.com/ep1.jpg",
-                            link: "episodes/the-boys-s01e01.html",
-                            description: "Hughie Campbell's life changes forever."
+                            title: "S1E1: The Name of the Game",
+                            thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
+                            link: "The-Boys/The-Name-of-the-Game.html",
+                            description: "Hughie Campbell's life changes when a superhero accidentally kills his girlfriend."
                         },
-                        // Add more episodes
+                        // Add more episodes for season 1
+                    ],
+                    season2: [
+                        {
+                            title: "S2E1: The Big Ride",
+                            thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
+                            link: "The-Boys/The-Big-Ride.html",
+                            description: "The Boys are on the run from the law."
+                        },
+                        // Add more episodes for season 2
+                    ],
+                    season3: [
+                        {
+                            title: "S3E1: Payback",
+                            thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
+                            link: "The-Boys/Payback.html",
+                            description: "It's been a year of calm. Homelander's subdued."
+                        },
+                        // Add more episodes for season 3
+                    ],
+                    season4: [
+                        {
+                            title: "S4E1: Department of Dirty Tricks",
+                            thumbnail: "https://static1.colliderimages.com/wordpress/wp-content/uploads/2021/08/the-boys-season-3.jpg",
+                            link: "The-Boys/Department-of-Dirty-Tricks.html",
+                            description: "The world is on the brink as Homelander's influence grows."
+                        },
+                        // Add more episodes for season 4
                     ]
                 }
             },
@@ -216,50 +283,73 @@
                 episodes: {
                     season1: [
                         {
-                            title: "Pink Premiere",
-                            thumbnail: "https://example.com/pp-ep1.jpg",
-                            link: "episodes/pink-panther-s01e01.html",
-                            description: "The Pink Panther's first adventure."
+                            title: "S1E1: Pink Premiere",
+                            thumbnail: "https://example.com/pink-panther-ep1.jpg",
+                            link: "Pink-Panther/Pink-Premiere.html",
+                            description: "The Pink Panther's first adventure begins."
                         },
-                        // Add more episodes
+                        // Add more episodes for season 1
+                    ],
+                    season2: [
+                        {
+                            title: "S2E1: Pink Returns",
+                            thumbnail: "https://example.com/pink-panther-s2e1.jpg",
+                            link: "Pink-Panther/Pink-Returns.html",
+                            description: "Pink Panther returns for more adventures."
+                        },
+                        // Add more episodes for season 2
                     ]
                 }
             }
         };
 
         function showEpisodes(showId) {
+            const view = document.getElementById('episodesView');
+            view.dataset.currentShow = showId;
+            view.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
             const show = shows[showId];
-            document.getElementById('episodesView').style.display = 'block';
-            document.getElementById('showTitle').textContent = show.title;
-            
+            document.querySelector('.show-title-large').textContent = show.title;
+
             // Create season tabs
-            const tabsHtml = Array.from({length: show.seasons}, (_, i) => 
-                `<button class="season-tab ${i === 0 ? 'active' : ''}" 
-                 onclick="changeSeason('${showId}', ${i + 1})">Season ${i + 1}</button>`
-            ).join('');
-            
-            document.getElementById('seasonsTabs').innerHTML = tabsHtml;
-            changeSeason(showId, 1);
+            const seasonsTabs = document.getElementById('seasonsTabs');
+            seasonsTabs.innerHTML = '';
+            for (let i = 1; i <= show.seasons; i++) {
+                const tab = document.createElement('button');
+                tab.className = `season-tab ${i === 1 ? 'active' : ''}`;
+                tab.textContent = `Season ${i}`;
+                tab.onclick = () => {
+                    document.querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    updateEpisodesList(showId, `season${i}`);
+                };
+                seasonsTabs.appendChild(tab);
+            }
+
+            // Show first season by default
+            updateEpisodesList(showId, 'season1');
         }
 
-        function changeSeason(showId, seasonNum) {
-            const episodes = shows[showId].episodes[`season${seasonNum}`];
-            const episodesHtml = episodes.map(ep => `
+        function updateEpisodesList(showId, season) {
+            const episodesList = document.getElementById('episodesList');
+            const episodes = shows[showId].episodes[season];
+
+            episodesList.innerHTML = episodes.map(ep => `
                 <div class="episode-card">
-                    <img src="${ep.thumbnail}" class="episode-thumbnail" alt="${ep.title}">
+                    <img src="${ep.thumbnail}" alt="${ep.title}" class="episode-thumbnail">
                     <div class="episode-info">
-                        <h3>${ep.title}</h3>
+                        <h3 class="episode-title">${ep.title}</h3>
                         <p>${ep.description}</p>
                         <a href="${ep.link}" class="watch-button">Watch Now</a>
                     </div>
                 </div>
             `).join('');
-            
-            document.getElementById('episodesList').innerHTML = episodesHtml;
         }
 
         function hideEpisodes() {
             document.getElementById('episodesView').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     </script>
 </body>
