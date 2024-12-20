@@ -8,14 +8,16 @@
             --primary-color: #800080;
             --hover-color: #9932CC;
             --bg-dark: #1a1a1a;
+            --card-shadow: rgba(128, 0, 128, 0.4);
         }
 
         body {
             margin: 0;
             padding: 0;
-            background-color: black;
+            background: linear-gradient(135deg, #13131f, #1a1a2e);
             color: #fff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
         }
 
         .header {
@@ -23,9 +25,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 1.5rem;
-            background-color: var(--bg-dark);
-            border-bottom: 2px solid var(--primary-color);
-            box-shadow: 0 2px 10px rgba(128, 0, 128, 0.3);
+            background: rgba(26, 26, 26, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(128, 0, 128, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
@@ -34,6 +41,7 @@
             background: linear-gradient(45deg, var(--primary-color), var(--hover-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .home-button {
@@ -48,41 +56,89 @@
 
         .home-button:hover {
             background-color: var(--hover-color);
-            box-shadow: 0 0 20px var(--primary-color);
             transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--primary-color);
         }
 
-        .games-container {
-            padding: 2rem;
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 2rem auto;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+            padding: 0 1rem;
+        }
+
+        .category-button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-button:hover,
+        .category-button.active {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--primary-color);
         }
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
-            padding: 1rem;
+            padding: 2rem;
+            animation: fadeIn 0.5s ease;
         }
 
         .game-card {
-            background-color: var(--bg-dark);
+            position: relative;
+            background: rgba(26, 26, 26, 0.8);
             border: 2px solid var(--primary-color);
             border-radius: 15px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
         }
 
         .game-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 5px 20px rgba(128, 0, 128, 0.4);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 10px 25px var(--card-shadow);
         }
 
         .game-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s ease;
         }
 
         .game-card:hover img {
@@ -92,18 +148,11 @@
         .game-card h3 {
             padding: 1rem;
             margin: 0;
-            color: var(--hover-color);
+            color: white;
             text-align: center;
             font-size: 1.2rem;
-        }
-
-        .section-title {
-            text-align: center;
-            color: var(--hover-color);
-            font-size: 2rem;
-            margin: 2rem 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            background: rgba(0, 0, 0, 0.7);
+            position: relative;
         }
 
         #gameFrame {
@@ -113,21 +162,35 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1000;
             background: black;
+            z-index: 1000;
         }
 
-        #gameIframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
         }
 
-        .game-instructions {
-            text-align: center;
-            color: var(--hover-color);
-            margin-top: 1rem;
-            font-size: 0.9rem;
+        .close-button:hover {
+            background: var(--hover-color);
+            transform: rotate(90deg);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -135,14 +198,18 @@
     <div class="header">
         <h1>Syfer's Unblocked Games</h1>
         <a href="https://Syfer-eng.github.io/Menu.html" class="home-button">Home</a>
+        <a href="https://forms.gle/79fXLvN6UoTayJCM9" class="home-button">Request Games</a>
     </div>
 
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search games...">
+    </div>
+
+
     <div class="games-container">
-        <h2 class="section-title">Featured Games</h2>
-        <p class="game-instructions">Welcome  To Syfers Games</p>
-        
         <div id="gameFrame">
             <iframe id="gameIframe" title="Game Frame"></iframe>
+            <div class="close-button" onclick="closeGame()">×</div>
         </div>
 
         <div class="games-grid">
@@ -190,37 +257,68 @@
                 <img src="https://placehold.co/200x160" alt="More Games Soon">
                 <h3>More Games Soon</h3>
             </div>
-            div class="game-card" onclick="loadGame('https://placehold.co/200x160')">
-                <img src="https://placehold.co/200x160" alt="More Games Soon">
-                <h3>More Games Soon</h3>
-            </div>
-        </div>
+
+
+
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const games = document.querySelectorAll('.game-card');
+            const searchInput = document.querySelector('.search-input');
+            const categoryButtons = document.querySelectorAll('.category-button');
+            let currentCategory = 'all';
+
+            searchInput.addEventListener('input', filterGames);
+
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentCategory = button.textContent.toLowerCase();
+                    filterGames();
+                });
+            });
+
+            function filterGames() {
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                games.forEach(game => {
+                    const title = game.querySelector('h3').textContent.toLowerCase();
+                    const category = game.dataset.category;
+                    const matchesSearch = title.includes(searchTerm);
+                    const matchesCategory = currentCategory === 'all' || category === currentCategory;
+                    
+                    if (matchesSearch && matchesCategory) {
+                        game.style.display = 'block';
+                        game.style.animation = 'fadeIn 0.5s ease';
+                    } else {
+                        game.style.display = 'none';
+                    }
+                });
+            }
+        });
+
         function loadGame(url) {
             const gameFrame = document.getElementById('gameFrame');
             const gameIframe = document.getElementById('gameIframe');
-            gameIframe.src = url;
             gameFrame.style.display = 'block';
+            gameIframe.src = url;
         }
 
         function closeGame() {
             const gameFrame = document.getElementById('gameFrame');
             const gameIframe = document.getElementById('gameIframe');
-            gameFrame.style.display = 'none';
-            gameIframe.src = '';
+            gameFrame.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => {
+                gameFrame.style.display = 'none';
+                gameIframe.src = '';
+                gameFrame.style.animation = '';
+            }, 300);
         }
 
-        document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape") {
-                const gameFrame = document.getElementById('gameFrame');
-                if (gameFrame.style.display === 'block') {
-                    closeGame();
-                } else {
-                    window.location.href = 'https://Syfer-eng.github.io/Menu.html';
-                }
-            } else if (event.key === 'Escape') {
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
                 closeGame();
             }
         });
