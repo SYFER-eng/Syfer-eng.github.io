@@ -158,18 +158,44 @@
         #gameFrame {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: rgba(0, 0, 0, 0.95);
             z-index: 1000;
+            border-radius: 15px;
+            box-shadow: 0 0 30px var(--card-shadow);
+            transition: all 0.3s ease;
         }
 
-        .close-button {
+        #gameFrame.fullscreen {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+        }
+
+        #gameIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        #gameFrame.fullscreen #gameIframe {
+            border-radius: 0;
+        }
+
+        .game-controls {
             position: absolute;
             top: 20px;
             right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-button {
             width: 40px;
             height: 40px;
             background: var(--primary-color);
@@ -179,13 +205,32 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 24px;
+            font-size: 20px;
             transition: all 0.3s ease;
+            border: none;
         }
 
-        .close-button:hover {
+        .control-button:hover {
             background: var(--hover-color);
-            transform: rotate(90deg);
+            transform: scale(1.1);
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--primary-color);
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
         @keyframes fadeIn {
@@ -205,21 +250,20 @@
         <input type="text" class="search-input" placeholder="Search games...">
     </div>
 
-
     <div class="games-container">
         <div id="gameFrame">
+            <div class="loading-spinner"></div>
             <iframe id="gameIframe" title="Game Frame"></iframe>
-            <div class="close-button" onclick="closeGame()">×</div>
+            <div class="game-controls">
+                <button class="control-button" onclick="toggleFullscreen()" title="Toggle Fullscreen">⛶</button>
+                <button class="control-button" onclick="closeGame()" title="Close Game">×</button>
+            </div>
         </div>
 
         <div class="games-grid">
             <div class="game-card" onclick="loadGame('https://krunker.io/')">
                 <img src="https://krunker-io.io/krunker-io-icon.jpg" alt="Krunker.io">
                 <h3>Krunker.io</h3>
-            </div>
-            <div class="game-card" onclick="loadGame('https://agar.io/')">
-                <img src="https://www.io-oyunlar.com/wp-content/uploads/2018/01/agar-io-oyun-200x160.jpg" alt="Agar.io">
-                <h3>Agar.io</h3>
             </div>
             <div class="game-card" onclick="loadGame('https://slither.io/')">
                 <img src="https://th.bing.com/th/id/OIP.LYa-qhB_EWtlV1KAEfidmQHaHa?rs=1&pid=ImgDetMain" alt="Slither.io">
@@ -257,39 +301,31 @@
                 <img src="https://placehold.co/200x160" alt="More Games Soon">
                 <h3>More Games Soon</h3>
             </div>
+            <div class="game-card" onclick="loadGame('https://placehold.co/200x160')">
+                <img src="https://placehold.co/200x160" alt="More Games Soon">
+                <h3>More Games Soon</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://placehold.co/200x160')">
+                <img src="https://placehold.co/200x160" alt="More Games Soon">
+                <h3>More Games Soon</h3>
+            </div>
 
-
-
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const games = document.querySelectorAll('.game-card');
             const searchInput = document.querySelector('.search-input');
-            const categoryButtons = document.querySelectorAll('.category-button');
-            let currentCategory = 'all';
 
             searchInput.addEventListener('input', filterGames);
-
-            categoryButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    categoryButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    currentCategory = button.textContent.toLowerCase();
-                    filterGames();
-                });
-            });
 
             function filterGames() {
                 const searchTerm = searchInput.value.toLowerCase();
                 
                 games.forEach(game => {
                     const title = game.querySelector('h3').textContent.toLowerCase();
-                    const category = game.dataset.category;
-                    const matchesSearch = title.includes(searchTerm);
-                    const matchesCategory = currentCategory === 'all' || category === currentCategory;
-                    
-                    if (matchesSearch && matchesCategory) {
+                    if (title.includes(searchTerm)) {
                         game.style.display = 'block';
                         game.style.animation = 'fadeIn 0.5s ease';
                     } else {
@@ -302,24 +338,42 @@
         function loadGame(url) {
             const gameFrame = document.getElementById('gameFrame');
             const gameIframe = document.getElementById('gameIframe');
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            
             gameFrame.style.display = 'block';
+            loadingSpinner.style.display = 'block';
+            
+            gameIframe.onload = () => {
+                loadingSpinner.style.display = 'none';
+            };
+            
             gameIframe.src = url;
+        }
+
+        function toggleFullscreen() {
+            const gameFrame = document.getElementById('gameFrame');
+            gameFrame.classList.toggle('fullscreen');
         }
 
         function closeGame() {
             const gameFrame = document.getElementById('gameFrame');
             const gameIframe = document.getElementById('gameIframe');
-            gameFrame.style.animation = 'fadeOut 0.3s ease';
+            
+            gameFrame.classList.remove('fullscreen');
+            gameFrame.style.opacity = '0';
+            
             setTimeout(() => {
                 gameFrame.style.display = 'none';
                 gameIframe.src = '';
-                gameFrame.style.animation = '';
+                gameFrame.style.opacity = '1';
             }, 300);
         }
 
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 closeGame();
+            } else if (event.key === 'f' || event.key === 'F') {
+                toggleFullscreen();
             }
         });
     </script>
