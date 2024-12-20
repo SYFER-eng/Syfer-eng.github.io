@@ -2,174 +2,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Downloads</title>
+    <title>Syfer's Unblocked Games</title>
     <style>
+        :root {
+            --primary-color: #800080;
+            --hover-color: #9932CC;
+            --bg-dark: #1a1a1a;
+        }
+
         body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: black;
             color: #fff;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background-color: #1a1a1a;
-            border-bottom: 2px solid #800080;
+            padding: 1.5rem;
+            background-color: var(--bg-dark);
+            border-bottom: 2px solid var(--primary-color);
+            box-shadow: 0 2px 10px rgba(128, 0, 128, 0.3);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--hover-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .home-button {
-            padding: 10px 20px;
-            background-color: #800080;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 8px;
             transition: all 0.3s ease;
+            font-weight: bold;
         }
 
         .home-button:hover {
-            background-color: #9932CC;
-            box-shadow: 0 0 15px #800080;
+            background-color: var(--hover-color);
+            box-shadow: 0 0 20px var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .games-container {
+            padding: 2rem;
         }
 
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
+            gap: 2rem;
+            padding: 1rem;
         }
 
         .game-card {
-            background-color: #1a1a1a;
-            border: 2px solid #800080;
-            border-radius: 10px;
+            background-color: var(--bg-dark);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .game-card:hover {
-            transform: scale(1.05);
+            transform: translateY(-10px);
+            box-shadow: 0 5px 20px rgba(128, 0, 128, 0.4);
         }
 
         .game-card img {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .game-card:hover img {
+            transform: scale(1.1);
         }
 
         .game-card h3 {
-            padding: 10px;
+            padding: 1rem;
             margin: 0;
-            color: #9932CC;
+            color: var(--hover-color);
             text-align: center;
+            font-size: 1.2rem;
         }
 
-        .modal {
+        .section-title {
+            text-align: center;
+            color: var(--hover-color);
+            font-size: 2rem;
+            margin: 2rem 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #gameFrame {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
             z-index: 1000;
+            background: black;
         }
 
-        .modal-content {
-            position: relative;
-            width: 80%;
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #1a1a1a;
-            border: 2px solid #800080;
-            border-radius: 10px;
-            padding: 20px;
+        #gameIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
-        .close-button {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            color: #9932CC;
-            font-size: 30px;
-            cursor: pointer;
-        }
-
-        .download-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .download-button {
-            padding: 15px 30px;
-            background-color: #800080;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .download-button:hover {
-            background-color: #9932CC;
-            box-shadow: 0 0 15px #800080;
+        .game-instructions {
+            text-align: center;
+            color: var(--hover-color);
+            margin-top: 1rem;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Game Downloads</h1>
-        <a href="Https://Syfer-eng.github.io/Menu.html" class="home-button">Home</a>
+        <h1>Syfer's Unblocked Games</h1>
+        <a href="https://Syfer-eng.github.io/Menu.html" class="home-button">Home</a>
     </div>
 
-    <div class="games-grid">
-        <div class="game-card" onclick="openModal('Hydroneer')">
-            <img src="https://th.bing.com/th/id/OIP.VhBivfNL38cd49VOs4VhDAAAAA?rs=1&pid=ImgDetMain" alt="Hydroneer">
-            <h3>Hydroneer</h3>
+    <div class="games-container">
+        <h2 class="section-title">Featured Games</h2>
+        <p class="game-instructions">Welcome  To Syfers Games</p>
+        
+        <div id="gameFrame">
+            <iframe id="gameIframe" title="Game Frame"></iframe>
         </div>
 
-        <!-- Add more game cards as needed -->
-    </div>
-
-    <div id="gameModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle"></h2>
-            <img id="modalImage" style="width: 100%; max-height: 400px; object-fit: cover;">
-            <div class="download-buttons">
-                <a href="https://mega.nz/folder/gsQGkC6C#2nMIlsSDCaOzWwLHNShyZw" class="download-button">Direct Download</a>
-                <a href="https://mega.nz/file/Q9AkBZRb#1Q9UaW534kCyEk3BPbAuyWIQOBrv80-rAy77OkZbgsQ" class="download-button">Torrent Download</a>
+        <div class="games-grid">
+            <div class="game-card" onclick="loadGame('https://krunker.io/')">
+                <img src="https://krunker-io.io/krunker-io-icon.jpg" alt="Krunker.io">
+                <h3>Krunker.io</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://agar.io/')">
+                <img src="https://www.io-oyunlar.com/wp-content/uploads/2018/01/agar-io-oyun-200x160.jpg" alt="Agar.io">
+                <h3>Agar.io</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://slither.io/')">
+                <img src="https://th.bing.com/th/id/OIP.LYa-qhB_EWtlV1KAEfidmQHaHa?rs=1&pid=ImgDetMain" alt="Slither.io">
+                <h3>Slither.io</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://shellshock.io/')">
+                <img src="https://th.bing.com/th/id/OIP.IsmeKrhF0gN18wHMXsS8_gHaHw?rs=1&pid=ImgDetMain" alt="Shell Shockers">
+                <h3>Shell Shockers</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://diep.io/')">
+                <img src="https://th.bing.com/th/id/R.427da301ae99abefd933f7a678cf253f?rik=W%2bUB72Nh6FEe%2bA&riu=http%3a%2f%2fdiep-2.io%2fdiep.png&ehk=QdPa1FWqRdVRHnCbUqqaxz30vf%2b%2b6hos59JxHLAueOU%3d&risl=&pid=ImgRaw&r=0" alt="Diep.io">
+                <h3>Diep.io</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://javaspence.github.io/retrobowl/')">
+                <img src="https://play-lh.googleusercontent.com/WRM5Y1xZmzcCP1YtO5zl6G2g7CU5c5ZfjX4UVrgi1bpNgkfy-wuB-bQx3kkeRfaGYQ" alt="Retro Bowl">
+                <h3>Retro Bowl</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://1v1.lol/')">
+                <img src="https://th.bing.com/th/id/OIP.I8HLfUGlR1d2_DGG6tefIAHaHa?rs=1&pid=ImgDetMain" alt="1v1.lol">
+                <h3>1v1.lol</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://placehold.co/200x160')">
+                <img src="https://placehold.co/200x160" alt="More Games Soon">
+                <h3>More Games Soon</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://placehold.co/200x160')">
+                <img src="https://placehold.co/200x160" alt="More Games Soon">
+                <h3>More Games Soon</h3>
+            </div>
+            <div class="game-card" onclick="loadGame('https://placehold.co/200x160')">
+                <img src="https://placehold.co/200x160" alt="More Games Soon">
+                <h3>More Games Soon</h3>
             </div>
         </div>
     </div>
 
-
     <script>
-        function openModal(gameName) {
-            const modal = document.getElementById('gameModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalImage = document.getElementById('modalImage');
-            
-            modalTitle.textContent = gameName;
-            modalImage.src = gameName.toLowerCase().replace(' ', '') + '.jpg';
-            modal.style.display = 'block';
+        function loadGame(url) {
+            const gameFrame = document.getElementById('gameFrame');
+            const gameIframe = document.getElementById('gameIframe');
+            gameIframe.src = url;
+            gameFrame.style.display = 'block';
         }
 
-        function closeModal() {
-            document.getElementById('gameModal').style.display = 'none';
+        function closeGame() {
+            const gameFrame = document.getElementById('gameFrame');
+            const gameIframe = document.getElementById('gameIframe');
+            gameFrame.style.display = 'none';
+            gameIframe.src = '';
         }
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('gameModal');
-            if (event.target == modal) {
-                modal.style.display = 'none';
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                const gameFrame = document.getElementById('gameFrame');
+                if (gameFrame.style.display === 'block') {
+                    closeGame();
+                } else {
+                    window.location.href = 'https://Syfer-eng.github.io/Menu.html';
+                }
+            } else if (event.key === 'Escape') {
+                closeGame();
             }
-        }
+        });
     </script>
 </body>
 </html>
