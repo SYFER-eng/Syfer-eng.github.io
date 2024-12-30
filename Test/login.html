@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Sign Up</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .toggle-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Login Form -->
+        <div id="login-form" class="form-container active">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Login">
+                </div>
+            </form>
+            <div class="toggle-link">
+                Don't have an account? <a href="javascript:void(0);" onclick="toggleForm('signup')">Sign Up</a>
+            </div>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div id="signup-form" class="form-container">
+            <h2>Sign Up</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="password" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Sign Up">
+                </div>
+            </form>
+            <div class="toggle-link">
+                Already have an account? <a href="javascript:void(0);" onclick="toggleForm('login')">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle between login and signup forms
+        function toggleForm(formType) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+
+            if (formType === 'signup') {
+                loginForm.classList.remove('active');
+                signupForm.classList.add('active');
+            } else {
+                signupForm.classList.remove('active');
+                loginForm.classList.add('active');
+            }
+        }
+
+        // Login Form Validation (Basic Example)
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Perform the actual login logic here (e.g., API request, authentication)
+            alert(`Login successful for ${email}`);
+        });
+
+        // Sign Up Form Validation
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (!email || !password || !confirmPassword) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+
+            // Perform the actual sign-up logic here (e.g., API request, save user data)
+            alert(`Sign Up successful for ${email}`);
+        });
+    </script>
+
+</body>
+</html>
