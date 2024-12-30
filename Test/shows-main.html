@@ -1,4 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Collection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            width: 70%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .category-buttons button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .category-buttons button:hover {
+            background-color: #555;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .movie-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .movie-card img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        .movie-card h3 {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .movie-card p {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .home-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Movie Collection</h1>
+    </header>
+
+    <div class="container">
+        <!-- Search and Category Section -->
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="Search movies...">
+            <div class="category-buttons">
+                <button>Action</button>
+                <button>Comedy</button>
+                <button>Drama</button>
+                <button>Horror</button>
+                <button>All</button>
             </div>
-            <div class="game-card" onclick="loadGame('https://placehold.co/200x160')">
-                <img src="https://placehold.co/200x160" alt="More Games Soon">
-                <h3>More Games Soon</h3>
+        </div>
+
+        <!-- Movie Grid Section -->
+        <div class="movie-grid">
+            <!-- Movie 1 -->
+            <div class="movie-card">
+                <img src="movie1.jpg" alt="Movie 1">
+                <h3>Movie Title 1</h3>
+                <p>Action, Adventure</p>
+            </div>
+
+            <!-- Movie 2 -->
+            <div class="movie-card">
+                <img src="movie2.jpg" alt="Movie 2">
+                <h3>Movie Title 2</h3>
+                <p>Comedy, Romance</p>
+            </div>
+
+            <!-- Movie 3 -->
+            <div class="movie-card">
+                <img src="movie3.jpg" alt="Movie 3">
+                <h3>Movie Title 3</h3>
+                <p>Drama, Thriller</p>
+            </div>
+
+            <!-- Movie 4 -->
+            <div class="movie-card">
+                <img src="movie4.jpg" alt="Movie 4">
+                <h3>Movie Title 4</h3>
+                <p>Horror, Mystery</p>
+            </div>
+        </div>
+
+        <!-- Home Button -->
+        <a href="index.html" class="home-button">Back to Home</a>
+    </div>
+
+</body>
+</html>
