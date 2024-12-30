@@ -529,58 +529,13 @@
             }
         };
 
-        function showEpisodes(showId) {
-            const view = document.getElementById('episodesView');
-            view.dataset.currentShow = showId;
-            view.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-
-            const show = shows[showId];
-            document.querySelector('.show-title-large').textContent = show.title;
-
-            // Create season tabs
-            const seasonsTabs = document.getElementById('seasonsTabs');
-            seasonsTabs.innerHTML = '';
-            for (let i = 1; i <= show.seasons; i++) {
-                const tab = document.createElement('button');
-                tab.className = `season-tab ${i === 1 ? 'active' : ''}`;
-                tab.textContent = `Season ${i}`;
-                tab.onclick = () => {
-                    document.querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    updateEpisodesList(showId, `season${i}`);
-                };
-                seasonsTabs.appendChild(tab);
-            }
-
-            // Show first season by default
-            updateEpisodesList(showId, 'season1');
-        }
-
-        function updateEpisodesList(showId, season) {
-            const episodesList = document.getElementById('episodesList');
-            const episodes = shows[showId].episodes[season];
-
-            episodesList.innerHTML = episodes.map(ep => `
-                <div class="episode-card">
-                    <img src="${ep.thumbnail}" alt="${ep.title}" class="episode-thumbnail">
-                    <div class="episode-info">
-                        <h3 class="episode-title">${ep.title}</h3>
-                        <p>${ep.description}</p>
-                        <a href="${ep.link}" class="watch-button">Watch Now</a>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-
-
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Bottom Banner</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         /* Style for the banner */
         #bottom-banner {
@@ -612,31 +567,172 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* Container for the show episodes view */
+        #episodesView {
+            display: none;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-top: 2px solid #ddd;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10000;
+            overflow: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .season-tab {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #7A4BCF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .season-tab.active {
+            background-color: #9B59B6;
+        }
+
+        /* Styling for the episode cards */
+        .episode-card {
+            display: flex;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .episode-thumbnail {
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .episode-info {
+            flex: 1;
+        }
+
+        .episode-title {
+            font-size: 18px;
+            margin: 0;
+        }
+
+        .watch-button {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #7A4BCF;
+            color: white;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .watch-button:hover {
+            background-color: #9B59B6;
+        }
+
     </style>
 </head>
 <body>
 
-        function hideEpisodes() {
-            document.getElementById('episodesView').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    </script>
-</body>
-</html>
-
-
-            <!-- Example content -->
-    <div style="height: 200px; padding: 20px;">
-        <h1></h1>
-        <p></p>
+    <!-- Example content to allow scrolling -->
+    <div style="height: 1500px; padding: 20px;">
+        <h1>Scroll Down to See the Banner!</h1>
+        <p>Scroll to the bottom of this page and the banner will appear.</p>
     </div>
-        
+
     <!-- Banner content -->
     <div id="bottom-banner" onclick="window.location.href='coming-soon.html'">
         <i class="fas fa-film"></i> <strong>Developer: Syfer-eng</strong> ‎ ‎ ‎ More Shows Coming Soon.
     </div>
 
+    <!-- Show episodes view -->
+    <div id="episodesView">
+        <button onclick="hideEpisodes()">Close</button>
+        <h2 class="show-title-large"></h2>
+        <div id="seasonsTabs"></div>
+        <div id="episodesList"></div>
+    </div>
+
     <script>
+        // Sample data for shows
+        const shows = {
+            1: {
+                title: "Example Show",
+                seasons: 2,
+                episodes: {
+                    season1: [
+                        { thumbnail: 'https://via.placeholder.com/100', title: 'Episode 1', description: 'Description for Episode 1', link: '#' },
+                        { thumbnail: 'https://via.placeholder.com/100', title: 'Episode 2', description: 'Description for Episode 2', link: '#' }
+                    ],
+                    season2: [
+                        { thumbnail: 'https://via.placeholder.com/100', title: 'Episode 1', description: 'Description for Episode 1', link: '#' },
+                        { thumbnail: 'https://via.placeholder.com/100', title: 'Episode 2', description: 'Description for Episode 2', link: '#' }
+                    ]
+                }
+            }
+        };
+
+        // Function to show episodes
+        function showEpisodes(showId) {
+            const view = document.getElementById('episodesView');
+            view.dataset.currentShow = showId;
+            view.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+
+            const show = shows[showId];
+            document.querySelector('.show-title-large').textContent = show.title;
+
+            // Create season tabs
+            const seasonsTabs = document.getElementById('seasonsTabs');
+            seasonsTabs.innerHTML = '';
+            for (let i = 1; i <= show.seasons; i++) {
+                const tab = document.createElement('button');
+                tab.className = `season-tab ${i === 1 ? 'active' : ''}`;
+                tab.textContent = `Season ${i}`;
+                tab.onclick = () => {
+                    document.querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    updateEpisodesList(showId, `season${i}`);
+                };
+                seasonsTabs.appendChild(tab);
+            }
+
+            // Show first season by default
+            updateEpisodesList(showId, 'season1');
+        }
+
+        // Function to update the episodes list based on the selected season
+        function updateEpisodesList(showId, season) {
+            const episodesList = document.getElementById('episodesList');
+            const episodes = shows[showId].episodes[season];
+
+            episodesList.innerHTML = episodes.map(ep => `
+                <div class="episode-card">
+                    <img src="${ep.thumbnail}" alt="${ep.title}" class="episode-thumbnail">
+                    <div class="episode-info">
+                        <h3 class="episode-title">${ep.title}</h3>
+                        <p>${ep.description}</p>
+                        <a href="${ep.link}" class="watch-button">Watch Now</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Function to hide episodes view
+        function hideEpisodes() {
+            document.getElementById('episodesView').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
         // JavaScript to trigger the banner when scrolled to the bottom
         window.onscroll = function() {
             var banner = document.getElementById("bottom-banner");
@@ -651,6 +747,6 @@
             }
         };
     </script>
-
 </body>
 </html>
+
