@@ -623,34 +623,3 @@
     </script>
 </body>
 </html>
-
-
-            <!-- Example content -->
-    <div style="height: 500px; padding: 20px;">
-        <h1></h1>
-        <p></p>
-    </div>
-        
-    <!-- Banner content -->
-    <div id="bottom-banner" onclick="window.location.href='coming-soon.html'">
-        <i class="fas fa-film"></i> <strong>Developer: Syfer-eng</strong> ‎ ‎ ‎ More Shows Coming Soon.
-    </div>
-
-    <script>
-        // JavaScript to trigger the banner when scrolled to the bottom
-        window.onscroll = function() {
-            var banner = document.getElementById("bottom-banner");
-            var scrollPosition = window.innerHeight + window.scrollY;
-            var documentHeight = document.documentElement.scrollHeight;
-
-            // If we are at the bottom of the page, show the banner
-            if (scrollPosition >= documentHeight) {
-                banner.classList.add("show");
-            } else {
-                banner.classList.remove("show");
-            }
-        };
-    </script>
-
-</body>
-</html>
