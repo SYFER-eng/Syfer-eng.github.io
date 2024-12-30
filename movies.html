@@ -557,55 +557,99 @@
 </div>
 </div>
 
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.yTrt1w18n-bqLf_bw24PTAHaJn?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">coming soon</h3>
-    <div class="movie-meta">
-        <span>coming soon</span>
-        <span>coming soon</span>
-    </div>
-    <a href="coming-soon.html" class="play-btn">Watch Now</a>
-</div>
-</div>
 
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.yTrt1w18n-bqLf_bw24PTAHaJn?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">coming soon</h3>
-    <div class="movie-meta">
-        <span>coming soon</span>
-        <span>coming soon</span>
-    </div>
-    <a href="coming-soon.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.yTrt1w18n-bqLf_bw24PTAHaJn?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">coming soon</h3>
-    <div class="movie-meta">
-        <span>coming soon</span>
-        <span>coming soon</span>
-    </div>
-    <a href="coming-soon.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.yTrt1w18n-bqLf_bw24PTAHaJn?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">coming soon</h3>
-    <div class="movie-meta">
-        <span>coming soon</span>
-        <span>coming soon</span>
-    </div>
-    <a href="coming-soon.html" class="play-btn">Watch Now</a>
-</div>
-</div>
         <!-- Add more movie cards as needed -->
     </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Style for the banner */
+        #bottom-banner {
+            position: fixed;
+            bottom: -70px; /* Initially off-screen, adjusted for smaller height */
+            left: 0;
+            width: 100%;
+            background-color: black; /* Black background */
+            color: #7A4BCF; /* Purple text */
+            text-align: center;
+            padding: 4px 0; /* Reduced padding to make the banner smaller */
+            font-size: 16px; /* Smaller text size */
+            z-index: 9999;
+            transform: translateY(100%);
+            transition: transform 0.5s ease, bottom 0.5s ease, opacity 0.5s ease, color 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+        }
+
+        /* Banner hover effect */
+        #bottom-banner:hover {
+            color: #9B59B6; /* Lighter purple text on hover */
+            background-color: #333; /* Dark gray (lighter black) background on hover */
+        }
+
+        /* Banner animation */
+        #bottom-banner.show {
+            bottom: 0;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Banner content -->
+    <div id="bottom-banner" onclick="window.location.href='coming-soon.html'">
+        <strong>Developer: Syfer-eng</strong> ‎ ‎ ‎ More Movies Coming Soon.
+    </div>
+
+    <script>
+        // JavaScript to trigger the banner when scrolled to the bottom
+        window.onscroll = function() {
+            var banner = document.getElementById("bottom-banner");
+            var scrollPosition = window.innerHeight + window.scrollY;
+            var documentHeight = document.documentElement.scrollHeight;
+
+            // If we are at the bottom of the page, show the banner
+            if (scrollPosition >= documentHeight) {
+                banner.classList.add("show");
+            } else {
+                banner.classList.remove("show");
+            }
+        };
+    </script>
+
+</body>
+</html>
+
 
     <script>
         const searchInput = document.querySelector('.search-input');
@@ -624,7 +668,7 @@
             button.addEventListener('click', () => {
                 categoryButtons.forEach(btn => btn.style.background = 'var(--primary)');
                 button.style.background = 'var(--secondary)';
-                // Add category filtering logic here
+
             });
         });
     </script>
