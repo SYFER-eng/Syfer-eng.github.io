@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Collection</title>
     <style>
-        /* General Styling */
+        /* Basic Reset */
         * {
             margin: 0;
             padding: 0;
@@ -13,557 +13,265 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+            font-family: 'Arial', sans-serif;
+            background-color: #101010;
+            color: #f0f0f0;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Main Content Styling */
-        #main-content {
+        /* Header Styling */
+        header {
+            background: rgba(0, 0, 0, 0.85);
             padding: 20px;
-        }
-
-        .search-container {
             text-align: center;
-            margin-bottom: 20px;
         }
 
-        #search {
-            width: 100%;
-            max-width: 500px;
+        header h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .search-bar {
+            width: 50%;
             padding: 10px;
-            border: 2px solid #ddd;
+            background-color: #333;
+            border: none;
             border-radius: 5px;
+            color: #f0f0f0;
             font-size: 1rem;
+            margin: 0 auto;
+            display: block;
         }
 
-        /* Movie Cards */
-        #movies {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        /* Movie Gallery Section */
+        .movie-gallery {
+            display: flex;
+            flex-wrap: wrap;
             gap: 20px;
+            justify-content: center;
+            margin: 20px;
         }
 
         .movie-card {
-            background-color: white;
-            padding: 15px;
+            width: 200px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease-in-out;
         }
 
         .movie-card img {
             width: 100%;
             height: auto;
-            border-radius: 5px;
+            border-radius: 10px;
+            transition: opacity 0.3s ease;
         }
 
-        .movie-card h3 {
-            margin-top: 10px;
-            font-size: 1.2rem;
-            color: #333;
+        .movie-card:hover {
+            transform: scale(1.05);
         }
 
-        .movie-card p {
-            color: #777;
+        .movie-card:hover img {
+            opacity: 0.8;
         }
 
-        /* Banner Styling (Fixed at the Bottom) */
-        .banner {
-            width: 100%;
-            height: 200px;  /* Adjust height of the banner */
-            background-image: url('https://via.placeholder.com/1500x400');  /* Example banner image URL */
-            background-size: cover;
-            background-position: center;
-            position: fixed;
-            bottom: 0;
+        /* Overlay on Hover */
+        .movie-card .movie-overlay {
+            position: absolute;
+            top: 0;
             left: 0;
-            z-index: 1000;  /* Ensures it's above other content */
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            transition: opacity 0.3s ease;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
-            padding: 20px;
+            flex-direction: column;
+            border-radius: 10px;
+            color: #fff;
+            padding: 10px;
         }
 
-        .banner-content {
-            text-align: center;
-            background: rgba(0, 0, 0, 0.6); /* Semi-transparent background to enhance text readability */
-            padding: 20px;
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+
+        .movie-overlay h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .movie-overlay p {
+            font-size: 1rem;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #333;
+            padding: 30px;
+            max-width: 700px;
+            border-radius: 10px;
+            width: 80%;
+            color: #fff;
+        }
+
+        .modal-content img {
+            width: 100%;
             border-radius: 10px;
         }
 
-        .banner-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 0;
+        .modal-header h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
         }
 
-        .banner-description {
-            font-size: 1.1rem;
-            margin: 15px 0;
+        .modal-header .close-btn {
+            color: #fff;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            position: absolute;
+            top: 15px;
+            right: 15px;
         }
 
-        .cta-button {
-            display: inline-block;
-            background: #007bff; /* Primary color */
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: background-color 0.3s ease;
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #101010;
+            color: #fff;
         }
 
-        .cta-button:hover {
-            background-color: #0056b3; /* Hover effect (darker primary) */
+        footer p {
+            font-size: 1rem;
         }
+
     </style>
 </head>
 <body>
 
-    <!-- Main Content Section (e.g. Movie Grid, Search Bar) -->
-    <section id="main-content">
-        <header>
-            <div class="search-container">
-                <input type="text" id="search" placeholder="Search Movies...">
-            </div>
-        </header>
+    <!-- Header Section -->
+    <header>
+        <h1>Movie Collection</h1>
+        <input type="text" class="search-bar" id="searchInput" placeholder="Search for a movie...">
+    </header>
 
-        <div id="movies">
-            <!-- Example movie cards or content -->
-    <div class="movies-grid">
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/R.31457f895e2411891602ebab7b2c619c?rik=bzpHPZtMFQwhTg&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Scream 1</h3>
-    <div class="movie-meta">
-        <span>1996</span>
-        <span>2h 3m</span>
-    </div>
-    <a href="Scream1.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://www.themoviedb.org/t/p/original/q1HEMtVhsW5C2VsFKIvLoPprAJN.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Scream 2</h3>
-    <div class="movie-meta">
-        <span>1997</span>
-        <span>2h 0m</span>
-    </div>
-    <a href="Scream2.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://cdn.vox-cdn.com/thumbor/-sxLtKD-q_X3178OQGyi0euwFrk=/0x0:1688x2500/1200x0/filters:focal(0x0:1688x2500):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/15961316/Payoff_1_Sht_Online_v6_Domestic_Lg.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Avengers Endgame</h3>
-    <div class="movie-meta">
-        <span>2019</span>
-        <span>3h 2m</span>
-    </div>
-    <a href="Avengers-Endgame.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/R.35626a5c6b961326df628a00972cf516?rik=0z5ARAA%2bid%2fPzQ&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Ted</h3>
-    <div class="movie-meta">
-        <span>2012</span>
-        <span>1h 46m</span>
-    </div>
-    <a href="Ted.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.gld6U5iSaG8VnSbQZB1WgQAAAA?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Its A Spongebob Christmas</h3>
-    <div class="movie-meta">
-        <span>2012</span>
-        <span>0h 19m</span>
-    </div>
-    <a href="its-a-spongebob-christmas.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/R.8dd6f3ed466c76a4203e239235f48810?rik=eEf3VGYTo7dEiQ&riu=http%3a%2f%2fwww.orbitdvd.com%2fcdn%2fshop%2ffiles%2f81-dxiMw4cL._SL1500_1200x1200.jpg%3fv%3d1687962528&ehk=zvgmdTf5CdEFkfIfRR64fuqvBjlH1pvr%2fFUMSil8SwQ%3d&risl=&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">The Truman Show</h3>
-    <div class="movie-meta">
-        <span>1998</span>
-        <span>1h 43m</span>
-    </div>
-    <a href="The-Truman-Show.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://pics.filmaffinity.com/the_wild_robot-598191664-large.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">The Wild Robot</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 42</span>
-    </div>
-    <a href="The-Wild-Robot.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.1NZdzcc6_Gjf7SqeIbsVBwHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Grown-Ups</h3>
-    <div class="movie-meta">
-        <span>2010</span>
-        <span>1h 42m</span>
-    </div>
-    <a href="Grown-Ups.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.6P7mWWlbCpxxSULPNFwakQHaK_?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Grown-Ups-2</h3>
-    <div class="movie-meta">
-        <span>2013</span>
-        <span>1h 42m</span>
-    </div>
-    <a href="Grown-Ups-2.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-        
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.nQRgSGemqihdnu85wJGoAQHaJ4?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Fury</h3>
-    <div class="movie-meta">
-        <span>2014</span>
-        <span>2h 14m</span>
-    </div>
-    <a href="Fury.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://i.ibb.co/jG98tcC/POSTER-Red-One-2024-Movie-PREMIUM-POSTER-MADE-IN-USA-16x24-UNFRAMED-832b5d82-e38f-417d-bd88-53c170db.webp" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Red One</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>2h 3m</span>
-    </div>
-    <a href="Red-One.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.dHcLcnCM6fOHxKViBjpjXQAAAA?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">300</h3>
-    <div class="movie-meta">
-        <span>2006</span>
-        <span>1h 57m</span>
-    </div>
-    <a href="300.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://th.bing.com/th/id/R.4c8bc992317e155901a0870af8c239e9?rik=NKv9%2bYvlwmb4Dg&riu=http%3a%2f%2fkyleonfilm.files.wordpress.com%2f2013%2f11%2fsaving-private-ryan-poster.jpg&ehk=oSSLVUKlwTjUBWghEqM3H6wGcxY6x0gIBb5osEx9p%2fo%3d&risl=&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Saving Private Ryan</h3>
-    <div class="movie-meta">
-        <span>1998</span>
-        <span>2h 49m</span>
-    </div>
-    <a href="Saving-Private-Ryan.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://cdn.sktorrent.eu/obrazky/97dd813f14311c5f4c13ebb3dfb6bc5e5832e37b.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">South park the end of obesity</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>0h 50m</span>
-    </div>
-    <a href="South-park-the-end-of-obesity.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.fM7lQirMX5i-es3JFXYQ8AAAAA?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">The Garfield Movie</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 41m</span>
-    </div>
-    <a href="The-Garfield-Movie.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://images.justwatch.com/poster/9618423/s718/transformers-the-last-knight.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Transformers The Last Knight</h3>
-    <div class="movie-meta">
-        <span>2017</span>
-        <span>3h 2m</span>
-    </div>
-    <a href="Transformers-The-Last-Knight.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/R.c6ab8cc09ffcd485084cccf2600c0554?rik=hi%2b6LImWYfl4Iw&riu=http%3a%2f%2fwww.impawards.com%2f2024%2fposters%2fif_ver5.jpg&ehk=KxhNPWgJ3A%2b6SOS2KeuQzOkSzsCHrdmY4pd7uBRxYwM%3d&risl=&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">IF</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 44m</span>
-    </div>
-    <a href="IF.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://images.static-bluray.com/movies/uvcovers/59828_large.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Night of the Killer Bears</h3>
-    <div class="movie-meta">
-        <span>2022</span>
-        <span>1h 35m</span>
-    </div>
-    <a href="Night-of-the-Killer-Bears.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.GvmDL01GbJvqmMeGfjMGPQHaKW?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">A Silent Voice</h3>
-    <div class="movie-meta">
-        <span>2016</span>
-        <span>2h 10m</span>
-    </div>
-    <a href="a-silent-voice.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.4hfC8HaZjJVfnk3hoshUaQHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Guardians Of The Galaxy Vol. 2</h3>
-    <div class="movie-meta">
-        <span>2017</span>
-        <span>2h 17m</span>
-    </div>
-    <a href="Guardians-Of-The-Galaxy-Vol.-2.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://www.themoviedb.org/t/p/original/5WClpSPw5v7daTErjmdMeK8T44x.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Pacific Rim</h3>
-    <div class="movie-meta">
-        <span>2013</span>
-        <span>2h 11m</span>
-    </div>
-    <a href="Pacific-Rim.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.1Tl-xjby_On2P7BYnYPgZAHaKc?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">A-X-L</h3>
-    <div class="movie-meta">
-        <span>2018</span>
-        <span>1h 39m</span>
-    </div>
-    <a href="A-X-L.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.YE9kRIE03AKrnhU7p2lw-wHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Bad Boys Ride or Die</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 55m</span>
-    </div>
-    <a href="Bad-Boys-Ride-or-Die.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.952fmNHUBnAA02AgNOtteQHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">I, Robot</h3>
-    <div class="movie-meta">
-        <span>2004</span>
-        <span>1h 55m</span>
-    </div>
-    <a href="I,-Robot.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://f.woowoowoowoo.net/resize/250x400/ff/fe/fffe4b4ac129cca7bf7c01b16bd1a7cd/fffe4b4ac129cca7bf7c01b16bd1a7cd.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">The Simpsons: O C'mon All Ye Faithful</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>0h 45m</span>
-    </div>
-    <a href="The-Simpsons-O-Cmon-All-Ye-Faithful.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.4OSLSEbgIKppoIJ3keUCwAHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Terrifier</h3>
-    <div class="movie-meta">
-        <span>2016</span>
-        <span>1h 25m</span>
-    </div>
-    <a href="Terrifier.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://static.displate.com/857x1200/displate/2022-11-14/c51baf707470bd662d4d9c65e416dd94_3e0411f2d66c5c2637a5b9cb90581b91.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Terrifier 2</h3>
-    <div class="movie-meta">
-        <span>2022</span>
-        <span>2h 18m</span>
-    </div>
-    <a href="Terrifier2.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://www.nextgame.es/wp-content/uploads/2023/11/Terrifier-3-1.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Terrifier 3</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>2h 0m</span>
-    </div>
-    <a href="Terrifier3.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://mlpnk72yciwc.i.optimole.com/cqhiHLc.IIZS~2ef73/w:auto/h:auto/q:75/https://bleedingcool.com/wp-content/uploads/2023/08/blue_beetle_ver11_xlg.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Blue Beetle</h3>
-    <div class="movie-meta">
-        <span>2023</span>
-        <span>2h 7m</span>
-    </div>
-    <a href="Blue-Beetle.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://www.themoviedb.org/t/p/original/98zsG0FX7z6R4i5q0HONLM21dpt.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Scooby Doo</h3>
-    <div class="movie-meta">
-        <span>2002</span>
-        <span>1h 26m</span>
-    </div>
-    <a href="Scooby-doo.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.n4eA7mMsubqL_vdB33lGFgHaK8?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Y2K</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 31m</span>
-    </div>
-    <a href="Y2K.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.yTrt1w18n-bqLf_bw24PTAHaJn?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">coming soon</h3>
-    <div class="movie-meta">
-        <span>coming soon</span>
-        <span>coming soon</span>
-    </div>
-    <a href="coming-soon.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.yTrt1w18n-bqLf_bw24PTAHaJn?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">coming soon</h3>
-    <div class="movie-meta">
-        <span>coming soon</span>
-        <span>coming soon</span>
-    </div>
-    <a href="coming-soon.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.yTrt1w18n-bqLf_bw24PTAHaJn?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">coming soon</h3>
-    <div class="movie-meta">
-        <span>coming soon</span>
-        <span>coming soon</span>
-    </div>
-    <a href="coming-soon.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.yTrt1w18n-bqLf_bw24PTAHaJn?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">coming soon</h3>
-    <div class="movie-meta">
-        <span>coming soon</span>
-        <span>coming soon</span>
-    </div>
-    <a href="coming-soon.html" class="play-btn">Watch Now</a>
-</div>
-</div>
+    <!-- Movie Gallery Section -->
+    <section class="movie-gallery" id="movieGallery">
+        <!-- Movie Cards will be dynamically inserted here -->
     </section>
 
-    <!-- Banner Section at the Bottom -->
-    <div class="banner">
-        <div class="banner-content">
-            <h1 class="banner-title">Don't Miss Our Latest Movies!</h1>
-            <p class="banner-description">Sign up today for exclusive offers and early access!</p>
-            <a href="#signup" class="cta-button">Sign Up Now</a>
+    <!-- Modal for Movie Details -->
+    <div class="modal" id="movieModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="movieTitle"></h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <img id="modalImage" src="" alt="">
+            <p id="modalDescription"></p>
         </div>
     </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Movie Collection | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // Movie Data (You can replace this with data from an API)
+        const movies = [
+            {
+                title: "Inception",
+                image: "https://image.tmdb.org/t/p/w500/x5EJJiRUzJZc35RjzIMl8oAZt1f.jpg",
+                description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO."
+            },
+            {
+                title: "The Dark Knight",
+                image: "https://image.tmdb.org/t/p/w500/rpftAokfsIxlgaebcFz9f9YH8oq.jpg",
+                description: "When the menace known as The Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham."
+            },
+            {
+                title: "Interstellar",
+                image: "https://image.tmdb.org/t/p/w500/pEwSPB57vUkriBqNO7O6zsd8Xh8.jpg",
+                description: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival."
+            },
+            {
+                title: "The Matrix",
+                image: "https://image.tmdb.org/t/p/w500/qPmlI9o7L7IV4ft5l0Lt4Rhtlqs.jpg",
+                description: "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers."
+            },
+            {
+                title: "Avatar",
+                image: "https://image.tmdb.org/t/p/w500/ugRsmv3t5fMPRsiM6j1sPIR15Zu.jpg",
+                description: "A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home."
+            }
+        ];
+
+        // Function to display movies in the gallery
+        function displayMovies(movies) {
+            const gallery = document.getElementById('movieGallery');
+            gallery.innerHTML = ''; // Clear gallery
+            movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
+
+                movieCard.innerHTML = `
+                    <img src="${movie.image}" alt="${movie.title}">
+                    <div class="movie-overlay">
+                        <h3>${movie.title}</h3>
+                        <p>${movie.description.slice(0, 100)}...</p>
+                    </div>
+                `;
+
+                movieCard.addEventListener('click', () => openModal(movie));
+                gallery.appendChild(movieCard);
+            });
+        }
+
+        // Function to open the movie details modal
+        function openModal(movie) {
+            document.getElementById('movieTitle').innerText = movie.title;
+            document.getElementById('modalImage').src = movie.image;
+            document.getElementById('modalDescription').innerText = movie.description;
+            document.getElementById('movieModal').style.display = 'flex';
+        }
+
+        // Function to close the movie details modal
+        function closeModal() {
+            document.getElementById('movieModal').style.display = 'none';
+        }
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', (event) => {
+            const searchText = event.target.value.toLowerCase();
+            const filteredMovies = movies.filter(movie =>
+                movie.title.toLowerCase().includes(searchText)
+            );
+            displayMovies(filteredMovies);
+        });
+
+        // Initial Display of Movies
+        displayMovies(movies);
+    </script>
 
 </body>
 </html>
