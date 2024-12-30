@@ -1,10 +1,16 @@
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up</title>
+        <style>
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
 const app = express();
 const port = 3000;
 
-// Discord Webhook URL (replace with your actual webhook URL)
+// Discord Webhook URL (your provided webhook URL)
 const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1323243084158341140/cMboe1Cfs-AitGn4tt-qsqlv0x03-AEVNoOA9djqxrUfP9mrcbGbgndIhPXjTFmFSe9u';
 
 // Middleware to parse JSON requests
@@ -16,13 +22,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Serve the sign-up HTML page on the root URL
 app.get('/', (req, res) => {
     res.send(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sign Up</title>
-        <style>
             /* Basic CSS */
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { font-family: 'Arial', sans-serif; background-color: #f7f7f7; display: flex; justify-content: center; align-items: center; height: 100vh; color: #333; }
