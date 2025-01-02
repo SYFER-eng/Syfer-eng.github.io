@@ -18,6 +18,27 @@
             padding: 20px;
         }
 
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, background 0.2s;
+            z-index: 1000;
+        }
+
+        .home-button:hover {
+            transform: translateY(-2px);
+            background: #1976d2;
+        }
+
         .player-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -98,6 +119,8 @@
     </style>
 </head>
 <body>
+    <a href="https://Syfer-eng.github.io/Shows/Anime.html" class="home-button">Home</a>
+    
     <div class="player-container">
         <div class="video-wrapper" id="videoWrapper">
             <!-- Initial video will be loaded here -->
@@ -185,7 +208,6 @@
                 };
                 picker.appendChild(button);
             });
-
             // Load first episode by default
             loadEpisode(episodes[0]);
             setActiveButton(picker.firstChild);
