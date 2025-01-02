@@ -1,0 +1,221 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime <3</title>
+    <style>
+        :root {
+            --primary-color: #2196f3;
+            --background: #1a1a1a;
+            --text: #ffffff;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .player-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #2a2a2a;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .controls {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .episode-picker {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .episode-button {
+            padding: 12px 24px;
+            background: #333;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .episode-button:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .episode-button.active {
+            background: var(--primary-color);
+        }
+
+        .episode-info-display {
+            padding: 20px;
+            background: rgba(0,0,0,0.8);
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .episode-title-display {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .episode-description {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="video-wrapper" id="videoWrapper">
+            <!-- Initial video will be loaded here -->
+        </div>
+        <div class="controls">
+            <div class="episode-picker" id="episodePicker"></div>
+            <div class="episode-info-display" id="episodeInfo"></div>
+        </div>
+    </div>
+
+    <script>
+        const episodes = [
+            {
+                title: "E1 - That's How Love Starts, Ya Know!",
+                info: "Momo is a high school girl born to a family of spirit mediums, and Okarun is an occult fanatic. To settle an argument, Momo heads to an abandoned hospital famous for UFO sightings while Okarun heads to a tunnel famous as a spiritual hotspot.",
+                url: "https://mega.nz/embed/fuQxwJhb#Tr2vfXg_94ZiEEk0m1-FnHlsG_9dHFRz8iQ63RqA6bI"
+            },
+            {
+                title: "E2 - That's a Space Alien, Ain't It?!",
+                info: "Okarun is cursed by Turbo Granny, and Momo uses her newly found psychic powers to curb Turbo Granny from running out of control. Dawn breaks, and the two of them temporarily find shelter in Momo's house.",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            },
+            {
+                title: "E3 - It's a Granny vs. Granny Clash!",
+                info: "Okarun transforms from Turbo Granny's curse. He goes berserk unable to control his power, but Momo's grandmother Seiko, saves them in the nick of time. To lift the curse, Momo and Okarun decide to play tag with Turbo Granny.",
+                url: "https://mega.nz/embed/YourThirdEpisodeLink"
+            },
+            {
+                title: "E4 - Kicking Turbo Granny's Ass",
+                info: "To settle the score with Turbo Granny, Momo and Okarun show up at the promised tunnel. They start the game of tag to pull the location-bound spirit away, and they managed to capture Turbo Granny using Momo's psychic powers.",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            },
+            {
+                title: "E5 - Like, Where Are Your Balls?!",
+                info: "Victorious against Turbo Granny, Momo and Okarun regain peace. They have gotten closer through the traumatic experience, but they find their relationship to be awkward. That is when Okarun discloses something important to Momo.",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            },
+            {
+                title: "E6 - A Dangerous Woman Arrives",
+                info: "Momo, Okarun, and Turbo Granny search for the missing golden ball. They search all over the school and find out that a pretty girl named Aira is in possession of a ball. Perhaps the effects of the ball, but Aira can now see 'invisible things' now.",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            },
+            {
+                title: "E7 - To a Kinder World",
+                info: "Momo and Okarun manage to pull Acrobatic Silky away from Aira after a fierce battle. However, Aira herself had lost her life as a side-effect of being eaten by a yokai monster. Facing Aira in such a crisis, Acrobatic Silky has a surprising proposal…",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            },
+            {
+                title: "E8 - I've Got This Funny Feeling",
+                info: "The battle against Acrobatic Silky is over, Aira harbors romantic feelings stemming from how Okarun had saved her. As Momo, Okarun, and Aira's feelings intertwine, Serpoians make another appearance, and the three of them are trapped in void space.",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            },
+            {
+                title: "E9 - Merge! Serpo Dover Demon Nessie!",
+                info: "Aira has awakened the powers of Acrobatic Silky within her and proceeds to have a seesaw battle against the Serpoians and the Dover Demon. Momo and Okarun join the fray, intensifying the battle.",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            },
+            {
+                title: "E10 - Have You Ever Seen a Cattle Mutilation?",
+                info: "Momo, Okarun, and Aira make it through the alien assault by combining their powers. However, the Dover Demon that they thought they had defeated appears before them.",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            },
+            {
+                title: "E11 - First Love",
+                info: "Momo's childhood friend, Jiji, appears and begins living in Momo's house. Jiji has been worrying about apparitions in the house he moved into. Okarun is clearly disturbed hearing that Jiji is Momo's first love and tries to distance himself from Momo.",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            },
+            {
+                title: "E12 - Let's Go to the Cursed House",
+                info: "Momo and Okarun head to Jiji's house in a hot springs district to investigate the case of Jiji's family. Okarun feels gloomy looking at how close Momo and Jiji are. Arriving at Jiji's house, there are several shadows watching them as they enter...",
+                url: "https://mega.nz/embed/YourSecondEpisodeLink"
+            }
+        ];
+
+        function createEpisodePicker() {
+            const picker = document.getElementById('episodePicker');
+            
+            episodes.forEach((episode, index) => {
+                const button = document.createElement('button');
+                button.className = 'episode-button';
+                button.textContent = `Episode ${index + 1}`;
+                button.onclick = () => {
+                    loadEpisode(episode);
+                    setActiveButton(button);
+                };
+                picker.appendChild(button);
+            });
+
+            // Load first episode by default
+            loadEpisode(episodes[0]);
+            setActiveButton(picker.firstChild);
+        }
+
+        function loadEpisode(episode) {
+            const wrapper = document.getElementById('videoWrapper');
+            const infoDisplay = document.getElementById('episodeInfo');
+            
+            wrapper.innerHTML = `
+                <iframe 
+                    src="${episode.url}" 
+                    allowfullscreen 
+                    style="border:0; width:100%; height:100%;">
+                </iframe>`;
+                
+            infoDisplay.innerHTML = `
+                <div class="episode-title-display">${episode.title}</div>
+                <div class="episode-description">${episode.info}</div>
+            `;
+        }
+
+        function setActiveButton(activeButton) {
+            const buttons = document.querySelectorAll('.episode-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            activeButton.classList.add('active');
+        }
+
+        // Initialize the player
+        document.addEventListener('DOMContentLoaded', createEpisodePicker);
+    </script>
+</body>
+</html>
