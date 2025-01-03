@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Mouse Background</title>
+    <title>Interactive Mouse Background with UI</title>
     <style>
         /* Global body styles */
         body {
@@ -28,24 +29,23 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glowing effect for text */
-        .start-text {
-            font-size: 200px; /* Very large font size to fill the entire page */
-            font-weight: bold;
-            color: #ffffff;
+        /* Centering the UI text */
+        .ui-container {
             text-align: center;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+
+        .start-text {
+            font-size: 48px; /* Larger font size for visibility */
+            font-weight: bold;
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.7), 0 0 40px rgba(255, 255, 255, 0.8);
             animation: glow 1.5s infinite alternate;
             user-select: none; /* Prevent text selection */
-            position: absolute; /* Fill entire screen */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: -1; /* Place text behind other elements */
-            opacity: 0; /* Make the text invisible */
         }
 
-        /* Glowing effect animation */
+        /* Glowing effect animation for the text */
         @keyframes glow {
             from {
                 text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.7), 0 0 40px rgba(255, 255, 255, 0.8);
@@ -69,14 +69,14 @@
             animation: pulse 0.6s ease-out infinite; /* Pulse effect */
         }
 
-        /* Pulse effect for cursor */
+        /* Pulse effect for the cursor */
         @keyframes pulse {
             0% { transform: scale(1) translate(-50%, -50%); }
             50% { transform: scale(1.1) translate(-50%, -50%); }
             100% { transform: scale(1) translate(-50%, -50%); }
         }
 
-        /* Parallax background movement */
+        /* Background element */
         .background {
             position: absolute;
             top: 0;
@@ -88,7 +88,7 @@
             transition: transform 0.2s ease-in-out;
         }
 
-        /* Parallax effect on mouse movement */
+        /* Parallax background movement */
         .parallax {
             transform: scale(1);
             transition: transform 0.3s ease-in-out;
@@ -96,8 +96,15 @@
     </style>
 </head>
 <body>
+    <!-- Background element with parallax effect -->
     <div class="background parallax"></div>
-    <div class="start-text">Invisible Text Filling Menu</div> <!-- Invisible text -->
+
+    <!-- UI Container with Start Text -->
+    <div class="ui-container">
+        <div class="start-text">Press 5 To Start</div>
+    </div>
+
+    <!-- Custom Cursor -->
     <div class="custom-cursor" id="customCursor"></div>
 
     <script>
@@ -106,7 +113,7 @@
         const background = document.querySelector('.background');
         const text = document.querySelector('.start-text');
 
-        // Cursor image URL
+        // Image URL for the custom cursor
         const cursorImageUrl = 'https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png'; 
 
         // Preloading cursor image
