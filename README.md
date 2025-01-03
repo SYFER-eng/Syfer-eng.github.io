@@ -1,178 +1,140 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cool Interactive Single Page Website</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-  <style>
-    /* General Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start menu</title>
+    <style>
+        /* Global body styles */
+        body {
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite; /* Smooth gradient transition */
+            cursor: none; /* Hide default cursor */
+            background-color: rgba(0, 0, 0, 0.7); /* Darker background overlay */
+        }
 
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #1c1c1c;
-      color: white;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+        /* Keyframe for smooth gradient transition */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-    /* Navbar Style */
-    nav {
-      background-color: #222;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      left: 0;
-      padding: 15px 50px;
-      z-index: 1000;
-    }
+        /* Glowing effect for text */
+        .start-text {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.7), 0 0 40px rgba(255, 255, 255, 0.8);
+            animation: glow 1.5s infinite alternate;
+            user-select: none; /* Prevent text selection */
+        }
 
-    .menu {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      list-style-type: none;
-    }
+        /* Glowing effect animation */
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.7), 0 0 40px rgba(255, 255, 255, 0.8);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 40px rgba(255, 255, 255, 0.9), 0 0 60px rgba(255, 255, 255, 0.8);
+            }
+        }
 
-    .menu li {
-      font-size: 20px;
-      padding: 10px;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
+        /* Custom cursor styling */
+        .custom-cursor {
+            position: absolute;
+            width: 70px; /* Fixed size */
+            height: 70px;
+            pointer-events: none;
+            background-image: url('https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png'); /* Cursor image */
+            background-size: cover;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            animation: pulse 0.6s ease-out infinite; /* Pulse effect */
+        }
 
-    .menu li a {
-      color: white;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-    }
+        /* Pulse effect for cursor */
+        @keyframes pulse {
+            0% { transform: scale(1) translate(-50%, -50%); }
+            50% { transform: scale(1.1) translate(-50%, -50%); }
+            100% { transform: scale(1) translate(-50%, -50%); }
+        }
 
-    .menu li a:hover {
-      color: #ff9a9e;
-    }
+        /* Parallax background movement */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            transition: transform 0.2s ease-in-out;
+        }
 
-    .menu li a i {
-      margin-right: 8px;
-      font-size: 22px;
-    }
-
-    /* Cool Buttons */
-    .btn {
-      padding: 12px 20px;
-      background-color: #ff9a9e;
-      border: none;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-    }
-
-    .btn:hover {
-      background-color: #ff4f6c;
-      transform: translateY(-3px);
-    }
-
-    /* Content Sections */
-    .section {
-      padding: 100px 20px;
-      text-align: center;
-      font-size: 24px;
-      min-height: 100vh;
-    }
-
-    /* About Page */
-    #about {
-      background-color: #333;
-    }
-
-    /* Websites Page */
-    #websites {
-      background-color: #444;
-    }
-
-    /* Home Section */
-    #home {
-      background-color: #222;
-    }
-
-    /* Cool Text Effects */
-    .cool-text {
-      font-size: 30px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      color: #ff9a9e;
-      animation: text-glow 1.5s infinite alternate;
-    }
-
-    @keyframes text-glow {
-      0% {
-        text-shadow: 0 0 10px #ff9a9e, 0 0 20px #ff9a9e, 0 0 30px #ff9a9e, 0 0 40px #ff4f6c, 0 0 50px #ff4f6c;
-      }
-      100% {
-        text-shadow: 0 0 20px #ff9a9e, 0 0 30px #ff9a9e, 0 0 40px #ff9a9e, 0 0 50px #ff4f6c, 0 0 60px #ff4f6c;
-      }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      nav {
-        padding: 15px;
-      }
-
-      .menu {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .menu li {
-        padding: 15px;
-        font-size: 24px;
-      }
-    }
-  </style>
+        /* Parallax effect on mouse movement */
+        .parallax {
+            transform: scale(1);
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
 </head>
 <body>
-  <nav>
-    <ul class="menu">
-      <li><a href="#home"><i class="fas fa-home"></i>Home</a></li>
-      <li><a href="#about"><i class="fas fa-info-circle"></i>About</a></li>
-      <li><a href="#websites"><i class="fas fa-laptop-code"></i>Websites</a></li>
-    </ul>
-  </nav>
+    <div class="background parallax"></div>
+    <div class="start-text">Press 5 to Start</div>
+    <div class="custom-cursor" id="customCursor"></div>
 
-  <!-- Home Section -->
-  <div id="home" class="section">
-    <h1 class="cool-text">Welcome to the Stylish Website</h1>
-    <p>Click on the menu items to explore different sections.</p>
-    <button class="btn">Learn More</button>
-  </div>
+    <script>
+        // Selecting DOM elements
+        const cursor = document.querySelector('.custom-cursor');
+        const background = document.querySelector('.background');
+        const text = document.querySelector('.start-text');
 
-  <!-- About Section -->
-  <div id="about" class="section">
-    <h2 class="cool-text">About Us</h2>
-    <p>Everything is made by Syfer-eng.</p>
-    <button class="btn">Contact Us</button>
-  </div>
+        // Cursor image URL
+        const cursorImageUrl = 'https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png'; 
 
-  <!-- Websites Section -->
-  <div id="websites" class="section">
-    <h2 class="cool-text">Websites</h2>
-    <p>Check out these cool websites we have worked on:</p>
-    <ul>
-      <li><a href="https://Syfer-eng.github.io/Menu.html" style="color: #ff9a9e;">Syfer-eng's Hub</a></li>
-      <li><a href="https://example2.com" style="color: #ff9a9e;">Example Website 2</a></li>
-      <li><a href="https://example3.com" style="color: #ff9a9e;">Example Website 3</a></li>
-    </ul>
-    <button class="btn">Visit More Websites</button>
-  </div>
+        // Preloading cursor image
+        const cursorImage = new Image();
+        cursorImage.src = cursorImageUrl;
+        cursorImage.onload = () => {
+            cursor.style.backgroundImage = `url(${cursorImageUrl})`;
+        };
+
+        // Mouse movement effect
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+
+            // Move custom cursor
+            cursor.style.left = `${x}px`;
+            cursor.style.top = `${y}px`;
+
+            // Parallax background effect (moves slower than mouse)
+            background.style.transform = `translate(${(x - window.innerWidth / 2) * 0.05}px, ${(y - window.innerHeight / 2) * 0.05}px)`;
+        });
+
+        // Keydown event to open website on "5" key press
+        document.addEventListener('keydown', (event) => {
+            if (event.key === '5') {
+                window.location.href = 'https://syfer-eng.github.io'; // Navigate to the website
+            }
+        });
+
+        // Responsive handling for cursor scaling
+        window.addEventListener('resize', () => {
+            const cursorSize = window.innerWidth / 15; // Adjust cursor size based on window size
+            cursor.style.width = `${cursorSize}px`;
+            cursor.style.height = `${cursorSize}px`;
+        });
+    </script>
 </body>
 </html>
