@@ -2,22 +2,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime <3</title>
-    <link rel="icon" type="image/x-icon" href="path/to/your/favicon.ico">
+    <title>Dan Da Dan <3</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #2196f3;
-            --background: #1a1a1a;
+            --secondary-color: #673ab7;
+            --background: linear-gradient(135deg, #1a1a1a, #111);
+            --button-bg: linear-gradient(90deg, #2196f3, #673ab7);
             --text: #ffffff;
         }
 
         body {
             background: var(--background);
             color: var(--text);
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            overflow: hidden;
         }
 
         .home-button {
@@ -25,29 +27,55 @@
             top: 20px;
             left: 20px;
             padding: 12px 24px;
-            background: var(--primary-color);
+            background: var(--button-bg);
             border: none;
             border-radius: 8px;
             color: white;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
             z-index: 1000;
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.5);
         }
 
         .home-button:hover {
-            transform: translateY(-2px);
-            background: #1976d2;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.7);
+        }
+
+        .close-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--button-bg);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.5);
+        }
+
+        .close-button:hover {
+            transform: rotate(90deg);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.7);
         }
 
         .player-container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 50px auto 0;
             background: #2a2a2a;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
         .video-wrapper {
@@ -68,71 +96,103 @@
 
         .controls {
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            text-align: center;
+        }
+
+        .episode-menu {
+            position: fixed;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            transition: top 0.5s ease;
+            overflow-y: auto;
+            z-index: 999;
+            padding: 80px 20px 20px;
+            box-sizing: border-box;
+        }
+
+        .episode-menu.open {
+            top: 0;
         }
 
         .episode-picker {
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .episode-button {
-            padding: 12px 24px;
+        .episode-item {
+            padding: 15px;
             background: #333;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .episode-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .episode-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .episode-description {
+            font-size: 14px;
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        .menu-button {
+            padding: 12px 24px;
+            background: var(--button-bg);
             border: none;
             border-radius: 8px;
             color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.5);
         }
 
-        .episode-button:hover {
-            background: var(--primary-color);
-            transform: translateY(-2px);
+        .menu-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.7);
         }
 
-        .episode-button.active {
-            background: var(--primary-color);
+        .skip-button {
+            margin: 0 10px;
         }
 
-        .episode-info-display {
-            padding: 20px;
-            background: rgba(0,0,0,0.8);
-            margin-top: 20px;
-            border-radius: 10px;
-        }
-
-        .episode-title-display {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: var(--primary-color);
-        }
-
-        .episode-description {
-            font-size: 16px;
-            line-height: 1.5;
-            color: #fff;
+        .skip-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
         }
     </style>
 </head>
 <body>
     <a href="https://Syfer-eng.github.io/Shows/Anime.html" class="home-button">Home</a>
-    
     <div class="player-container">
-        <div class="video-wrapper" id="videoWrapper">
-            <!-- Initial video will be loaded here -->
-        </div>
+        <div class="video-wrapper" id="videoWrapper"></div>
         <div class="controls">
-            <div class="episode-picker" id="episodePicker"></div>
-            <div class="episode-info-display" id="episodeInfo"></div>
+            <button class="menu-button skip-button" id="prevButton" onclick="skipEpisode(-1)">Previous</button>
+            <button class="menu-button" onclick="toggleMenu()">Select Episode</button>
+            <button class="menu-button skip-button" id="nextButton" onclick="skipEpisode(1)">Next</button>
         </div>
     </div>
-
+    <div class="episode-menu" id="episodeMenu">
+        <button class="close-button" onclick="toggleMenu()">×</button>
+        <div class="episode-picker" id="episodePicker"></div>
+    </div>
     <script>
         const episodes = [
             {
@@ -197,48 +257,57 @@
             }
         ];
 
-        function createEpisodePicker() {
-            const picker = document.getElementById('episodePicker');
+        let currentEpisodeIndex = 0;
+
+        function updateSkipButtons() {
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
             
-            episodes.forEach((episode, index) => {
-                const button = document.createElement('button');
-                button.className = 'episode-button';
-                button.textContent = `Episode ${index + 1}`;
-                button.onclick = () => {
-                    loadEpisode(episode);
-                    setActiveButton(button);
-                };
-                picker.appendChild(button);
-            });
-            // Load first episode by default
-            loadEpisode(episodes[0]);
-            setActiveButton(picker.firstChild);
+            prevButton.disabled = currentEpisodeIndex === 0;
+            nextButton.disabled = currentEpisodeIndex === episodes.length - 1;
+        }
+
+        function skipEpisode(direction) {
+            const newIndex = currentEpisodeIndex + direction;
+            
+            if (newIndex >= 0 && newIndex < episodes.length) {
+                currentEpisodeIndex = newIndex;
+                loadEpisode(episodes[currentEpisodeIndex]);
+                updateSkipButtons();
+            }
         }
 
         function loadEpisode(episode) {
             const wrapper = document.getElementById('videoWrapper');
-            const infoDisplay = document.getElementById('episodeInfo');
-            
-            wrapper.innerHTML = `
-                <iframe 
-                    src="${episode.url}" 
-                    allowfullscreen 
-                    style="border:0; width:100%; height:100%;">
-                </iframe>`;
-                
-            infoDisplay.innerHTML = `
-                <div class="episode-title-display">${episode.title}</div>
-                <div class="episode-description">${episode.info}</div>
-            `;
+            wrapper.innerHTML = `<iframe src="${episode.url}" allowfullscreen></iframe>`;
+            currentEpisodeIndex = episodes.indexOf(episode);
+            updateSkipButtons();
         }
 
-        function setActiveButton(activeButton) {
-            const buttons = document.querySelectorAll('.episode-button');
-            buttons.forEach(button => button.classList.remove('active'));
-            activeButton.classList.add('active');
+        function createEpisodePicker() {
+            const picker = document.getElementById('episodePicker');
+            episodes.forEach((episode, index) => {
+                const item = document.createElement('div');
+                item.className = 'episode-item';
+                item.onclick = () => {
+                    loadEpisode(episode);
+                    toggleMenu();
+                };
+                item.innerHTML = `
+                    <div class="episode-title">${episode.title}</div>
+                    <div class="episode-description">${episode.info}</div>
+                `;
+                picker.appendChild(item);
+            });
+            loadEpisode(episodes[0]);
+            updateSkipButtons();
         }
 
-        // Initialize the player
+        function toggleMenu() {
+            const menu = document.getElementById('episodeMenu');
+            menu.classList.toggle('open');
+        }
+
         document.addEventListener('DOMContentLoaded', createEpisodePicker);
     </script>
 </body>
