@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start menu</title>
+    <title>Interactive Mouse Background</title>
     <style>
         /* Global body styles */
         body {
@@ -18,6 +18,7 @@
             animation: gradientBG 15s ease infinite; /* Smooth gradient transition */
             cursor: none; /* Hide default cursor */
             background-color: rgba(0, 0, 0, 0.7); /* Darker background overlay */
+            position: relative;
         }
 
         /* Keyframe for smooth gradient transition */
@@ -29,13 +30,19 @@
 
         /* Glowing effect for text */
         .start-text {
-            font-size: 32px;
+            font-size: 200px; /* Very large font size to fill the entire page */
             font-weight: bold;
             color: #ffffff;
             text-align: center;
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.7), 0 0 40px rgba(255, 255, 255, 0.8);
             animation: glow 1.5s infinite alternate;
             user-select: none; /* Prevent text selection */
+            position: absolute; /* Fill entire screen */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1; /* Place text behind other elements */
+            opacity: 0; /* Make the text invisible */
         }
 
         /* Glowing effect animation */
@@ -90,7 +97,7 @@
 </head>
 <body>
     <div class="background parallax"></div>
-    <div class="start-text">Press 5 to Start</div>
+    <div class="start-text">Invisible Text Filling Menu</div> <!-- Invisible text -->
     <div class="custom-cursor" id="customCursor"></div>
 
     <script>
