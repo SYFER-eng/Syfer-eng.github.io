@@ -122,7 +122,7 @@
     <h2>Websites</h2>
     <p>Check out these cool websites we have worked on:</p>
     <ul>
-      <li><a href="https://example1.com" style="color: #ff9a9e;">Example Website 1</a></li>
+      <li><a href="https://Syfer-eng.github.io/Menu.html" style="color: #ff9a9e;">Syfer-eng's Hub</a></li>
       <li><a href="https://example2.com" style="color: #ff9a9e;">Example Website 2</a></li>
       <li><a href="https://example3.com" style="color: #ff9a9e;">Example Website 3</a></li>
     </ul>
