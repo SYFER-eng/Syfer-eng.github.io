@@ -3,33 +3,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime <3</title>
-<link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #000;
-            --text-color: #fff;
-            --picker-bg: #fff;
-            --picker-text: #000;
-            --button-bg: #000;
-            --button-text: #fff;
-        }
-
-        [data-theme="light"] {
-            --bg-color: #fff;
-            --text-color: #000;
-            --picker-bg: #000;
-            --picker-text: #fff;
-            --button-bg: #fff;
-            --button-text: #000;
-        }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
             margin: 0;
+            padding: 0;
             font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff0066, #ffcc00, #66ffcc, #6600ff);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: none; /* Hide the default cursor */
             transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Custom Mouse Cursor */
+        .mouse-picture {
+            width: 30px;
+            height: 30px;
+            position: fixed;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.8;
+            transition: opacity 0.5s;
+            margin-left: -15px;
+            margin-top: -15px;
+            background-image: url('https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* Show the cursor as pointer for clickable elements (like buttons/links) */
+        a, button {
+            cursor: pointer;
         }
 
         .home-button {
@@ -49,75 +73,6 @@
         .home-button:hover {
             transform: scale(1.1);
             background: #333;
-        }
-
-        [data-theme="light"] .home-button {
-            background: #fff;
-            color: #000;
-            border: 2px solid #000;
-        }
-
-        [data-theme="light"] .home-button:hover {
-            background: #eee;
-        }
-
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1001;
-        }
-
-        .theme-input {
-            display: none;
-        }
-
-        .theme-label {
-            cursor: pointer;
-            padding: 10px;
-            background: #000;
-            border-radius: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            width: 60px;
-            height: 30px;
-            transform-origin: center;
-            transition: transform 0.3s ease;
-        }
-
-        .theme-label:hover {
-            transform: scale(1.1);
-        }
-
-        .theme-label::after {
-            content: '';
-            position: absolute;
-            background: #fff;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            top: 3px;
-            left: 3px;
-            transition: transform 0.3s ease;
-        }
-
-        .theme-input:checked + .theme-label::after {
-            transform: translateX(30px);
-        }
-
-        .sun, .moon {
-            font-size: 14px;
-            line-height: 1;
-        }
-
-        .sun {
-            margin-left: 5px;
-        }
-
-        .moon {
-            margin-right: 5px;
         }
 
         .shows-container {
@@ -187,24 +142,39 @@
         .show-card:hover .show-title {
             transform: translateY(0);
         }
+
+        /* Particle Effect */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.7;
+            animation: particleMove 4s infinite;
+        }
+
+        @keyframes particleMove {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: translate(200px, 200px);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <a href="https://Syfer-eng.github.io/Menu.html" class="home-button">Home</a>
-    
-    <div class="theme-toggle">
-        <input type="checkbox" id="darkMode" class="theme-input">
-        <label for="darkMode" class="theme-label">
-            <span class="sun">🌙</span>
-            <span class="moon">☀️</span>
-        </label>
-    </div>
 
     <div id="showsPage" class="shows-page">
         <div class="shows-container">
             <div class="shows-grid" id="showsGrid"></div>
         </div>
     </div>
+
+    <div class="mouse-picture"></div>
 
     <script>
         const shows = [
@@ -219,6 +189,42 @@
                 title: "Jujutsu Kaisen",
                 image: "https://m.media-amazon.com/images/M/MV5BMTMwMDM4N2EtOTJiYy00OTQ0LThlZDYtYWUwOWFlY2IxZGVjXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_.jpg",
                 link: "Anime-Comming-Soon.html"
+            },
+            {
+                id: 3,
+                title: "Erased",
+                image: "https://upload.wikimedia.org/wikipedia/commons/6/64/Erased_poster.png",
+                link: "Anime/Erased.html"
+            },
+            {
+                id: 4,
+                title: "The Promised Neverland",
+                image: "https://upload.wikimedia.org/wikipedia/commons/4/42/The_Promised_Neverland_Season_1_Poster.jpg",
+                link: "Anime/The-Promised-Neverland.html"
+            },
+            {
+                id: 5,
+                title: "One Punch Man",
+                image: "https://upload.wikimedia.org/wikipedia/commons/9/92/One_Punch_Man_Season_1_Logo.png",
+                link: "Anime/One-Punch-Man.html"
+            },
+            {
+                id: 6,
+                title: "Mob Psycho 100",
+                image: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Mob_Psycho_100_%E2%80%93_Logo.png",
+                link: "Anime/Mob-Psycho-100.html"
+            },
+            {
+                id: 7,
+                title: "Death Note",
+                image: "https://upload.wikimedia.org/wikipedia/commons/f/f5/Death_Note_Logo.png",
+                link: "Anime/Death-Note.html"
+            },
+            {
+                id: 8,
+                title: "Your Lie in April",
+                image: "https://upload.wikimedia.org/wikipedia/commons/c/c9/Your_Lie_in_April_Logo.jpg",
+                link: "Anime/Your-Lie-in-April.html"
             }
         ];
 
@@ -238,15 +244,32 @@
             });
         }
 
-        function toggleTheme() {
-            const darkModeToggle = document.getElementById('darkMode');
-            document.documentElement.setAttribute('data-theme', 
-                darkModeToggle.checked ? 'light' : 'dark'
-            );
+        document.addEventListener('DOMContentLoaded', initializeShows);
+
+        function mouseMove(event) {
+            const mousePicture = document.querySelector('.mouse-picture');
+            mousePicture.style.left = event.pageX + 'px';
+            mousePicture.style.top = event.pageY + 'px';
         }
 
-        document.getElementById('darkMode').addEventListener('change', toggleTheme);
-        document.addEventListener('DOMContentLoaded', initializeShows);
+        document.addEventListener('mousemove', mouseMove);
+
+        // Generate particles
+        setInterval(() => {
+            let particle = document.createElement('div');
+            let size = Math.random() * 10 + 5;
+            particle.classList.add('particle');
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = Math.random() * window.innerHeight + 'px';
+            document.body.appendChild(particle);
+
+            // Remove particle after animation
+            setTimeout(() => {
+                particle.remove();
+            }, 4000);
+        }, 100);
     </script>
 </body>
 </html>
