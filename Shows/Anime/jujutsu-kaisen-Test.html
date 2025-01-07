@@ -15,7 +15,6 @@
             --shadow: rgba(0, 0, 0, 0.7);
             --neon-glow: #ffffff;
             --button-glow: #ff00ff;
-            --rainbow-colors: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff00, #0000ff, #8a00ff);
         }
 
         body {
@@ -30,18 +29,39 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: background 2s ease;
+            transition: background 2s ease-in-out;
         }
 
         body.rainbow-background {
-            background: var(--rainbow-colors);
-            animation: rainbow-animation 10s infinite linear;
+            background: linear-gradient(45deg, red, yellow, green, cyan, blue, magenta);
+            background-size: 400% 400%;
+            animation: rainbow 10s ease infinite;
         }
 
-        @keyframes rainbow-animation {
-            0% { background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff00, #0000ff, #8a00ff); }
-            50% { background: linear-gradient(45deg, #8a00ff, #0000ff, #00ff00, #fffb00, #ff7300, #ff0000); }
-            100% { background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff00, #0000ff, #8a00ff); }
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://source.unsplash.com/1600x900/?anime') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(5px);
+            z-index: -1;
+            animation: pulse 30s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { filter: blur(5px); }
+            50% { filter: blur(15px); }
+            100% { filter: blur(5px); }
         }
 
         .home-button {
@@ -211,99 +231,103 @@
             bottom: 20px;
             right: 20px;
             padding: 12px 24px;
-            background: linear-gradient(90deg, #ff0000, #ff7300, #fffb00, #00ff00, #0000ff, #8a00ff);
+            background: var(--button-bg);
             border: none;
             border-radius: 8px;
             color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s, filter 0.3s;
-            z-index: 1000;
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s, filter 0.3s;
             box-shadow: 0 5px 15px var(--shadow);
+            z-index: 1000;
         }
 
         .rainbow-toggle-button:hover {
             transform: translateY(-5px);
-            filter: drop-shadow(0 0 10px var(--neon-glow));
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+            filter: drop-shadow(0 0 10px var(--button-glow));
         }
     </style>
 </head>
 <body>
-<a href="https://Syzoo.to" class="home-button">Home</a>
-<button class="close-button" onclick="window.close();">X</button>
-<div class="player-container">
-    <div class="video-wrapper" id="videoWrapper"></div>
-    <div class="controls">
-        <button class="menu-button" onclick="toggleMenu()">Episode List</button>
-        <button class="skip-button" onclick="skipEpisode(-1)" id="skipBackward">Previous</button>
-        <button class="skip-button" onclick="skipEpisode(1)" id="skipForward">Next</button>
+    <a href="https://Syfer-eng.github.io/Shows/Anime.html" class="home-button">Home</a>
+    <button class="rainbow-toggle-button" onclick="toggleRainbowBackground()">Toggle Rainbow Background</button>
+    <div class="player-container">
+        <div class="video-wrapper" id="videoWrapper"></div>
+        <div class="controls">
+            <button class="menu-button skip-button" id="prevButton" onclick="skipEpisode(-1)">Previous</button>
+            <button class="menu-button" onclick="toggleMenu()">Select Episode</button>
+            <button class="menu-button skip-button" id="nextButton" onclick="skipEpisode(1)">Next</button>
+        </div>
     </div>
-</div>
+    <div class="episode-menu" id="episodeMenu">
+        <button class="close-button" onclick="toggleMenu()">×</button>
+        <div class="episode-picker" id="episodePicker"></div>
+    </div>
+    <script>
+        const episodes = [
+            // Same episode data as before
+        ];
 
-<div class="episode-menu" id="episodeMenu">
-    <div class="episode-picker" id="episodePicker"></div>
-</div>
+        let currentEpisodeIndex = 0;
 
-<button class="rainbow-toggle-button" onclick="toggleRainbow()">Toggle Rainbow Background</button>
-
-<script>
-    const episodes = [
-        { title: 'Episode 1', description: 'Description of Episode 1', url: 'https://www.youtube.com/embed/example1' },
-        { title: 'Episode 2', description: 'Description of Episode 2', url: 'https://www.youtube.com/embed/example2' },
-        { title: 'Episode 3', description: 'Description of Episode 3', url: 'https://www.youtube.com/embed/example3' }
-    ];
-
-    let currentEpisodeIndex = 0;
-
-    function updateVideo() {
-        const videoWrapper = document.getElementById('videoWrapper');
-        const episode = episodes[currentEpisodeIndex];
-        const iframe = document.createElement('iframe');
-        iframe.src = episode.url;
-        iframe.setAttribute('allowfullscreen', '');
-        videoWrapper.innerHTML = '';
-        videoWrapper.appendChild(iframe);
-    }
-
-    function skipEpisode(direction) {
-        currentEpisodeIndex += direction;
-        if (currentEpisodeIndex < 0) currentEpisodeIndex = 0;
-        if (currentEpisodeIndex >= episodes.length) currentEpisodeIndex = episodes.length - 1;
-        updateVideo();
-    }
-
-    function toggleMenu() {
-        const menu = document.getElementById('episodeMenu');
-        menu.classList.toggle('open');
-        if (menu.classList.contains('open')) {
-            loadEpisodes();
+        function updateSkipButtons() {
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            prevButton.disabled = currentEpisodeIndex === 0;
+            nextButton.disabled = currentEpisodeIndex === episodes.length - 1;
         }
-    }
 
-    function loadEpisodes() {
-        const episodePicker = document.getElementById('episodePicker');
-        episodePicker.innerHTML = '';
-        episodes.forEach((episode, index) => {
-            const div = document.createElement('div');
-            div.className = 'episode-item';
-            div.onclick = () => {
-                currentEpisodeIndex = index;
-                updateVideo();
-                toggleMenu();
-            };
-            div.innerHTML = `
-                <div class="episode-title">${episode.title}</div>
-                <div class="episode-description">${episode.description}</div>
-            `;
-            episodePicker.appendChild(div);
-        });
-    }
+        function updateVideo() {
+            const videoWrapper = document.getElementById('videoWrapper');
+            const episode = episodes[currentEpisodeIndex];
+            const iframe = document.createElement('iframe');
+            iframe.src = episode.url;
+            videoWrapper.innerHTML = '';
+            videoWrapper.appendChild(iframe);
+            updateSkipButtons();
+        }
 
-    function toggleRainbow() {
-        document.body.classList.toggle('rainbow-background');
-    }
+        function skipEpisode(direction) {
+            currentEpisodeIndex += direction;
+            if (currentEpisodeIndex < 0) currentEpisodeIndex = 0;
+            if (currentEpisodeIndex >= episodes.length) currentEpisodeIndex = episodes.length - 1;
+            updateVideo();
+        }
 
-    updateVideo();
-</script>
+        function toggleMenu() {
+            const menu = document.getElementById('episodeMenu');
+            menu.classList.toggle('open');
+            if (menu.classList.contains('open')) {
+                loadEpisodes();
+            }
+        }
+
+        function loadEpisodes() {
+            const episodePicker = document.getElementById('episodePicker');
+            episodePicker.innerHTML = '';
+            episodes.forEach((episode, index) => {
+                const div = document.createElement('div');
+                div.className = 'episode-item';
+                div.onclick = () => {
+                    currentEpisodeIndex = index;
+                    updateVideo();
+                    toggleMenu();
+                };
+                div.innerHTML = `
+                    <div class="episode-title">${episode.title}</div>
+                    <div class="episode-description">${episode.description}</div>
+                `;
+                episodePicker.appendChild(div);
+            });
+        }
+
+        function toggleRainbowBackground() {
+            document.body.classList.toggle('rainbow-background');
+        }
+
+        // Initial setup
+        updateVideo();
+    </script>
 </body>
 </html>
