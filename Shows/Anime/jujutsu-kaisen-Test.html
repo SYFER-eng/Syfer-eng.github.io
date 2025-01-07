@@ -15,6 +15,7 @@
             --shadow: rgba(0, 0, 0, 0.7);
             --neon-glow: #ffffff;
             --button-glow: #ff00ff;
+            --rainbow-colors: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff00, #0000ff, #8a00ff);
         }
 
         body {
@@ -29,26 +30,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: background 2s ease;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://source.unsplash.com/1600x900/?anime') no-repeat center center fixed;
-            background-size: cover;
-            filter: blur(5px);
-            z-index: -1;
-            animation: pulse 30s infinite ease-in-out;
+        body.rainbow-background {
+            background: var(--rainbow-colors);
+            animation: rainbow-animation 10s infinite linear;
         }
 
-        @keyframes pulse {
-            0% { filter: blur(5px); }
-            50% { filter: blur(15px); }
-            100% { filter: blur(5px); }
+        @keyframes rainbow-animation {
+            0% { background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff00, #0000ff, #8a00ff); }
+            50% { background: linear-gradient(45deg, #8a00ff, #0000ff, #00ff00, #fffb00, #ff7300, #ff0000); }
+            100% { background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #00ff00, #0000ff, #8a00ff); }
         }
 
         .home-button {
@@ -212,105 +205,105 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        .rainbow-toggle-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: linear-gradient(90deg, #ff0000, #ff7300, #fffb00, #00ff00, #0000ff, #8a00ff);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, filter 0.3s;
+            z-index: 1000;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .rainbow-toggle-button:hover {
+            transform: translateY(-5px);
+            filter: drop-shadow(0 0 10px var(--neon-glow));
+        }
     </style>
 </head>
 <body>
-    <a href="https://Syfer-eng.github.io/Shows/Anime.html" class="home-button">Home</a>
-    <div class="player-container">
-        <div class="video-wrapper" id="videoWrapper"></div>
-        <div class="controls">
-            <button class="menu-button skip-button" id="prevButton" onclick="skipEpisode(-1)">Previous</button>
-            <button class="menu-button" onclick="toggleMenu()">Select Episode</button>
-            <button class="menu-button skip-button" id="nextButton" onclick="skipEpisode(1)">Next</button>
-        </div>
+<a href="https://Syzoo.to" class="home-button">Home</a>
+<button class="close-button" onclick="window.close();">X</button>
+<div class="player-container">
+    <div class="video-wrapper" id="videoWrapper"></div>
+    <div class="controls">
+        <button class="menu-button" onclick="toggleMenu()">Episode List</button>
+        <button class="skip-button" onclick="skipEpisode(-1)" id="skipBackward">Previous</button>
+        <button class="skip-button" onclick="skipEpisode(1)" id="skipForward">Next</button>
     </div>
-    <div class="episode-menu" id="episodeMenu">
-        <button class="close-button" onclick="toggleMenu()">×</button>
-        <div class="episode-picker" id="episodePicker"></div>
-    </div>
-    <script>
-        const episodes = [
-            { title: "E1 - Ryomen Sukuna", info: "Itadori Yuji is a high school student with exceptional physical abilities. On the night his grandfather dies he meets Fushiguro Megumi from Jujutsu High. Fushiguro had come there to retrieve the cursed object that Itadori had picked up, but it was currently in the possession of Itadori's upperclassmen who were trying to remove its seal. The upperclassmen are then attacked by monsters drawn there by the cursed object as Itadori and Fushiguro race to their rescue.", url: "https://mega.nz/embed/PIc0yIiI#yjaUTPyDsnI5yizaQcZpVq-BLGPvehP9nGVYursAGNs" },
-            { title: "E2 - For Myself", info: "Following the delay of his secret execution, Yuji is brought to Tokyo Metropolitan Curse Technical School. He's interviewed by the principal, who tests his convictions to see if he's worthy of becoming a sorcerer.", url: "https://mega.nz/embed/qRszUTrJ#c5kTiCkocTq5me7rHjXZUIlHSpnfge-EcfQq7YXmCp8" },
-            { title: "E3 - Girl of Steel", info: "Nobara Kugisaki joins the class on a trip to Roppongi where Gojo gives her and Yuji their first test: dispel a curse from an abandoned building.", url: "https://mega.nz/embed/2NFglSLb#-oNsqp5-6Vr0GOdsmwQ8rTxEgK8yngbwzpB8CAec3zw" },
-            { title: "E4 - Curse Womb Must Die", info: "When a curse womb attacks a juvenile detention center, Yuji's group is called upon to rescue any remaining survivors — but combat isn’t an option.", url: "https://mega.nz/embed/LFERjJgR#8vMPcr_NEXYjAEWzokUv3dZwbOoOQ8q3UPyLxgEjN_A" },
-            { title: "E5 - Curse Womb Must Die II", info: "As Sukuna gruesomely holds Yuji's body hostage, Fushiguro struggles against the sheer strength of Sukuna's curse to buy time until Yuji can awaken.", url: "https://mega.nz/embed/TJEGGI5T#XXTzXKymnPVjwml65WdGNi1-hbK-bFJhc24FjNUT4ww" },
-            { title: "E6 - After Rain", info: "Sukuna tells Yuji that he will bring him back to life on two conditions. Meanwhile, Suguru Geto and a cursed spirit discuss their plans for Gojo.", url: "https://mega.nz/embed/TAlXiBIL#VWrPqOzdLdX0yUAhk3DU4LNOBRYG10RwQ9O-WL0ZstM" },
-            { title: "E7 - Assault", info: "The cursed spirit Jogo attacks Gojo, who has such little trouble fighting back that he leaves and brings back a student to observe the battle.", url: "https://mega.nz/embed/PBUkkTKC#2xH-cRl30iaNYLcRJH5mki-WYzL391QVCeigYAJEq-g" },
-            { title: "E8 - Boredom", info: "As Kugisaki and Fushiguro train for the exchange event, two older students from the Kyoto Jujutsu school arrive in Tokyo and pick a fight with them.", url: "https://mega.nz/embed/zRkAQJoA#ovaAjTPOowzlGLh7UFWziTjaOGAy0wVy5W5d5jWjN_U" },
-            { title: "E9 - Small Fry and Reverse Retribution", info: "High schooler Junpei Yoshino finds his bullies horrifically killed in a movie theater. Sorcerer Kento Nanami and Yuji investigate the crime scene.", url: "https://mega.nz/embed/XY1EAS7Y#4nzRrseHmm7Lvp0lQREyrJvJXXMYUuGP2zR9JQ9pbMQ" },
-            { title: "E10 - Idle Transfiguration", info: "Junpei gets some startling advice from Mahito. Later, Ijichi and Yuji track down Junpei and formulate a plan to set up a chance encounter with him.", url: "https://mega.nz/embed/eYVF1QaB#QbCsaGYSdSZ6SZR4aLf-rQjgsrTn-0cyPgIFaFuKrOY" },
-            { title: "E11 - Narrow-minded", info: "Annoyed at having to work off the clock, Nanami shows Mahito the true potential of his sorcery. Meanwhile, Yuji and Junpei bond over movies.", url: "https://mega.nz/embed/yB8khZhb#F7XcY-fWRXmlUc3v09o94aG8Z6QZR07LF5LfISxTwTU" },
-            { title: "E12 - To You, Someday", info: "Ignoring Nanami's warning, Yuji dashes into the school and tries to reason with Junpei, but Mahito soon interrupts. Yuji appeals to Sukuna for help.", url: "https://mega.nz/embed/eVVG0Q4a#j7IVWcWN0ephzDYSm8fN2WE6Owrg5rvK9kCLyWI0ML0" },
-            { title: "E13 - Tomorrow", info: "Yuji and Nanami coordinate their attacks on Mahito, wearing him down. But as the cursed spirit approaches death, he finds a new power within himself.", url: "https://mega.nz/embed/aVdiRYjD#ATxbBaVg0lEcM6E-JhCEtuCwksOmfMjXjaQzENQtgZc" },
-            { title: "E14 - Kyoto Sister School Exchange Event - Group Battle 0 -", info: "With the exchange event between the Tokyo and Kyoto Jujutsu schools set to begin, Gojo arranges for Yuji to make a surprise appearance.", url: "https://mega.nz/embed/aRtEmBLQ#bZQagM_29udhUkHHqwXDzfZjeiyE7kxZMygQ8pU5tvM" },
-            { title: "E15 - Kyoto Sister School Exchange Event - Group Battle 1 -", info: "Shortly after the exchange event team battle begins, Todo ambushes the Tokyo students. Yuji moves to stop him but soon finds himself surrounded.", url: "https://mega.nz/embed/LA8DEKoJ#yTYDxuRjCn8EngE5cuxKh2EFUeUD75g1oV_iMd6_Slc" },
-            { title: "E16 - Kyoto Sister School Exchange Event - Group Battle 2 -", info: "Todo gives Yuji advice on how to better tap into his curse powers. After Kugisaki taunts Nishimiya, Panda fights the remote-controlled Mechamaru.", url: "https://mega.nz/embed/nNsi3AYb#hVSpRrXy08uieN7gvbCe9ju8e8F0KhjcGPLlJDKrkRw" },
-            { title: "E17 - Kyoto Sister School Exchange Event - Group Battle 3 -", info: "While Miwa struggles to stand her ground against Maki's attacks, Kugisaki chases down a flying Nishimiya, who lectures her about Mai's hardships.", url: "https://mega.nz/embed/rMt2UAbC#YH-qFZjPWYXbaYbrvcTc1U6PZ4H3q4RG1Hb5xCbzk_E" },
-            { title: "E18 - Sage", info: "Fushiguro dodges Kamo's barrage of arrows but his opponent proves just as formidable in close combat. Meanwhile, Inumaki senses a foreboding presence.", url: "https://mega.nz/embed/OAcARIwD#WZuHntG_DhpW_kpD2QMx6xmJSJMfrCPV3V8y6MYVCA8" },
-            { title: "E19 - Black Flash", info: "Inumaki, Fushiguro and Kamo struggle to hold their own against special grade cursed spirit Hanami, but Maki arrives to provide much-needed backup.", url: "https://mega.nz/embed/aYFlkZjK#32ZcM0LFNnweL72TkOJ8y8cs7ZDGNKrnIn8xsGipyMc" },
-            { title: "E20 - Nonstandard", info: "After analyzing Hanami's assortment of skills with his self-proclaimed intellect, Todo uses his disorienting technique to attack in tandem with Yuji.", url: "https://mega.nz/embed/ndcSEYKA#TZu5L3nN0YR-U5BQOkVNSJWED9lQXQz6zobaNCElqcI" },
-            { title: "E21 - Jujutsu Koshien", info: "After the event's interruption, the school tournament continues with a baseball match.", url: "https://mega.nz/embed/SA8nWApY#MZYfn-19SoEP6JikwLEPjCTztSoBTIX7r_7aGhAf38A" },
-            { title: "E22 - The Origin of Blind Obedience", info: "An investigation into a string of curse-related killings leads Yuji, Fushiguro and Kugisaki to the victims' – and Fushiguro's – former middle school.", url: "https://mega.nz/embed/fFsSVCpZ#7_DO-fyxLIJ-AtHFufXaE7X407Yg7TqEKwWMn6aFCQ0" },
-            { title: "E23 - The Origin of Blind Obedience -II-", info: "Fushiguro, Kugisaki and Itadori fight the cursed spirits on two fronts. When Fushiguro faces his enemy alone, he recalls his recent training with Gojo. He knows that he has to be able to surpass himself...", url: "https://mega.nz/embed/TUMjBYqJ#pPKAbsIvnp0GbZJsAhMGxDigtPxzP071sx4Vucfz_Ks" },
-            { title: "E24 - Accomplices", info: "Yuji and Nobara's battle against the Death Painting Wombs Kechizu and Eso reaches its conclusion! However, even in victory there is a cost in killing, something the Jujutsu High students had never considered before. Meanwhile, Choso, Geto and Mahito gain wind of this event.", url: "https://mega.nz/embed/iYtjGJBL#WYQTVfgTRLxrr0N9q4toLGI0tlw8wNSSCVv1TcAhcP8" }
-        ];
+</div>
 
-        let currentEpisodeIndex = 0;
+<div class="episode-menu" id="episodeMenu">
+    <div class="episode-picker" id="episodePicker"></div>
+</div>
 
-        function updateSkipButtons() {
-            const prevButton = document.getElementById('prevButton');
-            const nextButton = document.getElementById('nextButton');
-            prevButton.disabled = currentEpisodeIndex === 0;
-            nextButton.disabled = currentEpisodeIndex === episodes.length - 1;
-        }
+<button class="rainbow-toggle-button" onclick="toggleRainbow()">Toggle Rainbow Background</button>
 
-        function updateVideo() {
-            const videoWrapper = document.getElementById('videoWrapper');
-            const episode = episodes[currentEpisodeIndex];
-            const iframe = document.createElement('iframe');
-            iframe.src = episode.url;
-            videoWrapper.innerHTML = '';
-            videoWrapper.appendChild(iframe);
-            updateSkipButtons();
-        }
+<script>
+    const episodes = [
+        { title: 'Episode 1', description: 'Description of Episode 1', url: 'https://www.youtube.com/embed/example1' },
+        { title: 'Episode 2', description: 'Description of Episode 2', url: 'https://www.youtube.com/embed/example2' },
+        { title: 'Episode 3', description: 'Description of Episode 3', url: 'https://www.youtube.com/embed/example3' }
+    ];
 
-        function skipEpisode(direction) {
-            currentEpisodeIndex += direction;
-            if (currentEpisodeIndex < 0) currentEpisodeIndex = 0;
-            if (currentEpisodeIndex >= episodes.length) currentEpisodeIndex = episodes.length - 1;
-            updateVideo();
-        }
+    let currentEpisodeIndex = 0;
 
-        function toggleMenu() {
-            const menu = document.getElementById('episodeMenu');
-            menu.classList.toggle('open');
-            if (menu.classList.contains('open')) {
-                loadEpisodes();
-            }
-        }
+    function updateVideo() {
+        const videoWrapper = document.getElementById('videoWrapper');
+        const episode = episodes[currentEpisodeIndex];
+        const iframe = document.createElement('iframe');
+        iframe.src = episode.url;
+        iframe.setAttribute('allowfullscreen', '');
+        videoWrapper.innerHTML = '';
+        videoWrapper.appendChild(iframe);
+    }
 
-        function loadEpisodes() {
-            const episodePicker = document.getElementById('episodePicker');
-            episodePicker.innerHTML = '';
-            episodes.forEach((episode, index) => {
-                const div = document.createElement('div');
-                div.className = 'episode-item';
-                div.onclick = () => {
-                    currentEpisodeIndex = index;
-                    updateVideo();
-                    toggleMenu();
-                };
-                div.innerHTML = `
-                    <div class="episode-title">${episode.title}</div>
-                    <div class="episode-description">${episode.description}</div>
-                `;
-                episodePicker.appendChild(div);
-            });
-        }
-
-        // Initial setup
+    function skipEpisode(direction) {
+        currentEpisodeIndex += direction;
+        if (currentEpisodeIndex < 0) currentEpisodeIndex = 0;
+        if (currentEpisodeIndex >= episodes.length) currentEpisodeIndex = episodes.length - 1;
         updateVideo();
-    </script>
+    }
+
+    function toggleMenu() {
+        const menu = document.getElementById('episodeMenu');
+        menu.classList.toggle('open');
+        if (menu.classList.contains('open')) {
+            loadEpisodes();
+        }
+    }
+
+    function loadEpisodes() {
+        const episodePicker = document.getElementById('episodePicker');
+        episodePicker.innerHTML = '';
+        episodes.forEach((episode, index) => {
+            const div = document.createElement('div');
+            div.className = 'episode-item';
+            div.onclick = () => {
+                currentEpisodeIndex = index;
+                updateVideo();
+                toggleMenu();
+            };
+            div.innerHTML = `
+                <div class="episode-title">${episode.title}</div>
+                <div class="episode-description">${episode.description}</div>
+            `;
+            episodePicker.appendChild(div);
+        });
+    }
+
+    function toggleRainbow() {
+        document.body.classList.toggle('rainbow-background');
+    }
+
+    updateVideo();
+</script>
 </body>
 </html>
