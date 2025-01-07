@@ -2,11 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Watch your favorite anime episodes with a smooth, interactive interface.">
-    <meta name="keywords" content="anime, episodes, video, watch, anime episodes">
-    <meta name="author" content="Syfer">
     <title>Anime <3</title>
-    <link rel="icon" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png" type="image/x-icon">
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -25,13 +22,14 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            position: relative;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
         }
 
+        /* Animated Background */
         body::before {
             content: '';
             position: absolute;
@@ -52,10 +50,6 @@
             100% { filter: blur(5px); }
         }
 
-        .home-button, .close-button, .menu-button {
-            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
-        }
-
         .home-button {
             position: absolute;
             top: 20px;
@@ -68,6 +62,8 @@
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+            z-index: 1000;
             box-shadow: 0 5px 15px var(--shadow);
         }
 
@@ -92,6 +88,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 1000;
             box-shadow: 0 5px 15px var(--shadow);
         }
 
@@ -100,8 +98,9 @@
             box-shadow: 0 8px 20px var(--shadow);
         }
 
+        /* Larger Player Container */
         .player-container {
-            max-width: 1600px;
+            max-width: 1600px; /* Increased size */
             width: 90%;
             margin: 50px auto;
             background: rgba(0, 0, 0, 0.8);
@@ -110,9 +109,10 @@
             box-shadow: 0 10px 30px var(--shadow);
         }
 
+        /* Adjusted padding-bottom for video wrapper */
         .video-wrapper {
             position: relative;
-            padding-bottom: 56.25%;
+            padding-bottom: 56.25%; /* Keeps the 16:9 aspect ratio */
             height: 0;
             overflow: hidden;
         }
@@ -161,6 +161,7 @@
             background: rgba(50, 50, 50, 0.9);
             border-radius: 8px;
             cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
             box-shadow: 0 5px 15px var(--shadow);
         }
 
@@ -189,6 +190,7 @@
             color: white;
             font-weight: bold;
             cursor: pointer;
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
             box-shadow: 0 5px 15px var(--shadow);
         }
 
@@ -209,7 +211,6 @@
 </head>
 <body>
     <a href="https://Syfer-eng.github.io/Shows/Anime.html" class="home-button">Home</a>
-
     <div class="player-container">
         <div class="video-wrapper" id="videoWrapper"></div>
         <div class="controls">
@@ -218,18 +219,13 @@
             <button class="menu-button skip-button" id="nextButton" onclick="skipEpisode(1)">Next</button>
         </div>
     </div>
-
     <div class="episode-menu" id="episodeMenu">
         <button class="close-button" onclick="toggleMenu()">×</button>
         <div class="episode-picker" id="episodePicker"></div>
     </div>
-
     <script>
         const episodes = [
-            { title: "E1 - Flashing Before My Eyes", info: "Satoru Fujinuma is a struggling manga artist who works at a pizza parlor. Ever since he was a kid, he has been holding himself responsible for a kidnapping incident. Finally, the time has come for the truth from his past to be revealed…", url: "https://www.youtube.com/embed/example1" },
-            { title: "E2 - Palm of the Hand", info: "The year is 1988… Satoru is back in elementary school. Now, he has a chance to change the future!", url: "https://www.youtube.com/embed/example2" },
-            { title: "E3 - Birthmark", info: "Satoru is determined to prevent Kayo from getting kidnapped before her birthday. He goes to her place to see her, but… is he too late?", url: "https://www.youtube.com/embed/example3" },
-            { title: "E4 - Accomplishment", info: "Satoru invites Hinazuki to the Science Center so she won’t be alone. He suspects that he’s riding the same pre-Revival rail of time, and before he knows it, X-day has arrived...", url: "https://www.youtube.com/embed/example4" }
+            { title: "E1 - Flashing Before My Eyes", info: "Satoru Fujinuma is a struggling manga artist who works at a pizza parlor. Ever since he was a kid, he has been holding himself responsible for a kidnapping incident. Finally, the time has come for the truth from his past to be revealed…" },
         ];
 
         let currentEpisodeIndex = 0;
@@ -252,7 +248,7 @@
 
         function loadEpisode(episode) {
             const wrapper = document.getElementById('videoWrapper');
-            wrapper.innerHTML = `<iframe src="${episode.url}" title="${episode.title}" allowfullscreen></iframe>`;
+            wrapper.innerHTML = `<iframe src="${episode.url}" allowfullscreen></iframe>`;
             currentEpisodeIndex = episodes.indexOf(episode);
             updateSkipButtons();
         }
@@ -262,7 +258,10 @@
             episodes.forEach((episode, index) => {
                 const item = document.createElement('div');
                 item.className = 'episode-item';
-                item.onclick = () => { loadEpisode(episode); toggleMenu(); };
+                item.onclick = () => {
+                    loadEpisode(episode);
+                    toggleMenu();
+                };
                 item.innerHTML = `
                     <div class="episode-title">${episode.title}</div>
                     <div class="episode-description">${episode.info}</div>
