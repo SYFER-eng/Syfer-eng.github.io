@@ -198,6 +198,12 @@
             color: #ccc;
             margin-top: 5px;
         }
+
+        #videoWrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -234,85 +240,52 @@
         const episodes = [
             { title: "E1 - Ryomen Sukuna", info: "Itadori Yuji is a high school student with exceptional physical abilities. On the night his grandfather dies he meets Fushiguro Megumi from Jujutsu High. Fushiguro had come there to retrieve the cursed object that Itadori had picked up, but it was currently in the possession of Itadori's upperclassmen who were trying to remove its seal. The upperclassmen are then attacked by monsters drawn there by the cursed object as Itadori and Fushiguro race to their rescue.", url: "https://mega.nz/embed/PIc0yIiI#yjaUTPyDsnI5yizaQcZpVq-BLGPvehP9nGVYursAGNs" },
             { title: "E2 - For Myself", info: "Following the delay of his secret execution, Yuji is brought to Tokyo Metropolitan Curse Technical School. He's interviewed by the principal, who tests his convictions to see if he's worthy of becoming a sorcerer.", url: "https://mega.nz/embed/qRszUTrJ#c5kTiCkocTq5me7rHjXZUIlHSpnfge-EcfQq7YXmCp8" },
-            { title: "E3 - Girl of Steel", info: "Nobara Kugisaki joins the class on a trip to Roppongi where Gojo gives her and Yuji their first test: dispel a curse from an abandoned building.", url: "https://mega.nz/embed/2NFglSLb#-oNsqp5-6Vr0GOdsmwQ8rTxEgK8yngbwzpB8CAec3zw" },
-            { title: "E4 - Curse Womb Must Die", info: "When a curse womb attacks a juvenile detention center, Yuji's group is called upon to rescue any remaining survivors — but combat isn’t an option.", url: "https://mega.nz/embed/LFERjJgR#8vMPcr_NEXYjAEWzokUv3dZwbOoOQ8q3UPyLxgEjN_A" },
-            { title: "E5 - Curse Womb Must Die II", info: "As Sukuna gruesomely holds Yuji's body hostage, Fushiguro struggles against the sheer strength of Sukuna's curse to buy time until Yuji can awaken.", url: "https://mega.nz/embed/TJEGGI5T#XXTzXKymnPVjwml65WdGNi1-hbK-bFJhc24FjNUT4ww" },
-            { title: "E6 - After Rain", info: "Sukuna tells Yuji that he will bring him back to life on two conditions. Meanwhile, Suguru Geto and a cursed spirit discuss their plans for Gojo.", url: "https://mega.nz/embed/TAlXiBIL#VWrPqOzdLdX0yUAhk3DU4LNOBRYG10RwQ9O-WL0ZstM" },
-            { title: "E7 - Assault", info: "The cursed spirit Jogo attacks Gojo, who has such little trouble fighting back that he leaves and brings back a student to observe the battle.", url: "https://mega.nz/embed/PBUkkTKC#2xH-cRl30iaNYLcRJH5mki-WYzL391QVCeigYAJEq-g" },
-            { title: "E8 - Boredom", info: "As Kugisaki and Fushiguro train for the exchange event, two older students from the Kyoto Jujutsu school arrive in Tokyo and pick a fight with them.", url: "https://mega.nz/embed/zRkAQJoA#ovaAjTPOowzlGLh7UFWziTjaOGAy0wVy5W5d5jWjN_U" },
-            { title: "E9 - Small Fry and Reverse Retribution", info: "High schooler Junpei Yoshino finds his bullies horrifically killed in a movie theater. Sorcerer Kento Nanami and Yuji investigate the crime scene.", url: "https://mega.nz/embed/XY1EAS7Y#4nzRrseHmm7Lvp0lQREyrJvJXXMYUuGP2zR9JQ9pbMQ" },
-            { title: "E10 - Idle Transfiguration", info: "Junpei gets some startling advice from Mahito. Later, Ijichi and Yuji track down Junpei and formulate a plan to set up a chance encounter with him.", url: "https://mega.nz/embed/eYVF1QaB#QbCsaGYSdSZ6SZR4aLf-rQjgsrTn-0cyPgIFaFuKrOY" },
-            { title: "E11 - Narrow-minded", info: "Annoyed at having to work off the clock, Nanami shows Mahito the true potential of his sorcery. Meanwhile, Yuji and Junpei bond over movies.", url: "https://mega.nz/embed/yB8khZhb#F7XcY-fWRXmlUc3v09o94aG8Z6QZR07LF5LfISxTwTU" },
-            { title: "E12 - To You, Someday", info: "Ignoring Nanami's warning, Yuji dashes into the school and tries to reason with Junpei, but Mahito soon interrupts. Yuji appeals to Sukuna for help.", url: "https://mega.nz/embed/eVVG0Q4a#j7IVWcWN0ephzDYSm8fN2WE6Owrg5rvK9kCLyWI0ML0" },
-            { title: "E13 - Tomorrow", info: "Yuji and Nanami coordinate their attacks on Mahito, wearing him down. But as the cursed spirit approaches death, he finds a new power within himself.", url: "https://mega.nz/embed/aVdiRYjD#ATxbBaVg0lEcM6E-JhCEtuCwksOmfMjXjaQzENQtgZc" },
-            { title: "E14 - Kyoto Sister School Exchange Event - Group Battle 0 -", info: "With the exchange event between the Tokyo and Kyoto Jujutsu schools set to begin, Gojo arranges for Yuji to make a surprise appearance.", url: "https://mega.nz/embed/aRtEmBLQ#bZQagM_29udhUkHHqwXDzfZjeiyE7kxZMygQ8pU5tvM" },
-            { title: "E15 - Kyoto Sister School Exchange Event - Group Battle 1 -", info: "Shortly after the exchange event team battle begins, Todo ambushes the Tokyo students. Yuji moves to stop him but soon finds himself surrounded.", url: "https://mega.nz/embed/LA8DEKoJ#yTYDxuRjCn8EngE5cuxKh2EFUeUD75g1oV_iMd6_Slc" },
-            { title: "E16 - Kyoto Sister School Exchange Event - Group Battle 2 -", info: "Todo gives Yuji advice on how to better tap into his curse powers. After Kugisaki taunts Nishimiya, Panda fights the remote-controlled Mechamaru.", url: "https://mega.nz/embed/nNsi3AYb#hVSpRrXy08uieN7gvbCe9ju8e8F0KhjcGPLlJDKrkRw" },
-            { title: "E17 - Kyoto Sister School Exchange Event - Group Battle 3 -", info: "While Miwa struggles to stand her ground against Maki's attacks, Kugisaki chases down a flying Nishimiya, who lectures her about Mai's hardships.", url: "https://mega.nz/embed/rMt2UAbC#YH-qFZjPWYXbaYbrvcTc1U6PZ4H3q4RG1Hb5xCbzk_E" },
-            { title: "E18 - Sage", info: "Fushiguro dodges Kamo's barrage of arrows but his opponent proves just as formidable in close combat. Meanwhile, Inumaki senses a foreboding presence.", url: "https://mega.nz/embed/OAcARIwD#WZuHntG_DhpW_kpD2QMx6xmJSJMfrCPV3V8y6MYVCA8" },
-            { title: "E19 - Black Flash", info: "Inumaki, Fushiguro and Kamo struggle to hold their own against special grade cursed spirit Hanami, but Maki arrives to provide much-needed backup.", url: "https://mega.nz/embed/aYFlkZjK#32ZcM0LFNnweL72TkOJ8y8cs7ZDGNKrnIn8xsGipyMc" },
-            { title: "E20 - Nonstandard", info: "After analyzing Hanami's assortment of skills with his self-proclaimed intellect, Todo uses his disorienting technique to attack in tandem with Yuji.", url: "https://mega.nz/embed/ndcSEYKA#TZu5L3nN0YR-U5BQOkVNSJWED9lQXQz6zobaNCElqcI" },
-            { title: "E21 - Jujutsu Koshien", info: "After the event's interruption, the school tournament continues with a baseball match.", url: "https://mega.nz/embed/SA8nWApY#MZYfn-19SoEP6JikwLEPjCTztSoBTIX7r_7aGhAf38A" },
-            { title: "E22 - The Origin of Blind Obedience", info: "An investigation into a string of curse-related killings leads Yuji, Fushiguro and Kugisaki to the victims' – and Fushiguro's – former middle school.", url: "https://mega.nz/embed/fFsSVCpZ#7_DO-fyxLIJ-AtHFufXaE7X407Yg7TqEKwWMn6aFCQ0" },
-            { title: "E23 - The Origin of Blind Obedience -II-", info: "Fushiguro, Kugisaki and Itadori fight the cursed spirits on two fronts. When Fushiguro faces his enemy alone, he recalls his recent training with Gojo. He knows that he has to be able to surpass himself...", url: "https://mega.nz/embed/TUMjBYqJ#pPKAbsIvnp0GbZJsAhMGxDigtPxzP071sx4Vucfz_Ks" },
-            { title: "E24 - Accomplices", info: "Yuji and Nobara's battle against the Death Painting Wombs Kechizu and Eso reaches its conclusion! However, even in victory there is a cost in killing, something the Jujutsu High students had never considered before. Meanwhile, Choso, Geto and Mahito gain wind of this event.", url: "https://mega.nz/embed/iYtjGJBL#WYQTVfgTRLxrr0N9q4toLGI0tlw8wNSSCVv1TcAhcP8" }
+            { title: "E3 - Girl of Steel", info: "Nobara Kugisaki is introduced as a new sorcerer who joins Yuji and Megumi at Jujutsu High. The trio are sent on a mission together, facing an unexpected and dangerous curse.", url: "https://mega.nz/embed/xDdiDCqT#-z05h9q8D3RUyBlgtdlqob6g0GL2pYgsu6b9X5QIQuk" }
         ];
 
+        const episodeMenu = document.getElementById('episodeMenu');
+        const episodePicker = document.getElementById('episodePicker');
         let currentEpisodeIndex = 0;
 
-        function updateSkipButtons() {
-            const prevButton = document.getElementById('prevButton');
-            const nextButton = document.getElementById('nextButton');
-            prevButton.disabled = currentEpisodeIndex === 0;
-            nextButton.disabled = currentEpisodeIndex === episodes.length - 1;
-        }
-
-        function updateVideo() {
-            const videoWrapper = document.getElementById('videoWrapper');
-            const episode = episodes[currentEpisodeIndex];
-            const iframe = document.createElement('iframe');
-            iframe.src = episode.url;
-            videoWrapper.innerHTML = '';
-            videoWrapper.appendChild(iframe);
-            updateSkipButtons();
-        }
-
-        function skipEpisode(direction) {
-            currentEpisodeIndex += direction;
-            if (currentEpisodeIndex < 0) currentEpisodeIndex = 0;
-            if (currentEpisodeIndex >= episodes.length) currentEpisodeIndex = episodes.length - 1;
-            updateVideo();
-        }
-
         function toggleMenu() {
-            const menu = document.getElementById('episodeMenu');
-            menu.classList.toggle('open');
-            if (menu.classList.contains('open')) {
+            episodeMenu.classList.toggle('open');
+            const isOpen = episodeMenu.classList.contains('open');
+            if (isOpen) {
                 loadEpisodes();
             }
         }
 
         function loadEpisodes() {
-            const episodePicker = document.getElementById('episodePicker');
             episodePicker.innerHTML = '';
             episodes.forEach((episode, index) => {
-                const div = document.createElement('div');
-                div.className = 'episode-item';
-                div.onclick = () => {
-                    currentEpisodeIndex = index;
-                    updateVideo();
-                    toggleMenu();
-                };
-                div.innerHTML = `
+                const episodeItem = document.createElement('div');
+                episodeItem.className = 'episode-item';
+                episodeItem.onclick = () => playEpisode(index);
+                episodeItem.innerHTML = `
                     <div class="episode-title">${episode.title}</div>
-                    <div class="episode-description">${episode.description}</div>
+                    <div class="episode-description">${episode.info}</div>
                 `;
-                episodePicker.appendChild(div);
+                episodePicker.appendChild(episodeItem);
             });
         }
 
-        // Initial setup
-        updateVideo();
+        function playEpisode(index) {
+            currentEpisodeIndex = index;
+            const episode = episodes[currentEpisodeIndex];
+            const iframe = document.createElement('iframe');
+            iframe.src = episode.url;
+            document.getElementById('videoWrapper').innerHTML = '';
+            document.getElementById('videoWrapper').appendChild(iframe);
+            toggleMenu();
+        }
+
+        function skipEpisode(direction) {
+            const nextIndex = (currentEpisodeIndex + direction + episodes.length) % episodes.length;
+            playEpisode(nextIndex);
+        }
+
+        // Initially load the first episode
+        playEpisode(currentEpisodeIndex);
     </script>
 </body>
 </html>
