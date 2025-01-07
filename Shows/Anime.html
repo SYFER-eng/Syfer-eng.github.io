@@ -1,73 +1,46 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anime <3</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
+    <link rel="icon" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png" type="image/png" sizes="32x32">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-            height: 100vh;
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(45deg, #ff0066, #ffcc00, #66ffcc, #6600ff);
             background-size: 400% 400%;
             animation: gradientAnimation 10s ease infinite;
             display: flex;
             justify-content: center;
-            align-items: center;
-            cursor: none; /* Hide the default cursor */
+            align-items: flex-start;
+            cursor: none;
             transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            padding-top: 20px; /* Added some padding to make sure content is visible */
+            overflow-y: auto; /* Enable vertical scrolling */
         }
 
         @keyframes gradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* Custom Mouse Cursor */
-        .mouse-picture {
-            width: 30px;
-            height: 30px;
-            position: fixed;
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0.8;
-            transition: opacity 0.5s;
-            margin-left: -15px;
-            margin-top: -15px;
-            background-image: url('https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        /* Show the cursor as pointer for clickable elements (like buttons/links) */
-        a, button {
-            cursor: pointer;
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .home-button {
             position: fixed;
             top: 20px;
             left: 20px;
-            z-index: 1001;
             background: #000;
             color: #fff;
             padding: 10px 20px;
             border-radius: 25px;
             text-decoration: none;
             font-weight: bold;
-            transition: transform 0.3s ease, background 0.3s ease;
+            transition: transform 0.3s, background 0.3s;
+            z-index: 1001;
         }
 
         .home-button:hover {
@@ -79,6 +52,7 @@
             padding: 20px;
             max-width: 1400px;
             margin: 0 auto;
+            width: 100%;
         }
 
         .shows-grid {
@@ -90,12 +64,12 @@
 
         .show-card {
             position: relative;
-            cursor: pointer;
-            overflow: hidden;
-            border-radius: 8px;
-            aspect-ratio: 2/3;
             display: block;
             text-decoration: none;
+            border-radius: 8px;
+            overflow: hidden;
+            aspect-ratio: 2/3;
+            transition: transform 0.3s;
         }
 
         .show-card img {
@@ -111,12 +85,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0);
+            background: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: opacity 0.3s;
         }
 
         .show-title {
@@ -124,8 +98,7 @@
             font-size: 1.5rem;
             font-weight: bold;
             text-align: center;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease;
             padding: 0 15px;
         }
 
@@ -135,7 +108,6 @@
         }
 
         .show-card:hover .show-overlay {
-            background: rgba(0, 0, 0, 0.5);
             opacity: 1;
         }
 
@@ -143,32 +115,41 @@
             transform: translateY(0);
         }
 
-        /* Particle Effect */
+        .mouse-picture {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-image: url('https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.8;
+            transition: opacity 0.5s;
+            transform: translate(-50%, -50%);
+        }
+
         .particle {
             position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: white;
             border-radius: 50%;
-            background: white;
             opacity: 0.7;
             animation: particleMove 4s infinite;
         }
 
         @keyframes particleMove {
-            0% {
-                transform: translate(0, 0);
-                opacity: 0.7;
-            }
-
-            100% {
-                transform: translate(200px, 200px);
-                opacity: 0;
-            }
+            0% { transform: scale(0.5); opacity: 0.7; }
+            100% { transform: translate(100px, 100px) scale(1.5); opacity: 0; }
         }
     </style>
 </head>
 <body>
     <a href="https://Syfer-eng.github.io/Menu.html" class="home-button">Home</a>
 
-    <div id="showsPage" class="shows-page">
+    <div id="showsPage">
         <div class="shows-container">
             <div class="shows-grid" id="showsGrid"></div>
         </div>
@@ -178,24 +159,9 @@
 
     <script>
         const shows = [
-            {
-                id: 1,
-                title: "Dan Da Dan",
-                image: "https://cdn.kobo.com/book-images/d04e3502-b794-431d-a742-5b196976349c/1200/1200/False/dandadan-vol-2.jpg",
-                link: "Anime/Dan-Da-Dan.html"
-            },
-            {
-                id: 2,
-                title: "Jujutsu Kaisen",
-                image: "https://m.media-amazon.com/images/M/MV5BMTMwMDM4N2EtOTJiYy00OTQ0LThlZDYtYWUwOWFlY2IxZGVjXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_.jpg",
-                link: "Anime/jujutsu-kaisen.html"
-            },
-            {
-                id: 3,
-                title: "Erased",
-                image: "https://i.ibb.co/yqS87pv/R-fotor-20250106214947.jpg",
-                link: "Anime/Erased.html"
-            }
+            { id: 1, title: "Dan Da Dan", image: "https://cdn.kobo.com/book-images/d04e3502-b794-431d-a742-5b196976349c/1200/1200/False/dandadan-vol-2.jpg", link: "Anime/Dan-Da-Dan.html" },
+            { id: 2, title: "Jujutsu Kaisen", image: "https://m.media-amazon.com/images/M/MV5BMTMwMDM4N2EtOTJiYy00OTQ0LThlZDYtYWUwOWFlY2IxZGVjXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_.jpg", link: "Anime/jujutsu-kaisen.html" },
+            { id: 3, title: "Erased", image: "https://i.ibb.co/yqS87pv/R-fotor-20250106214947.jpg", link: "Anime/Erased.html" },
         ];
 
         function initializeShows() {
@@ -204,8 +170,9 @@
                 const showCard = document.createElement('a');
                 showCard.href = show.link;
                 showCard.className = 'show-card';
+                showCard.setAttribute('aria-label', `Visit ${show.title}`);
                 showCard.innerHTML = `
-                    <img src="${show.image}" alt="${show.title}">
+                    <img src="${show.image}" alt="${show.title} Cover Image">
                     <div class="show-overlay">
                         <div class="show-title">${show.title}</div>
                     </div>
@@ -216,29 +183,25 @@
 
         document.addEventListener('DOMContentLoaded', initializeShows);
 
-        function mouseMove(event) {
+        // Custom Mouse Cursor
+        document.addEventListener('mousemove', function (event) {
             const mousePicture = document.querySelector('.mouse-picture');
-            mousePicture.style.left = event.pageX + 'px';
-            mousePicture.style.top = event.pageY + 'px';
-        }
+            mousePicture.style.left = `${event.pageX}px`;
+            mousePicture.style.top = `${event.pageY}px`;
+        });
 
-        document.addEventListener('mousemove', mouseMove);
-
-        // Generate particles
+        // Particle Generation
         setInterval(() => {
-            let particle = document.createElement('div');
-            let size = Math.random() * 10 + 5;
+            const particle = document.createElement('div');
+            const size = Math.random() * 10 + 5;
             particle.classList.add('particle');
-            particle.style.width = size + 'px';
-            particle.style.height = size + 'px';
-            particle.style.left = Math.random() * window.innerWidth + 'px';
-            particle.style.top = Math.random() * window.innerHeight + 'px';
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * window.innerWidth}px`;
+            particle.style.top = `${Math.random() * window.innerHeight}px`;
             document.body.appendChild(particle);
 
-            // Remove particle after animation
-            setTimeout(() => {
-                particle.remove();
-            }, 4000);
+            setTimeout(() => particle.remove(), 4000);
         }, 100);
     </script>
 </body>
