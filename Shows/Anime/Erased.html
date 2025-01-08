@@ -50,25 +50,31 @@
             100% { filter: blur(5px); }
         }
 
+        .home-button,
+        .skip-button,
+        .menu-button {
+            position: relative;
+            padding: 12px 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            background: var(--button-bg);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
         .home-button {
             position: absolute;
             top: 20px;
             left: 20px;
-            padding: 12px 24px;
-            background: var(--button-bg);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            text-decoration: none;
-            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
-            z-index: 1000;
-            box-shadow: 0 5px 15px var(--shadow);
         }
 
-        .home-button:hover {
-            transform: translateY(-5px);
+        .home-button:hover,
+        .skip-button:hover,
+        .menu-button:hover {
+            transform: translateY(-5px) scale(1.1);
             background: linear-gradient(90deg, #9c27b0, #00bcd4);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
         }
@@ -98,21 +104,21 @@
             box-shadow: 0 8px 20px var(--shadow);
         }
 
-        /* Larger Player Container */
         .player-container {
-            max-width: 1600px; /* Increased size */
+            max-width: 1320px;
             width: 90%;
             margin: 50px auto;
             background: rgba(0, 0, 0, 0.8);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px var(--shadow);
+            box-shadow: 0 10px 50px var(--shadow);
+            transform: scale(0.9);
+            transform-origin: center;
         }
 
-        /* Adjusted padding-bottom for video wrapper */
         .video-wrapper {
             position: relative;
-            padding-bottom: 56.25%; /* Keeps the 16:9 aspect ratio */
+            padding-bottom: 56.25%;
             height: 0;
             overflow: hidden;
         }
@@ -161,42 +167,34 @@
             background: rgba(50, 50, 50, 0.9);
             border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
             box-shadow: 0 5px 15px var(--shadow);
+            transform: scale(0.95);
+            color: #ccc;
         }
 
         .episode-item:hover {
-            transform: translateY(-5px);
+            transform: scale(1.01);
+            background-color: #9c27b0;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
         }
 
-        .episode-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--primary-color);
+        .episode-item:hover .episode-title,
+        .episode-item:hover .episode-description {
+            color: black;
         }
 
+        .episode-title,
         .episode-description {
-            font-size: 14px;
-            color: #ccc;
-            margin-top: 5px;
+            transition: color 0.3s ease-in-out;
         }
 
-        .menu-button {
-            padding: 12px 24px;
-            background: var(--button-bg);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
-            box-shadow: 0 5px 15px var(--shadow);
+        .episode-item:hover .episode-title {
+            color: black;
         }
 
-        .menu-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+        .episode-item:hover .episode-description {
+            color: black;
         }
 
         .skip-button {
@@ -225,7 +223,18 @@
     </div>
     <script>
         const episodes = [
-            { title: "E1 - Flashing Before My Eyes", info: "Satoru Fujinuma is a struggling manga artist who works at a pizza parlor. Ever since he was a kid, he has been holding himself responsible for a kidnapping incident. Finally, the time has come for the truth from his past to be revealed…" },
+            { title: "E - 1 Flashing Before My Eyes", info: "Satoru Fujinuma is a struggling manga artist who works at a pizza parlor. Ever since he was a kid, he has been holding himself responsible for a kidnapping incident. Finally, the time has come for the truth from his past to be revealed…", url: "https://mega.nz/embed/7V0gnKBS#W5HNrT7Uvm4Z1ti7_cyIsKiH55J9dpHz1qK17hRAcGQ" },
+            { title: "E - 2 Palm of the Hand", info: "The year is 1988… Satoru is back in elementary school. Now, he has a chance to change the future!", url: "https://mega.nz/embed/bR8AQKbK#DUv7_Q4KHqG1-FouaW-5UQpIlq01BICDyPar39pXgXw" },
+            { title: "E - 3 Birthmark", info: "Satoru is determined to prevent Kayo from getting kidnapped before her birthday. He goes to her place to see her, but… is he too late?", url: "https://mega.nz/embed/fZ8SFCjJ#V2hDBCLQCAujkDsWk1cazmTAwv8FedEVt-E2HU-Ifd8" },
+            { title: "E - 4 Accomplishment", info: "Satoru invites Hinazuki to the Science Center so she won’t be alone. He suspects that he’s riding the same pre-Revival rail of time, and before he knows it, X-day has arrived...", url: "https://mega.nz/embed/udFSGDoQ#ZohM7K7RKGl60ZFtb9lMoPscUnxd5tZ04IywMWvieT4" },
+            { title: "E - 5 ", info: "Descreption Goes Here", url: "the video link" },
+            { title: "E - 6 ", info: "Descreption Goes Here", url: "the video link" },
+            { title: "E - 7 ", info: "Descreption Goes Here", url: "the video link" },
+            { title: "E - 8 ", info: "Descreption Goes Here", url: "the video link" },
+            { title: "E - 9 ", info: "Descreption Goes Here", url: "the video link" },
+            { title: "E - 10 ", info: "Descreption Goes Here", url: "the video link" },
+            { title: "E - 11 ", info: "Descreption Goes Here", url: "the video link" },
+            { title: "E - 12 ", info: "Descreption Goes Here", url: "the video link" },
         ];
 
         let currentEpisodeIndex = 0;
@@ -255,7 +264,7 @@
 
         function createEpisodePicker() {
             const picker = document.getElementById('episodePicker');
-            episodes.forEach((episode, index) => {
+            episodes.forEach((episode) => {
                 const item = document.createElement('div');
                 item.className = 'episode-item';
                 item.onclick = () => {
