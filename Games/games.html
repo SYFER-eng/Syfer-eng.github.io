@@ -294,3 +294,137 @@
 
 
 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Bottom Banner</title>
+    <style>
+        /* Style for the banner */
+        #bottom-banner {
+            position: fixed;
+            bottom: -70px; /* Initially off-screen, adjusted for smaller height */
+            left: 0;
+            width: 100%;
+            background-color: black; /* Black background */
+            color: #7A4BCF; /* Purple text */
+            text-align: center;
+            padding: 10px 0; /* Reduced padding to make the banner smaller */
+            font-size: 16px; /* Smaller text size */
+            z-index: 9999;
+            transform: translateY(100%);
+            transition: transform 0.5s ease, bottom 0.5s ease, opacity 0.5s ease, color 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+        }
+
+        /* Banner hover effect */
+        #bottom-banner:hover {
+            color: #9B59B6; /* Lighter purple text on hover */
+            background-color: #333; /* Dark gray (lighter black) background on hover */
+        }
+
+        /* Banner animation */
+        #bottom-banner.show {
+            bottom: 0;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+
+
+    <!-- Banner content -->
+    <div id="bottom-banner" onclick="window.location.href='coming-soon.html'">
+        <i class="fas fa-film"></i> <strong>Developer: Syfer-eng</strong> ‎ ‎ ‎ More Websites Coming Soon.
+    </div>
+
+    <script>
+        // JavaScript to trigger the banner when scrolled to the bottom
+        window.onscroll = function() {
+            var banner = document.getElementById("bottom-banner");
+            var scrollPosition = window.innerHeight + window.scrollY;
+            var documentHeight = document.documentElement.scrollHeight;
+
+            // If we are at the bottom of the page, show the banner
+            if (scrollPosition >= documentHeight) {
+                banner.classList.add("show");
+            } else {
+                banner.classList.remove("show");
+            }
+        };
+    </script>
+
+</body>
+</html>
+
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const games = document.querySelectorAll('.game-card');
+            const searchInput = document.querySelector('.search-input');
+
+            searchInput.addEventListener('input', filterGames);
+
+            function filterGames() {
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                games.forEach(game => {
+                    const title = game.querySelector('h3').textContent.toLowerCase();
+                    if (title.includes(searchTerm)) {
+                        game.style.display = 'block';
+                        game.style.animation = 'fadeIn 0.5s ease';
+                    } else {
+                        game.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        function loadGame(url) {
+            const gameFrame = document.getElementById('gameFrame');
+            const gameIframe = document.getElementById('gameIframe');
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            
+            gameFrame.style.display = 'block';
+            loadingSpinner.style.display = 'block';
+            
+            gameIframe.onload = () => {
+                loadingSpinner.style.display = 'none';
+            };
+            
+            gameIframe.src = url;
+        }
+
+        function toggleFullscreen() {
+            const gameFrame = document.getElementById('gameFrame');
+            gameFrame.classList.toggle('fullscreen');
+        }
+
+        function closeGame() {
+            const gameFrame = document.getElementById('gameFrame');
+            const gameIframe = document.getElementById('gameIframe');
+            
+            gameFrame.classList.remove('fullscreen');
+            gameFrame.style.opacity = '0';
+            
+            setTimeout(() => {
+                gameFrame.style.display = 'none';
+                gameIframe.src = '';
+                gameFrame.style.opacity = '1';
+            }, 300);
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeGame();
+            } else if (event.key === 'f' || event.key === 'F') {
+                toggleFullscreen();
+            }
+        });
+    </script>
+</body>
+</html>
