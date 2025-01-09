@@ -133,8 +133,11 @@
         }
 
         .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
             padding: 30px;
-            text-align: center;
         }
 
         .episode-menu {
@@ -205,6 +208,18 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        
+        .dropdown {
+            background: var(--button-bg);
+            border-radius: 8px;
+            color: black;  /* Set the text color inside the dropdown to black */
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            width: 150px;
+        }
+
     </style>
 </head>
 <body>
@@ -215,30 +230,120 @@
             <button class="menu-button skip-button" id="prevButton" onclick="skipEpisode(-1)">Previous</button>
             <button class="menu-button" onclick="toggleMenu()">Select Episode</button>
             <button class="menu-button skip-button" id="nextButton" onclick="skipEpisode(1)">Next</button>
+            <!-- Server Picker Dropdown moved here -->
+            <select class="dropdown" id="serverDropdown" onchange="changeServer()">
+                <option value="0">Mega.nz</option>
+                <option value="1">Google Drive</option>
+            </select>
         </div>
     </div>
     <div class="episode-menu" id="episodeMenu">
         <button class="close-button" onclick="toggleMenu()">×</button>
         <div class="episode-picker" id="episodePicker"></div>
     </div>
+
     <script>
         const episodes = [
-            { title: "E1 - Flashing Before My Eyes", info: "Satoru Fujinuma is a struggling manga artist who works at a pizza parlor. Ever since he was a kid, he has been holding himself responsible for a kidnapping incident. Finally, the time has come for the truth from his past to be revealed…", url: "https://mega.nz/embed/7V0gnKBS#W5HNrT7Uvm4Z1ti7_cyIsKiH55J9dpHz1qK17hRAcGQ" },
-            { title: "E2 - Palm of the Hand", info: "The year is 1988… Satoru is back in elementary school. Now, he has a chance to change the future!", url: "https://mega.nz/embed/bR8AQKbK#DUv7_Q4KHqG1-FouaW-5UQpIlq01BICDyPar39pXgXw" },
-            { title: "E3 - Birthmark", info: "Satoru is determined to prevent Kayo from getting kidnapped before her birthday. He goes to her place to see her, but… is he too late?", url: "https://mega.nz/embed/fZ8SFCjJ#V2hDBCLQCAujkDsWk1cazmTAwv8FedEVt-E2HU-Ifd8" },
-            { title: "E4 - Accomplishment", info: "Satoru invites Hinazuki to the Science Center so she won’t be alone. He suspects that he’s riding the same pre-Revival rail of time, and before he knows it, X-day has arrived...", url: "https://mega.nz/embed/udFSGDoQ#ZohM7K7RKGl60ZFtb9lMoPscUnxd5tZ04IywMWvieT4" },
-            { title: "E5 - Getaway", info: "It turns out that Kayo, absent from school, has disappeared after all. Satoru is tormenting himself with the thought that he should have been able to do something more. On top of that, Aya Nakanishi from the nearby elementary school has vanished too!", url: "https://mega.nz/embed/7dtiSQwa#nC_AwKEKBKd31LLvGwWr6vN0aIGAFkYgWSvCOA7--dk" },
-            { title: "E6 - Grim Reaper", info: "After confirming that the fire at Airi’s home is related to his mother’s death, Satoru relies on a note she left behind to make contact with Sawada, a former reporter for TV Ishikari.", url: "https://mega.nz/embed/GB1GgRDC#MfYQGr2Ii0-ME9UQgOa82ghggAav37cV6CEOIXqCPzU" },
-            { title: "E7 - Out of Control", info: "After getting caught by the police, Satoru has only one wish… to have one final Revival to make things right!", url: "https://mega.nz/embed/yQkC0TIK#CDNoxHXZVBLrA9s6Z5cRBBnZd5B4btg89Z8YXngrg-g" },
-            { title: "E8 - Spiral", info: "Instead of going home, Kayo has spent the last few days in a disused school bus while being supported by Satoru and the others. Only Sachiko and Yashiro begin to realize that something is going on when they observe changes in Satoru’s behavior.", url: "https://mega.nz/embed/HcswmBjb#CfmA8DxdGgugs3RvCtUaKY-v7bb56uoNrpiTOQlVZeI" },
-            { title: "E9 - Closure", info: "After being 'missing' for three days, Kayo returns home. Her mother, Akemi, sees Satoru and Sachiko standing a few paces behind... Will Kayo be safe at last?", url: "https://mega.nz/embed/fA01DZIZ#8Di3mlBDZBOONJFhHJfVoBoBiX0e1AJFRWx5f0Llrw8" },
-            { title: "E10 - Joy", info: "Three people, including Hiromi, were murdered the first time around, but this time, the targets were moved out of the killer’s sights. However, Satoru is worried about whom the killer will go after next in place of his intended victims.", url: "https://mega.nz/embed/eEc2RIha#GkXaGAzZoZ0EDveg3yRz49JqVS_Uusaj_SN9xy8qP4M" },
-            { title: "E11 - Future", info: "After revealing who he really is, the kidnapper leaves Satoru to drown… Is it all over for Satoru?", url: "https://mega.nz/embed/yJVRkTjY#xlhQnRahIG_A2ni1Nt97rWOQ-x2XYRSVK76OweyxgUo" },
-            { title: "E12 - Treasure", info: "Finally Satoru regains his memories and faces off against the culprit!", url: "https://mega.nz/embed/XVcG1a7K#nH32YTH5Emr0bK91srYnULsIHKEyETN-0yBI-Q3YcQo" },
-            { title: "S2", info: "", url: "//" },
+            {
+        "title": "E1 - Flashing Before My Eyes",
+        "info": "Satoru Fujinuma is a struggling manga artist who works at a pizza parlor. Ever since he was a kid, he has been holding himself responsible for a kidnapping incident. Finally, the time has come for the truth from his past to be revealed…",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/7V0gnKBS#W5HNrT7Uvm4Z1ti7_cyIsKiH55J9dpHz1qK17hRAcGQ" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1Yhpz-ieorQ68vAC7n8hHOPoAGS9r94yx/preview" }
+        ]
+    },
+    {
+        "title": "E2 - Palm of the Hand",
+        "info": "The year is 1988… Satoru is back in elementary school. Now, he has a chance to change the future!",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/bR8AQKbK#DUv7_Q4KHqG1-FouaW-5UQpIlq01BICDyPar39pXgXw" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1DCtPsQm58x3i3ajPGte0Sn96q-RjufUP/preview" }
+        ]
+    },
+    {
+        "title": "E3 - Birthmark",
+        "info": "Satoru is determined to prevent Kayo from getting kidnapped before her birthday. He goes to her place to see her, but… is he too late?",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/fZ8SFCjJ#V2hDBCLQCAujkDsWk1cazmTAwv8FedEVt-E2HU-Ifd8" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1heOn5nMa2HQhZP4BKC-xIiAALpI_DKe5/preview" }
+        ]
+    },
+    {
+        "title": "E4 - Accomplishment",
+        "info": "Satoru invites Hinazuki to the Science Center so she won’t be alone. He suspects that he’s riding the same pre-Revival rail of time, and before he knows it, X-day has arrived...",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/udFSGDoQ#ZohM7K7RKGl60ZFtb9lMoPscUnxd5tZ04IywMWvieT4" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1pvgpOKXcdAezBZQiFfmbkPx7T_ysE51r/preview" }
+        ]
+    },
+    {
+        "title": "E5 - Getaway",
+        "info": "It turns out that Kayo, absent from school, has disappeared after all. Satoru is tormenting himself with the thought that he should have been able to do something more. On top of that, Aya Nakanishi from the nearby elementary school has vanished too!",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/7dtiSQwa#nC_AwKEKBKd31LLvGwWr6vN0aIGAFkYgWSvCOA7--dk" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1rtrw8Doq6Y9OWZn6mdJt8Zli5jPegCYn/preview" }
+        ]
+    },
+    {
+        "title": "E6 - Grim Reaper",
+        "info": "After confirming that the fire at Airi’s home is related to his mother’s death, Satoru relies on a note she left behind to make contact with Sawada, a former reporter for TV Ishikari.",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/GB1GgRDC#MfYQGr2Ii0-ME9UQgOa82ghggAav37cV6CEOIXqCPzU" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1yqhEE9AhipxwcRrm_ndltDGuhUlXZNbH/preview" }
+        ]
+    },
+    {
+        "title": "E7 - Out of Control",
+        "info": "After getting caught by the police, Satoru has only one wish… to have one final Revival to make things right!",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/yQkC0TIK#CDNoxHXZVBLrA9s6Z5cRBBnZd5B4btg89Z8YXngrg-g" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1-R136bC8-VzoMxIJnMVSqT-oekc2H7dJ/preview" }
+        ]
+    },
+    {
+        "title": "E8 - Spiral",
+        "info": "Instead of going home, Kayo has spent the last few days in a disused school bus while being supported by Satoru and the others. Only Sachiko and Yashiro begin to realize that something is going on when they observe changes in Satoru’s behavior.",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/HcswmBjb#CfmA8DxdGgugs3RvCtUaKY-v7bb56uoNrpiTOQlVZeI" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1yCf9m6oL63yHJM0nJ9t4cpIixK9Gweh5/preview" }
+        ]
+    },
+    {
+        "title": "E9 - Closure",
+        "info": "After being 'missing' for three days, Kayo returns home. Her mother, Akemi, sees Satoru and Sachiko standing a few paces behind... Will Kayo be safe at last?",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/fA01DZIZ#8Di3mlBDZBOONJFhHJfVoBoBiX0e1AJFRWx5f0Llrw8" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1N0ny2HusvlIF6VTgf_A5K4NtwV3hEcT1/preview" }
+        ]
+    },
+    {
+        "title": "E10 - Joy",
+        "info": "Three people, including Hiromi, were murdered the first time around, but this time, the targets were moved out of the killer’s sights. However, Satoru is worried about whom the killer will go after next in place of his intended victims.",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/eEc2RIha#GkXaGAzZoZ0EDveg3yRz49JqVS_Uusaj_SN9xy8qP4M" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1OmEekGzvkQlIOWEfe8YuiuXnpLmWiBL_/preview" }
+        ]
+    },
+    {
+        "title": "E11 - Future",
+        "info": "After revealing who he really is, the kidnapper leaves Satoru to drown… Is it all over for Satoru?",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/yJVRkTjY#xlhQnRahIG_A2ni1Nt97rWOQ-x2XYRSVK76OweyxgUo" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1N6QhNVySOq0yKVkzaVNDNNuQSTdHsOXS/preview" }
+        ]
+    },
+    {
+        "title": "E12 - Treasure",
+        "info": "Finally Satoru regains his memories and faces off against the culprit!",
+        "servers": [
+            { "name": "Mega.nz", "url": "https://mega.nz/embed/XVcG1a7K#nH32YTH5Emr0bK91srYnULsIHKEyETN-0yBI-Q3YcQo" },
+            { "name": "Google Drive", "url": "https://drive.google.com/file/d/1DGdYXowy47lbX_IRYXi-TBikbzBqVUo2/preview" }
+        ]
+    },
         ];
 
         let currentEpisodeIndex = 0;
+        let currentServerIndex = 0;
 
         function updateSkipButtons() {
             const prevButton = document.getElementById('prevButton');
@@ -258,7 +363,8 @@
 
         function loadEpisode(episode) {
             const wrapper = document.getElementById('videoWrapper');
-            wrapper.innerHTML = `<iframe src="${episode.url}" allowfullscreen></iframe>`;
+            const serverUrl = episode.servers[currentServerIndex].url;
+            wrapper.innerHTML = `<iframe src="${serverUrl}" allowfullscreen></iframe>`;
             currentEpisodeIndex = episodes.indexOf(episode);
             updateSkipButtons();
         }
@@ -287,7 +393,14 @@
             menu.classList.toggle('open');
         }
 
-        document.addEventListener('DOMContentLoaded', createEpisodePicker);
+        function changeServer() {
+            currentServerIndex = document.getElementById('serverDropdown').value;
+            loadEpisode(episodes[currentEpisodeIndex]);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createEpisodePicker();
+        });
     </script>
 </body>
 </html>
