@@ -1,0 +1,406 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime <3</title>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00bcd4;
+            --secondary-color: #9c27b0;
+            --background: radial-gradient(circle, rgba(25, 25, 25, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            --button-bg: linear-gradient(90deg, #00bcd4, #9c27b0);
+            --text: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.7);
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://source.unsplash.com/1600x900/?anime') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(5px);
+            z-index: -1;
+            animation: pulse 30s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { filter: blur(5px); }
+            50% { filter: blur(15px); }
+            100% { filter: blur(5px); }
+        }
+
+        .home-button,
+        .skip-button,
+        .menu-button {
+            position: relative;
+            padding: 12px 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            background: var(--button-bg);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .home-button:hover,
+        .skip-button:hover,
+        .menu-button:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: linear-gradient(90deg, #9c27b0, #00bcd4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .close-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--button-bg);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 1000;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .close-button:hover {
+            transform: rotate(90deg);
+            box-shadow: 0 8px 20px var(--shadow);
+        }
+
+        .player-container {
+            max-width: 1320px;
+            width: 90%;
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 50px var(--shadow);
+            transform: scale(0.9);
+            transform-origin: center;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 30px;
+        }
+
+        .episode-menu {
+            position: fixed;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            transition: top 0.5s ease;
+            z-index: 999;
+            padding: 80px 20px 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .episode-menu.open {
+            top: 0;
+        }
+
+        .episode-picker {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .episode-item {
+            padding: 20px;
+            background: rgba(50, 50, 50, 0.9);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px var(--shadow);
+            transform: scale(0.95);
+            color: #ccc;
+        }
+
+        .episode-item:hover {
+            transform: scale(1.01);
+            background-color: #9c27b0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .episode-item:hover .episode-title,
+        .episode-item:hover .episode-description {
+            color: black;
+        }
+
+        .episode-title,
+        .episode-description {
+            transition: color 0.3s ease-in-out;
+        }
+
+        .episode-item:hover .episode-title {
+            color: black;
+        }
+
+        .episode-item:hover .episode-description {
+            color: black;
+        }
+
+        .skip-button {
+            margin: 0 10px;
+        }
+
+        .skip-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .dropdown {
+            background: var(--button-bg);
+            border-radius: 8px;
+            color: black;  /* Set the text color inside the dropdown to black */
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            width: 150px;
+        }
+
+    </style>
+</head>
+<body>
+    <a href="https://Syfer-eng.github.io/Shows/Anime.html" class="home-button">Home</a>
+    <div class="player-container">
+        <div class="video-wrapper" id="videoWrapper"></div>
+        <div class="controls">
+            <button class="menu-button skip-button" id="prevButton" onclick="skipEpisode(-1)">Previous</button>
+            <button class="menu-button" onclick="toggleMenu()">Select Episode</button>
+            <button class="menu-button skip-button" id="nextButton" onclick="skipEpisode(1)">Next</button>
+            <!-- Server Picker Dropdown moved here -->
+            <select class="dropdown" id="serverDropdown" onchange="changeServer()">
+                <option value="0">Mega.nz</option>
+                <option value="1">Google Drive</option>
+            </select>
+        </div>
+    </div>
+    <div class="episode-menu" id="episodeMenu">
+        <button class="close-button" onclick="toggleMenu()">×</button>
+        <div class="episode-picker" id="episodePicker"></div>
+    </div>
+
+    <script>
+        const episodes = [
+            {
+                title: "E1 - That's How Love Starts, Ya Know!",
+                info: "Momo is a high school girl born to a family of spirit mediums, and Okarun is an occult fanatic. To settle an argument, Momo heads to an abandoned hospital famous for UFO sightings while Okarun heads to a tunnel famous as a spiritual hotspot.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/fuQxwJhb#Tr2vfXg_94ZiEEk0m1-FnHlsG_9dHFRz8iQ63RqA6bI" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-1.com" }
+                ]
+            },
+            {
+                title: "E2 - That's a Space Alien, Ain't It?!",
+                info: "Okarun is cursed by Turbo Granny, and Momo uses her newly found psychic powers to curb Turbo Granny from running out of control. Dawn breaks, and the two of them temporarily find shelter in Momo's house.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/2nY2EAAA#anuAtoSJDqUW8R4padsFSATJ9rBo_HiVKKjkSp9KEFQ" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E3 - It's a Granny vs. Granny Clash!",
+                info: "Okarun transforms from Turbo Granny's curse. He goes berserk unable to control his power, but Momo's grandmother Seiko, saves them in the nick of time. To lift the curse, Momo and Okarun decide to play tag with Turbo Granny.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/P6I3hADA#aTFVfVmwPIQ9yTDKcsRvUQZAblNCTp36LF-OggQFJoI" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E4 - Kicking Turbo Granny's Ass",
+                info: "To settle the score with Turbo Granny, Momo and Okarun show up at the promised tunnel. They start the game of tag to pull the location-bound spirit away, and they managed to capture Turbo Granny using Momo's psychic powers.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/mjQwkB7Y#WzfdQX0UOW4FE-1lBgBBIQqh36bwwzVRxONWXW4EQQs" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E5 - Like, Where Are Your Balls?!",
+                info: "Victorious against Turbo Granny, Momo and Okarun regain peace. They have gotten closer through the traumatic experience, but they find their relationship to be awkward. That is when Okarun discloses something important to Momo.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/r2hA2QbZ#g2aT0IIVapvpvYlYBDBU7r2fDGjQyKoiy_1HppjLn7c" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E6 - A Dangerous Woman Arrives",
+                info: "Momo, Okarun, and Turbo Granny search for the missing golden ball. They search all over the school and find out that a pretty girl named Aira is in possession of a ball. Perhaps the effects of the ball, but Aira can now see 'invisible things' now.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/CnYQlTzb#gyT4r3LI66wcC6rmX2L_i-PZmnGpbMDCwduVyYW2viI" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E7 - To a Kinder World",
+                info: "Momo and Okarun manage to pull Acrobatic Silky away from Aira after a fierce battle. However, Aira herself had lost her life as a side-effect of being eaten by a yokai monster. Facing Aira in such a crisis, Acrobatic Silky has a surprising proposal…",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/f3JClKAb#NKAHpbQTiAhqDUTgF5zX-MIg4ahwCWUIZSVCA0jF8og" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E8 - I've Got This Funny Feeling",
+                info: "The battle against Acrobatic Silky is over, Aira harbors romantic feelings stemming from how Okarun had saved her. As Momo, Okarun, and Aira's feelings intertwine, Serpoians make another appearance, and the three of them are trapped in void space.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/22on1LLY#rQzaTlfdDbm3rFzYrziLV8v_0JTuUFJR_AZq5hWukSs" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E9 - Merge! Serpo Dover Demon Nessie!",
+                info: "Aira has awakened the powers of Acrobatic Silky within her and proceeds to have a seesaw battle against the Serpoians and the Dover Demon. Momo and Okarun join the fray, intensifying the battle.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/37IkBBJY#SiCk1NQUe6x4Dd1i6MO3ljQWmIKe4MrZEtJE7ZALlzs" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E10 - Have You Ever Seen a Cattle Mutilation?",
+                info: "Momo, Okarun, and Aira make it through the alien assault by combining their powers. However, the Dover Demon that they thought they had defeated appears before them.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/G3pVXa7Z#GxAL5LdLMSkw5DZUki6laJ0ei2jRJrSozVm53Oaj3rA" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E11 - First Love",
+                info: "Momo's childhood friend, Jiji, appears and begins living in Momo's house. Jiji has been worrying about apparitions in the house he moved into. Okarun is clearly disturbed hearing that Jiji is Momo's first love and tries to distance himself from Momo.",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/XqJ2HDhI#a78vjptYHYYQm60Z9ENrSuNlRzOWl04w-QPzgKopEjE" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            },
+            {
+                title: "E12 - Let's Go to the Cursed House",
+                info: "Momo and Okarun head to Jiji's house in a hot springs district to investigate the case of Jiji's family. Okarun feels gloomy looking at how close Momo and Jiji are. Arriving at Jiji's house, there are several shadows watching them as they enter...",
+                servers: [
+                    { name: "Mega.nz", url: "https://mega.nz/embed/2n4ygSpb#87RoUpNYGBoX3CP3nNRYSoD72kTAOcBC18euDKikFrI" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            }
+        ];
+
+        let currentEpisodeIndex = 0;
+        let currentServerIndex = 0;
+
+        function updateSkipButtons() {
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            prevButton.disabled = currentEpisodeIndex === 0;
+            nextButton.disabled = currentEpisodeIndex === episodes.length - 1;
+        }
+
+        function skipEpisode(direction) {
+            const newIndex = currentEpisodeIndex + direction;
+            if (newIndex >= 0 && newIndex < episodes.length) {
+                currentEpisodeIndex = newIndex;
+                loadEpisode(episodes[currentEpisodeIndex]);
+                updateSkipButtons();
+            }
+        }
+
+        function loadEpisode(episode) {
+            const wrapper = document.getElementById('videoWrapper');
+            const serverUrl = episode.servers[currentServerIndex].url;
+            wrapper.innerHTML = `<iframe src="${serverUrl}" allowfullscreen></iframe>`;
+            currentEpisodeIndex = episodes.indexOf(episode);
+            updateSkipButtons();
+        }
+
+        function createEpisodePicker() {
+            const picker = document.getElementById('episodePicker');
+            episodes.forEach((episode) => {
+                const item = document.createElement('div');
+                item.className = 'episode-item';
+                item.onclick = () => {
+                    loadEpisode(episode);
+                    toggleMenu();
+                };
+                item.innerHTML = `
+                    <div class="episode-title">${episode.title}</div>
+                    <div class="episode-description">${episode.info}</div>
+                `;
+                picker.appendChild(item);
+            });
+            loadEpisode(episodes[0]);
+            updateSkipButtons();
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('episodeMenu');
+            menu.classList.toggle('open');
+        }
+
+        function changeServer() {
+            currentServerIndex = document.getElementById('serverDropdown').value;
+            loadEpisode(episodes[currentEpisodeIndex]);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createEpisodePicker();
+        });
+    </script>
+</body>
+</html>
