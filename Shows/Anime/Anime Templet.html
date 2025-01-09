@@ -133,8 +133,11 @@
         }
 
         .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
             padding: 30px;
-            text-align: center;
         }
 
         .episode-menu {
@@ -205,6 +208,18 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        
+        .dropdown {
+            background: var(--button-bg);
+            border-radius: 8px;
+            color: black;  /* Set the text color inside the dropdown to black */
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            width: 150px;
+        }
+
     </style>
 </head>
 <body>
@@ -215,18 +230,40 @@
             <button class="menu-button skip-button" id="prevButton" onclick="skipEpisode(-1)">Previous</button>
             <button class="menu-button" onclick="toggleMenu()">Select Episode</button>
             <button class="menu-button skip-button" id="nextButton" onclick="skipEpisode(1)">Next</button>
+            <!-- Server Picker Dropdown moved here -->
+            <select class="dropdown" id="serverDropdown" onchange="changeServer()">
+                <option value="0">Mega.nz</option>
+                <option value="1">Google Drive</option>
+            </select>
         </div>
     </div>
     <div class="episode-menu" id="episodeMenu">
         <button class="close-button" onclick="toggleMenu()">×</button>
         <div class="episode-picker" id="episodePicker"></div>
     </div>
+
     <script>
         const episodes = [
-            { title: "Title", info: "Descreption Goes Here", url: "the video link" },
+            {
+                title: "Episode 1",
+                info: "Description goes here",
+                servers: [
+                    { name: "Mega.nz", url: "https://path-to-video-mega-1.com" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-1.com" }
+                ]
+            },
+            {
+                title: "Episode 2",
+                info: "Description goes here",
+                servers: [
+                    { name: "Mega.nz", url: "https://path-to-video-mega-2.com" },
+                    { name: "Google Drive", url: "https://path-to-video-gdrive-2.com" }
+                ]
+            }
         ];
 
         let currentEpisodeIndex = 0;
+        let currentServerIndex = 0;
 
         function updateSkipButtons() {
             const prevButton = document.getElementById('prevButton');
@@ -246,7 +283,8 @@
 
         function loadEpisode(episode) {
             const wrapper = document.getElementById('videoWrapper');
-            wrapper.innerHTML = `<iframe src="${episode.url}" allowfullscreen></iframe>`;
+            const serverUrl = episode.servers[currentServerIndex].url;
+            wrapper.innerHTML = `<iframe src="${serverUrl}" allowfullscreen></iframe>`;
             currentEpisodeIndex = episodes.indexOf(episode);
             updateSkipButtons();
         }
@@ -275,7 +313,14 @@
             menu.classList.toggle('open');
         }
 
-        document.addEventListener('DOMContentLoaded', createEpisodePicker);
+        function changeServer() {
+            currentServerIndex = document.getElementById('serverDropdown').value;
+            loadEpisode(episodes[currentEpisodeIndex]);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createEpisodePicker();
+        });
     </script>
 </body>
 </html>
