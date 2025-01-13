@@ -1,11 +1,11 @@
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Games</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
-    <link href="https://www.bing.com/images/search?view=detailV2&ccid=dLlNAIbF&id=ECED99A30FB0275853804BCC4D82ABE33C00F36E&thid=OIP.dLlNAIbFypypLDzxSOwJpgHaGn&mediaurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR.74b94d0086c5ca9ca92c3cf148ec09a6%3frik%3dbvMAPOOrgk3MSw%26riu%3dhttp%253a%252f%252fupload.wikimedia.org%252fwikipedia%252fcommons%252f7%252f7f%252fXbox-s-controller.jpg%26ehk%3dKUAGwgssKVJ8TQk%252fQPUEzvsUN8fOI3ewGh5ktV1VR7w%253d%26risl%3d1%26pid%3dImgRaw%26r%3d0&exph=2660&expw=2980&q=controller&simid=608028969079957215&FORM=IRPRST&ck=087216E8335FD94DF29C3116A5E81DB3&selectedIndex=2&itb=0" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syfer's Unblocked Games</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
     <style>
         :root {
             --primary-color: #800080;
@@ -23,6 +23,7 @@
             min-height: 100vh;
         }
 
+        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -30,7 +31,6 @@
             padding: 1.5rem;
             background: rgba(26, 26, 26, 0.75);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -63,6 +63,7 @@
             box-shadow: 0 0 20px var(--primary-color);
         }
 
+        /* Search */
         .search-container {
             display: flex;
             justify-content: center;
@@ -88,32 +89,7 @@
             background: rgba(255, 255, 255, 0.15);
         }
 
-        .category-filters {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 1rem 0;
-            flex-wrap: wrap;
-            padding: 0 1rem;
-        }
-
-        .category-button {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 25px;
-            background: var(--primary-color);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .category-button:hover,
-        .category-button.active {
-            background: var(--hover-color);
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px var(--primary-color);
-        }
-
+        /* Game Cards */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -158,6 +134,7 @@
             position: relative;
         }
 
+        /* Game Frame */
         #gameFrame {
             display: none;
             position: fixed;
@@ -186,10 +163,21 @@
             border-radius: 15px;
         }
 
-        #gameFrame.fullscreen #gameIframe {
-            border-radius: 0;
+        /* Loading Spinner */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--primary-color);
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
+        /* Fullscreen Controls */
         .game-controls {
             position: absolute;
             top: 20px;
@@ -218,42 +206,70 @@
             transform: scale(1.1);
         }
 
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--primary-color);
-            border-top: 5px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        /* Bottom Banner */
+        #bottom-banner {
+            position: fixed;
+            bottom: -70px;
+            left: 0;
+            width: 100%;
+            background-color: black;
+            color: #7A4BCF;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 16px;
+            z-index: 9999;
+            transform: translateY(100%);
+            transition: transform 0.5s ease, bottom 0.5s ease, opacity 0.5s ease, color 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
         }
 
+        #bottom-banner.show {
+            bottom: 0;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Keyframes */
         @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
     </style>
 </head>
+
 <body>
-    <div class="header">
+    <header class="header">
         <h1>Syfer's Unblocked Games</h1>
-        <a href="https://Syfer-eng.github.io/Menu.html" class="home-button">Home</a>
-        <a href="https://forms.gle/79fXLvN6UoTayJCM9" class="home-button">Request Games</a>
-    </div>
+        <nav>
+            <a href="https://Syfer-eng.github.io/Menu.html" class="home-button">Home</a>
+            <a href="https://forms.gle/79fXLvN6UoTayJCM9" class="home-button">Request Games</a>
+        </nav>
+    </header>
 
-    <div class="search-container">
+    <section class="search-container">
         <input type="text" class="search-input" placeholder="Search games...">
-    </div>
+    </section>
 
-    <div class="games-container">
+    <section class="games-container">
         <div id="gameFrame">
             <div class="loading-spinner"></div>
             <iframe id="gameIframe" title="Game Frame"></iframe>
@@ -264,11 +280,11 @@
         </div>
 
         <div class="games-grid">
-            <div class="game-card" onclick="loadGame('Https://Syfer-eng.github.io/Games/Krunker_io.html')">
+            <div class="game-card" onclick="loadGame('https://Syfer-eng.github.io/Games/Krunker_io.html')">
                 <img src="https://gamepretty.com/wp-content/uploads/2021/02/Is-Krunker-the-best-browser-shooting-game-in-2019.jpg" alt="Krunker.io">
                 <h3>Krunker.io</h3>
             </div>
-            <div class="game-card" onclick="loadGame('Https://Syfer-eng.github.io/Games/Shellshock_io.html')">
+            <div class="game-card" onclick="loadGame('https://Syfer-eng.github.io/Games/Shellshock_io.html')">
                 <img src="https://th.bing.com/th/id/OIP.IsmeKrhF0gN18wHMXsS8_gHaHw?rs=1&pid=ImgDetMain" alt="Shell Shockers">
                 <h3>Shell Shockers</h3>
             </div>
@@ -276,7 +292,7 @@
                 <img src="https://play-lh.googleusercontent.com/WRM5Y1xZmzcCP1YtO5zl6G2g7CU5c5ZfjX4UVrgi1bpNgkfy-wuB-bQx3kkeRfaGYQ" alt="Retro Bowl">
                 <h3>Retro Bowl</h3>
             </div>
-            <div class="game-card" onclick="loadGame('Https://Syfer-eng.github.io/Games/1v1_lol.html')">
+            <div class="game-card" onclick="loadGame('https://Syfer-eng.github.io/Games/1v1_lol.html')">
                 <img src="https://th.bing.com/th/id/OIP.I8HLfUGlR1d2_DGG6tefIAHaHa?rs=1&pid=ImgDetMain" alt="1v1.lol">
                 <h3>1v1.lol</h3>
             </div>
@@ -284,102 +300,30 @@
                 <img src="https://th.bing.com/th/id/OIP.ORiEsqfbp-W8WaVSX3tyyQHaHX?rs=1&pid=ImgDetMain" alt="Pokemon Radical Red">
                 <h3>Pokemon Radical Red</h3>
             </div>
-            <div class="game-card" onclick="loadGame('Https://Syfer-eng.github.io/Games/Armed Forces io.html')">
+            <div class="game-card" onclick="loadGame('https://Syfer-eng.github.io/Games/Armed Forces io.html')">
                 <img src="https://th.bing.com/th/id/OIP.WChy2Ms02Mm2pxe4y2IfOQHaHa?rs=1&pid=ImgDetMain" alt="Armed Forces.io">
                 <h3>Armed Forces.io</h3>
             </div>
-
         </div>
-    </div>
+    </section>
 
+    <footer>
+        <div id="bottom-banner" onclick="window.location.href='coming-soon.html'">
+            Developer: Syfer-eng · More Websites Coming Soon
+        </div>
+    </footer>
 
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Bottom Banner</title>
-    <style>
-        /* Style for the banner */
-        #bottom-banner {
-            position: fixed;
-            bottom: -70px; /* Initially off-screen, adjusted for smaller height */
-            left: 0;
-            width: 100%;
-            background-color: black; /* Black background */
-            color: #7A4BCF; /* Purple text */
-            text-align: center;
-            padding: 10px 0; /* Reduced padding to make the banner smaller */
-            font-size: 16px; /* Smaller text size */
-            z-index: 9999;
-            transform: translateY(100%);
-            transition: transform 0.5s ease, bottom 0.5s ease, opacity 0.5s ease, color 0.3s ease, background-color 0.3s ease;
-            cursor: pointer;
-            opacity: 0;
-        }
-
-        /* Banner hover effect */
-        #bottom-banner:hover {
-            color: #9B59B6; /* Lighter purple text on hover */
-            background-color: #333; /* Dark gray (lighter black) background on hover */
-        }
-
-        /* Banner animation */
-        #bottom-banner.show {
-            bottom: 0;
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
-</head>
-<body>
-
-
-
-    <!-- Banner content -->
-    <div id="bottom-banner" onclick="window.location.href='coming-soon.html'">
-        <i class="fas fa-film"></i> <strong>Developer: Syfer-eng</strong> ‎ ‎ ‎ More Websites Coming Soon.
-    </div>
-
-    <script>
-        // JavaScript to trigger the banner when scrolled to the bottom
-        window.onscroll = function() {
-            var banner = document.getElementById("bottom-banner");
-            var scrollPosition = window.innerHeight + window.scrollY;
-            var documentHeight = document.documentElement.scrollHeight;
-
-            // If we are at the bottom of the page, show the banner
-            if (scrollPosition >= documentHeight) {
-                banner.classList.add("show");
-            } else {
-                banner.classList.remove("show");
-            }
-        };
-    </script>
-
-</body>
-</html>
-
-
-    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const games = document.querySelectorAll('.game-card');
             const searchInput = document.querySelector('.search-input');
-
             searchInput.addEventListener('input', filterGames);
 
             function filterGames() {
                 const searchTerm = searchInput.value.toLowerCase();
-                
                 games.forEach(game => {
                     const title = game.querySelector('h3').textContent.toLowerCase();
-                    if (title.includes(searchTerm)) {
-                        game.style.display = 'block';
-                        game.style.animation = 'fadeIn 0.5s ease';
-                    } else {
-                        game.style.display = 'none';
-                    }
+                    game.style.display = title.includes(searchTerm) ? 'block' : 'none';
                 });
             }
         });
@@ -388,14 +332,9 @@
             const gameFrame = document.getElementById('gameFrame');
             const gameIframe = document.getElementById('gameIframe');
             const loadingSpinner = document.querySelector('.loading-spinner');
-            
             gameFrame.style.display = 'block';
             loadingSpinner.style.display = 'block';
-            
-            gameIframe.onload = () => {
-                loadingSpinner.style.display = 'none';
-            };
-            
+            gameIframe.onload = () => loadingSpinner.style.display = 'none';
             gameIframe.src = url;
         }
 
@@ -407,10 +346,8 @@
         function closeGame() {
             const gameFrame = document.getElementById('gameFrame');
             const gameIframe = document.getElementById('gameIframe');
-            
             gameFrame.classList.remove('fullscreen');
             gameFrame.style.opacity = '0';
-            
             setTimeout(() => {
                 gameFrame.style.display = 'none';
                 gameIframe.src = '';
@@ -419,12 +356,19 @@
         }
 
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                closeGame();
-            } else if (event.key === 'f' || event.key === 'F') {
-                toggleFullscreen();
-            }
+            if (event.key === 'Escape') closeGame();
+            else if (event.key === 'f' || event.key === 'F') toggleFullscreen();
         });
+
+        window.onscroll = () => {
+            const banner = document.getElementById("bottom-banner");
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const documentHeight = document.documentElement.scrollHeight;
+            if (scrollPosition >= documentHeight) banner.classList.add("show");
+            else banner.classList.remove("show");
+        };
     </script>
+
 </body>
+
 </html>
