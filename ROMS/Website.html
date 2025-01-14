@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Menu</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #13131f;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        /* Menu container */
+        .menu-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* Individual menu items */
+        .menu-item {
+            width: 310px;
+            height: 310px;
+            background-color: rgba(26, 26, 26, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Menu item image */
+        .menu-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        /* Menu item text */
+        .menu-item h3 {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            background: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            padding: 10px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Hover effects */
+        .menu-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .menu-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Modal container */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 655px;
+            height: 499px;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+        }
+
+        /* Modal iframe */
+        .modal iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        /* Close button */
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2rem;
+            color: white;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1001; /* Ensure it is above the iframe */
+        }
+
+        /* Make sure the items have the same size on mobile and larger screens */
+        @media (max-width: 800px) {
+            .menu-item {
+                width: 90%;
+                height: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu-container">
+        <!-- Menu Item 1 -->
+        <div class="menu-item" onclick="openModal('https://Rom-Player-Html.github.io/Pokemon-Crystal-Version.html')">
+            <img src="https://th.bing.com/th/id/R.0e7a773d59474d6a8cca1f4ba311b943?rik=Wv36BAJnsDUBoA&pid=ImgRaw&r=0" alt="Game 1">
+            <h3>Pokemon Crystal Version</h3>
+        </div>
+        
+        <!-- Menu Item 2 -->
+        <div class="menu-item" onclick="openModal('https://via.placeholder.com/410x410.png?text=Game+2')">
+            <img src="https://via.placeholder.com/410x410.png?text=Game+2" alt="Game 2">
+            <h3>Game 2</h3>
+        </div>
+
+        <!-- Menu Item 3 -->
+        <div class="menu-item" onclick="openModal('https://via.placeholder.com/410x410.png?text=Game+3')">
+            <img src="https://via.placeholder.com/410x410.png?text=Game+3" alt="Game 3">
+            <h3>Game 3</h3>
+        </div>
+
+        <!-- Menu Item 4 -->
+        <div class="menu-item" onclick="openModal('https://via.placeholder.com/410x410.png?text=Game+4')">
+            <img src="https://via.placeholder.com/410x410.png?text=Game+4" alt="Game 4">
+            <h3>Game 4</h3>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <iframe id="modal-iframe" src="" title="Game Frame"></iframe>
+    </div>
+
+    <script>
+        // Function to open the modal and load the iframe with the game URL
+        function openModal(gameUrl) {
+            const modal = document.getElementById('modal');
+            const iframe = document.getElementById('modal-iframe');
+            modal.style.display = 'block';
+            iframe.src = gameUrl;  // Set the source of the iframe to the game's URL
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            const iframe = document.getElementById('modal-iframe');
+            modal.style.display = 'none';
+            iframe.src = ''; // Clear the iframe's source to stop the game
+        }
+
+        // Close modal when clicking outside the iframe
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            const iframe = document.getElementById('modal-iframe');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+
+</html>
