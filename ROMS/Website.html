@@ -24,6 +24,27 @@
             flex-direction: column;
         }
 
+        /* Home Button */
+        .home-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px 20px;
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .home-btn:hover {
+            background-color: #005fa3;
+            transform: scale(1.05);
+        }
+
         /* Menu container */
         .menu-container {
             display: flex;
@@ -126,6 +147,9 @@
 </head>
 
 <body>
+    <!-- Home Button -->
+    <button class="home-btn" onclick="window.location.href='https://Syfer-eng.github.io/Menu.html'">Home</button>
+
     <div class="menu-container">
         <div class="menu-item" onclick="openModal('https://Rom-Player-Html.github.io/Pokemon-Crystal-Version.html')">
             <img src="https://th.bing.com/th/id/R.0e7a773d59474d6a8cca1f4ba311b943?rik=Wv36BAJnsDUBoA&pid=ImgRaw&r=0" alt="Game 1">
@@ -141,6 +165,7 @@
             <img src="https://infinityretro.com/wp-content/uploads/2014/06/Pokemon-Yellow-cover.png" alt="Game 3">
             <h3>Pokemon Yellow Version</h3>
         </div>
+    </div>
 
     <!-- Modal -->
     <div id="modal" class="modal">
