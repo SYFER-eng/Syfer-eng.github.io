@@ -1,9 +1,8 @@
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Menu</title>
+    <title>Roms Menu</title>
     <style>
         /* Basic reset */
         * {
@@ -13,7 +12,7 @@
         }
 
         body {
-            background: #13131f;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
             color: white;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -22,6 +21,7 @@
             height: 100vh;
             margin: 0;
             flex-direction: column;
+            overflow: hidden;
         }
 
         /* Home Button */
@@ -29,7 +29,7 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #0078d4;
             color: white;
             border: none;
@@ -37,7 +37,7 @@
             cursor: pointer;
             font-size: 1rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .home-btn:hover {
@@ -51,6 +51,26 @@
             gap: 2rem;
             flex-wrap: wrap;
             justify-content: center;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding-right: 10px;
+            width: 90%;
+            max-width: 1200px;
+            transition: all 0.3s ease;
+        }
+
+        /* Custom Scrollbar */
+        .menu-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .menu-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+        }
+
+        .menu-container::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 255, 255, 0.8);
         }
 
         /* Individual menu items */
@@ -71,7 +91,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.5s ease, filter 0.3s ease;
         }
 
         /* Menu item text */
@@ -97,6 +117,7 @@
 
         .menu-item:hover img {
             transform: scale(1.1);
+            filter: brightness(1.1);
         }
 
         /* Modal container */
@@ -113,6 +134,8 @@
             border-radius: 15px;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
             overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
 
         /* Modal iframe */
@@ -133,16 +156,38 @@
             background-color: transparent;
             border: none;
             cursor: pointer;
-            z-index: 1001; /* Ensure it is above the iframe */
+            z-index: 1001;
         }
 
-        /* Make sure the items have the same size on mobile and larger screens */
+        /* Fullscreen button (top-left of the screen) */
+        .fullscreen-btn-top-left {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 12px 24px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .fullscreen-btn-top-left:hover {
+            background-color: #ff9b00;
+        }
+
+        /* Responsive Design */
         @media (max-width: 800px) {
             .menu-item {
                 width: 90%;
                 height: 90%;
             }
         }
+
     </style>
 </head>
 
@@ -151,6 +196,7 @@
     <button class="home-btn" onclick="window.location.href='https://Syfer-eng.github.io/Menu.html'">Home</button>
 
     <div class="menu-container">
+        <!-- Game Menu Items -->
         <div class="menu-item" onclick="openModal('https://Rom-Player-Html.github.io/Pokemon-Crystal-Version.html')">
             <img src="https://th.bing.com/th/id/R.0e7a773d59474d6a8cca1f4ba311b943?rik=Wv36BAJnsDUBoA&pid=ImgRaw&r=0" alt="Game 1">
             <h3>Pokemon Crystal Version</h3>
@@ -182,18 +228,19 @@
         </div>
 
         <div class="menu-item" onclick="openModal('https://Rom-Player-Html.github.io/Tom&Jerry.html')">
-            <img src="https://i.ibb.co/T1bR9cZ/tom-jerry-snes-340x483.webp" alt="Game 3">
+            <img src="https://th.bing.com/th/id/OIP.Ab1oVIDeO-B4Fi3uIlyMZgHaFa?rs=1&pid=ImgDetMain" alt="Game 3">
             <h3>Tom & Jerry</h3>
         </div>
     </div>
-        
+    
     <!-- Modal -->
     <div id="modal" class="modal">
         <button class="close-btn" onclick="closeModal()">×</button>
         <iframe id="modal-iframe" src="" title="Game Frame"></iframe>
     </div>
 
-/Tom&Jerry.html
+    <!-- Fullscreen Button -->
+    <button id="fullscreen-btn-top-left" class="fullscreen-btn-top-left" onclick="toggleFullscreen()">Exit Fullscreen</button>
 
     <script>
         // Function to open the modal and load the iframe with the game URL
@@ -201,6 +248,7 @@
             const modal = document.getElementById('modal');
             const iframe = document.getElementById('modal-iframe');
             modal.style.display = 'block';
+            modal.style.opacity = 1; // Make the modal fade in
             iframe.src = gameUrl;  // Set the source of the iframe to the game's URL
         }
 
@@ -208,19 +256,31 @@
         function closeModal() {
             const modal = document.getElementById('modal');
             const iframe = document.getElementById('modal-iframe');
-            modal.style.display = 'none';
+            modal.style.opacity = 0; // Fade out the modal
+            setTimeout(function() {
+                modal.style.display = 'none';
+            }, 300); // Delay hiding the modal until the fade-out is complete
             iframe.src = ''; // Clear the iframe's source to stop the game
         }
 
-        // Close modal when clicking outside the iframe
-        window.onclick = function(event) {
-            const modal = document.getElementById('modal');
-            const iframe = document.getElementById('modal-iframe');
-            if (event.target === modal) {
-                closeModal();
+        // Function to toggle fullscreen
+        function toggleFullscreen() {
+            const fullscreenBtnTopLeft = document.getElementById('fullscreen-btn-top-left');
+
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => console.log(err));
+            } else {
+                document.exitFullscreen().catch(err => console.log(err));
             }
+
+            fullscreenBtnTopLeft.style.display = document.fullscreenElement ? 'block' : 'none'; // Show or hide button based on fullscreen state
         }
+
+        // Check for fullscreen change event
+        document.addEventListener('fullscreenchange', function() {
+            const fullscreenBtnTopLeft = document.getElementById('fullscreen-btn-top-left');
+            fullscreenBtnTopLeft.style.display = document.fullscreenElement ? 'block' : 'none';
+        });
     </script>
 </body>
-
 </html>
