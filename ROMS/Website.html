@@ -17,6 +17,7 @@
             --transition-speed: 0.3s;
             --modal-width: 700px;
             --modal-height: 500px;
+            --item-width: 270px; /* Adjusted to fit more items */
         }
 
         * {
@@ -31,7 +32,7 @@
             color: var(--text-color);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
             flex-direction: column;
             padding: 20px;
@@ -100,18 +101,17 @@
             margin-top: 40px;
         }
 
-        /* Container for vertical scrolling */
         .slider-container {
             position: relative;
-            height: 500px;
+            height: 80vh;
             width: 100%;
             overflow: hidden;
         }
 
         .menu-container {
             display: grid;
-            gap: 30px;
-            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(var(--item-width), 1fr));
             justify-content: center;
             padding-right: 15px;
             transition: transform var(--transition-speed);
@@ -121,8 +121,8 @@
 
         .menu-item {
             position: relative;
-            width: 90%;
-            height: 320px;
+            width: 100%;
+            height: 220px;
             background-color: #333;
             border-radius: 10px;
             box-shadow: var(--box-shadow);
@@ -166,26 +166,32 @@
 
         /* Custom Scrollbar */
         .scrollbar {
-            position: absolute;
-            right: 10px;
+            position: fixed;
             top: 0;
-            width: 8px;
-            background: rgba(255, 255, 255, 0.2);
+            right: 0; /* Position it at the far right */
+            width: 12px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             cursor: pointer;
+            z-index: 999;
         }
 
         .scrollbar-thumb {
             width: 100%;
-            background: rgba(255, 255, 255, 0.7);
+            background: linear-gradient(135deg, var(--primary-color), var(--highlight-color));
             border-radius: 10px;
-            transition: background 0.3s;
+            transition: background 0.3s ease, transform 0.3s ease;
+            opacity: 0.8;
         }
 
         .scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, var(--highlight-color), var(--primary-color));
+            transform: scale(1.1);
+            opacity: 1;
         }
 
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -246,6 +252,35 @@
             transform: scale(1.1);
             color: var(--primary-color);
         }
+
+        /* Development Message */
+        .dev-message {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: var(--highlight-color);
+            font-weight: bold;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: var(--box-shadow);
+            animation: fadeIn 2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -260,7 +295,7 @@
     <main>
         <div class="slider-container">
             <section class="menu-container" id="menu-container">
-                <!-- Menu items (as per your existing items) -->
+                <!-- Menu items (You can add as many items as you like) -->
         <div class="menu-item" onclick="openModal('https://Rom-Player-Html.github.io/Pokemon-Crystal-Version.html')">
             <img src="https://th.bing.com/th/id/R.0e7a773d59474d6a8cca1f4ba311b943?rik=Wv36BAJnsDUBoA&pid=ImgRaw&r=0" alt="Game 1">
             <h3>Pokemon Crystal Version</h3>
@@ -315,13 +350,8 @@
             <img src="https://th.bing.com/th/id/OIP.BATEdPXfeJv65NdymcU21wAAAA?rs=1&pid=ImgDetMain" alt="Game 3">
             <h3>Pokemon - Ruby Version</h3>
         </div>
-                <!-- Add more menu items here... -->
+                <!-- More items can be added here... -->
             </section>
-
-            <!-- Custom scrollbar -->
-            <div id="scrollbar" class="scrollbar">
-                <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
-            </div>
         </div>
     </main>
 
@@ -334,6 +364,13 @@
             <i class="fas fa-expand"></i>
         </button>
     </div>
+
+    <div id="scrollbar" class="scrollbar">
+        <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
+    </div>
+
+    <!-- Development message at the bottom -->
+    <div class="dev-message">Website Still In Development</div>
 
     <script>
         let isFullscreen = false;
