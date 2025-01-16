@@ -12,11 +12,11 @@
             --background-color: #2a2a2a;
             --highlight-color: #6a0dad;
             --text-color: #fff;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             --transition-speed: 0.3s;
             --modal-width: 700px;
             --modal-height: 500px;
-            --item-width: 270px; /* Adjusted to fit more items */
+            --item-width: 270px;
         }
 
         * {
@@ -36,10 +36,12 @@
             flex-direction: column;
             padding: 20px;
             overflow: hidden;
+            animation: fadeIn 1s ease-out;
         }
 
         header {
             text-align: center;
+            animation: fadeIn 1s ease-out 0.5s;
         }
 
         .title {
@@ -75,6 +77,18 @@
             }
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .home-button {
             position: fixed;
             top: 20px;
@@ -86,12 +100,14 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color var(--transition-speed);
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
             z-index: 1000;
+            box-shadow: var(--box-shadow);
         }
 
         .home-button:hover {
             background-color: var(--secondary-color);
+            transform: scale(1.05);
         }
 
         main {
@@ -105,6 +121,7 @@
             height: 80vh;
             width: 100%;
             overflow: hidden;
+            transition: transform var(--transition-speed);
         }
 
         .menu-container {
@@ -113,7 +130,6 @@
             grid-template-columns: repeat(auto-fill, minmax(var(--item-width), 1fr));
             justify-content: center;
             padding-right: 15px;
-            transition: transform var(--transition-speed);
             overflow-y: scroll;
             height: 100%;
         }
@@ -131,11 +147,13 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
+            opacity: 0.8;
         }
 
         .menu-item:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            opacity: 1;
         }
 
         .menu-item img {
@@ -167,13 +185,15 @@
         .scrollbar {
             position: fixed;
             top: 0;
-            right: 0; /* Position it at the far right */
+            right: 0;
             width: 12px;
             height: 100vh;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             cursor: pointer;
             z-index: 999;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
         }
 
         .scrollbar-thumb {
@@ -204,6 +224,7 @@
             box-shadow: var(--box-shadow);
             z-index: 1000;
             overflow: hidden;
+            transition: all var(--transition-speed);
         }
 
         .modal-content {
@@ -252,7 +273,6 @@
             color: var(--primary-color);
         }
 
-        /* Development Message */
         .dev-message {
             position: fixed;
             bottom: 10px;
@@ -268,18 +288,6 @@
             box-shadow: var(--box-shadow);
             animation: fadeIn 2s ease-out;
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
     </style>
 </head>
 
@@ -294,7 +302,8 @@
     <main>
         <div class="slider-container">
             <section class="menu-container" id="menu-container">
-                <!-- Menu items (You can add as many items as you like) -->
+                <!-- Menu items (you can add more here) -->
+                <!-- Example game items: -->
         <div class="menu-item" onclick="openModal('https://Rom-Player-Html.github.io/Pokemon-Crystal-Version.html')">
             <img src="https://th.bing.com/th/id/R.0e7a773d59474d6a8cca1f4ba311b943?rik=Wv36BAJnsDUBoA&pid=ImgRaw&r=0" alt="Game 1">
             <h3>Pokemon Crystal Version</h3>
@@ -364,7 +373,7 @@
             <img src="https://images.nintendolife.com/fdfba5323164b/simpsons-barts-nightmare-cover.cover_large.jpg" alt="Game 3">
             <h3>Simpsons, The - Barts Nightmare</h3>
         </div>
-                <!-- More items can be added here... -->
+                <!-- More items here -->
             </section>
         </div>
     </main>
@@ -383,7 +392,6 @@
         <div id="scrollbar-thumb" class="scrollbar-thumb"></div>
     </div>
 
-    <!-- Development message at the bottom -->
     <div class="dev-message">Website Still In Development</div>
 
     <script>
@@ -434,7 +442,6 @@
             }
         }
 
-        // Make scrollbar functional
         const scrollbar = document.getElementById('scrollbar');
         const thumb = document.getElementById('scrollbar-thumb');
         const container = document.getElementById('menu-container');
@@ -444,7 +451,6 @@
             thumb.style.top = `${scrollRatio * (scrollbar.clientHeight - thumb.clientHeight)}px`;
         });
 
-        // Handle thumb dragging
         scrollbar.addEventListener('mousedown', function (e) {
             isDragging = true;
             startY = e.clientY;
