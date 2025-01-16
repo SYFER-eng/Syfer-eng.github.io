@@ -83,18 +83,18 @@
   </div>
 
   <div id="embed-container">
-    <iframe src="https://Syfer-eng.github.io" title="Embedded Content"></iframe>
+    <iframe src="https://Syfer-eng.github.io/Menu.html" title="Embedded Content"></iframe>
   </div>
 
   <script>
     setTimeout(function() {
-      // Hide the GIFs and show the embedded content
+      // Hide the GIFs and show the embedded content after 2 seconds
       const gifs = document.querySelectorAll('.corner-gif');
       gifs.forEach(gif => gif.style.display = 'none');
       
       document.querySelector("h1").style.display = 'none';
       document.getElementById("embed-container").style.display = 'block';
-    }, 3000); // 3 seconds delay before hiding GIFs and showing the embedded content
+    }, 2000); // 2 seconds delay before redirecting
   </script>
 
 </body>
