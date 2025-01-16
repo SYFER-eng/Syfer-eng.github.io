@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Syfer-eng</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+      background: radial-gradient(circle, #5D3FD3, #000000); /* Purple and black gradient background */
+      color: white;
+      position: relative; /* Allows positioning the GIFs */
+    }
+    
+    h1 {
+      font-size: 4rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 5px;
+      color: #E8A0FF; /* Light purple text */
+      text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.6);
+      animation: textAnimation 3s ease-out forwards;
+    }
+
+    @keyframes textAnimation {
+      0% { opacity: 0; transform: translateY(-50px); }
+      50% { opacity: 0.7; transform: translateY(0); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .corner-gif {
+      position: absolute;
+      width: 120px; /* Adjust the size */
+    }
+
+    /* Positioning the GIFs in each corner */
+    .top-left {
+      top: 20px;
+      left: 20px;
+    }
+    .top-right {
+      top: 20px;
+      right: 20px;
+    }
+    .bottom-left {
+      bottom: 20px;
+      left: 20px;
+    }
+    .bottom-right {
+      bottom: 20px;
+      right: 20px;
+    }
+
+    #embed-container {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Four static GIFs positioned in each corner -->
+  <img src="https://media.tenor.com/tHCECHs0aRUAAAAM/dancing-cat-dance.gif" class="corner-gif top-left" alt="Top Left GIF">
+  <img src="https://media.tenor.com/tHCECHs0aRUAAAAM/dancing-cat-dance.gif" class="corner-gif top-right" alt="Top Right GIF">
+  <img src="https://media.tenor.com/tHCECHs0aRUAAAAM/dancing-cat-dance.gif" class="corner-gif bottom-left" alt="Bottom Left GIF">
+  <img src="https://media.tenor.com/tHCECHs0aRUAAAAM/dancing-cat-dance.gif" class="corner-gif bottom-right" alt="Bottom Right GIF">
+
+  <div>
+    <h1>Developer Syfer-eng</h1>
+  </div>
+
+  <div id="embed-container">
+    <iframe src="https://Syfer-eng.github.io" title="Embedded Content"></iframe>
+  </div>
+
+  <script>
+    setTimeout(function() {
+      // Hide the GIFs and show the embedded content
+      const gifs = document.querySelectorAll('.corner-gif');
+      gifs.forEach(gif => gif.style.display = 'none');
+      
+      document.querySelector("h1").style.display = 'none';
+      document.getElementById("embed-container").style.display = 'block';
+    }, 3000); // 3 seconds delay before hiding GIFs and showing the embedded content
+  </script>
+
+</body>
+</html>
