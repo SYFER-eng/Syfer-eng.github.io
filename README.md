@@ -105,7 +105,7 @@
         }
     </style>
 </head>
-<body onload="setTimeout(function(){ window.location.replace('https://syfer-eng.github.io/Loading%20Screen/Loading%20Screen.html'); }, 2000);" onmousemove="mouseMove(event)">
+<body onload="setTimeout(function(){ window.location.replace('https://syfer-eng.github.io/Loading Screen/Loading Screen.html'); }, 2000);" onmousemove="mouseMove(event)">
     <div class="mouse-picture"></div>
     
     <script>
