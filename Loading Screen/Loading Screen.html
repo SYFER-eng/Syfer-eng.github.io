@@ -6,7 +6,7 @@
   <title>Developer Syfer-eng</title>
 
   <!-- Adding the favicon -->
-  <link rel="icon" href="https://i.ibb.co/TvYqxpJ/Remove-background-project.png" type="image/png">
+  <link rel="icon" href="https://th.bing.com/th/id/R.79cd4a88a087a640a834866eb545975a?rik=pY%2bV0ZUhTqL4aA&pid=ImgRaw&r=0" type="image/png">
 
   <style>
     body {
@@ -85,6 +85,20 @@
       text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
       letter-spacing: 2px;
     }
+
+    /* Updated Text Styling for Pin Tab Message */
+    .pin-tab-message {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
+      color: #E8A0FF;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+      /* Removed animation */
+    }
   </style>
 </head>
 <body>
@@ -108,6 +122,11 @@
     Made By Teegan >_<
   </div>
 
+  <!-- Pin the Tab Message -->
+  <div class="pin-tab-message" id="pin-tab-message">
+    Pin the Tab to Hide It
+  </div>
+
   <script>
     setTimeout(function() {
       // Hide the GIFs and show the embedded content after 2 seconds
@@ -119,6 +138,9 @@
       
       // Change the footer text to "Disaster" after 2 seconds
       document.getElementById("footer-text").innerText = "";
+
+      // Hide the "Pin the Tab" message after 2 seconds
+      document.getElementById("pin-tab-message").style.display = 'none';
     }, 2000); // 2 seconds delay before redirecting
   </script>
 
