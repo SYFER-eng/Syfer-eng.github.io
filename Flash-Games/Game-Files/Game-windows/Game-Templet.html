@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play SWF with Ruffle.js</title>
+
+    <!-- Include the Ruffle.js script -->
+    <script src="https://syfer-eng.github.io/Ruffle/ruffle.js"></script>
+
+    <style>
+        /* Make the body and html fill the entire viewport */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        /* The container will take the full viewport */
+        #swf-container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SWF container -->
+    <div id="swf-container"></div>
+
+    <script>
+        // Initialize the Ruffle player
+        const ruffle = window.RufflePlayer.newest();
+
+        // Set the SWF file URL
+        const swfUrl = 'path/to/your/file.swf';  // Replace with your SWF file path
+
+        // Create a Ruffle player instance and append it to the container
+        const player = ruffle.createPlayer();
+        const container = document.getElementById('swf-container');
+        container.appendChild(player);
+
+        // Load the SWF file into the Ruffle player
+        player.load(swfUrl);
+
+        // Function to resize the player when the window size changes
+        function resizePlayer() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            // Resize the player to fit the window dimensions
+            player.style.width = `${width}px`;
+            player.style.height = `${height}px`;
+        }
+
+        // Call resize function on window resize
+        window.addEventListener('resize', resizePlayer);
+
+        // Initial resize to fit the window on page load
+        resizePlayer();
+    </script>
+
+</body>
+</html>
