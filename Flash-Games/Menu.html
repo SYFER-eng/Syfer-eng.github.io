@@ -1,0 +1,312 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syfer's Flash Games</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
+    <style>
+        :root {
+            --primary-color: #7A4BCF;
+            --hover-color: #6A3CB2;
+            --bg-dark: #13131f;
+            --card-shadow: rgba(128, 0, 128, 0.4);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--bg-dark), #1a1a2e);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: rgba(26, 26, 26, 0.75);
+            backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--primary-color);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--hover-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .home-button {
+            padding: 10px 18px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .home-button:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--primary-color);
+        }
+
+        /* Game Cards */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .game-card {
+            position: relative;
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 25px var(--card-shadow);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .game-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .game-card h3 {
+            padding: 1rem;
+            margin: 0;
+            color: white;
+            text-align: center;
+            font-size: 1.2rem;
+            background: rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+
+        /* Game Frame */
+        #gameFrame {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            border-radius: 15px;
+            box-shadow: 0 0 30px var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        #gameFrame.fullscreen {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+        }
+
+        #gameIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--primary-color);
+            border-top: 5px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Fullscreen Controls */
+        .game-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-button {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .control-button:hover {
+            background: var(--hover-color);
+            transform: scale(1.1);
+        }
+
+        /* Bottom Banner */
+        #bottom-banner {
+            position: fixed;
+            bottom: -70px;
+            left: 0;
+            width: 100%;
+            background-color: black;
+            color: #7A4BCF;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 16px;
+            z-index: 9999;
+            transform: translateY(100%);
+            transition: transform 0.5s ease, bottom 0.5s ease, opacity 0.5s ease, color 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+        }
+
+        #bottom-banner.show {
+            bottom: 0;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Keyframes */
+        @keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <h1>Syfer's Flash Games</h1>
+        <nav>
+            <a href="https://Syfer-eng.github.io/Menu.html" class="home-button">Home</a>
+        </nav>
+    </header>
+
+    <section class="games-container">
+        <div id="gameFrame">
+            <div class="loading-spinner"></div>
+            <iframe id="gameIframe" title="Game Frame"></iframe>
+            <div class="game-controls">
+                <button class="control-button" onclick="toggleFullscreen()" title="Toggle Fullscreen">⛶</button>
+                <button class="control-button" onclick="closeGame()" title="Close Game">×</button>
+            </div>
+        </div>
+
+        <div class="games-grid">
+            <div class="game-card" onclick="loadGame('https://syfer-eng.github.io/Flash-Games/Game-Files/game-websites/BTD4.html')">
+                <img src="https://gameforge.com/de-DE/littlegames/includes/images/games/13426_5ec634fec15e3.jpg" alt="Bloons TD 4">
+                <h3>Bloons TD 4</h3>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div id="bottom-banner" onclick="window.location.href=''">
+            Developer: Syfer-eng · More Websites Coming Soon
+        </div>
+    </footer>
+
+    <script>
+        function loadGame(url) {
+            const gameFrame = document.getElementById('gameFrame');
+            const gameIframe = document.getElementById('gameIframe');
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            gameFrame.style.display = 'block';
+            loadingSpinner.style.display = 'block';
+            gameIframe.onload = () => loadingSpinner.style.display = 'none';
+            gameIframe.src = url;
+        }
+
+        function toggleFullscreen() {
+            const gameFrame = document.getElementById('gameFrame');
+            gameFrame.classList.toggle('fullscreen');
+        }
+
+        function closeGame() {
+            const gameFrame = document.getElementById('gameFrame');
+            const gameIframe = document.getElementById('gameIframe');
+            gameFrame.classList.remove('fullscreen');
+            gameFrame.style.opacity = '0';
+            setTimeout(() => {
+                gameFrame.style.display = 'none';
+                gameIframe.src = '';
+                gameFrame.style.opacity = '1';
+            }, 300);
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') closeGame();
+            else if (event.key === 'f' || event.key === 'F') toggleFullscreen();
+        });
+
+        window.onscroll = () => {
+            const banner = document.getElementById("bottom-banner");
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const documentHeight = document.documentElement.scrollHeight;
+            if (scrollPosition >= documentHeight) banner.classList.add("show");
+            else banner.classList.remove("show");
+        };
+    </script>
+
+</body>
+
+</html>
