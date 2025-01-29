@@ -41,7 +41,7 @@ class SegaSaturn {
     this.isRunning = true;
   }
 
-  // Load a game ROM (assuming it's a binary file named 'game.bin')
+  // Load a game ROM (change this URL to your game file)
   async loadGame(gameFile) {
     const game = await fetch(gameFile).then(response => response.arrayBuffer());
     const view = new DataView(game);
@@ -110,7 +110,7 @@ class SegaSaturn {
     window.addEventListener('load', () => {
       // Initialize the Sega Saturn and load a game
       this.init();
-      this.loadGame('game.bin');
+      this.loadGame('https://yourserver.com/yourgame.bin'); // Replace this with your game ROM link
       runEmulator();
     });
   }
