@@ -17,7 +17,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            padding-bottom: 120px; /* Add space for the fixed player at the bottom */
+            padding-bottom: 120px;
         }
 
         .navbar {
@@ -92,7 +92,7 @@
         }
 
         .player-container {
-            position: fixed; /* Fix the player at the bottom */
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
@@ -169,33 +169,6 @@
             margin-left: 10px;
             font-size: 14px;
         }
-
-        /* Hover and animation effects */
-        .song-item {
-            position: relative;
-            background-color: #282828;
-            border-radius: 12px;
-            margin: 15px;
-            width: 160px;
-            height: 160px;
-            cursor: pointer;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .song-item:hover {
-            transform: scale(1.08);
-            box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
-        }
-
-        .song-item img {
-            transition: opacity 0.3s ease, filter 0.3s ease;
-        }
-
-        .song-item:hover img {
-            opacity: 0.8;
-            filter: brightness(0.5);
-        }
     </style>
 </head>
 <body>
@@ -205,7 +178,6 @@
     </div>
 
     <div class="song-list-container">
-        <!-- Song 1 -->
         <div class="song-item" onclick="loadSong('https://syfer-eng.github.io/Songs/Spotify/keeping%20secrets.mp3', 'Keeping Secrets', 'wifiskeleton', 'https://github.com/Spotify-png/Spotify-png.github.io/blob/main/Songs/icons/keeping%20secrets%20icon.jpg?raw=true')">
             <img src="https://github.com/SYFER-eng/Syfer-eng.github.io/blob/main/Songs/Spotify/icons/keeping%20secrets.jpg?raw=true" alt="Song 1 Cover">
             <div class="song-title">Keeping Secrets</div>
@@ -236,6 +208,8 @@
             <img src="https://github.com/SYFER-eng/Syfer-eng.github.io/blob/main/Songs/Spotify/icons/my%20twenty%20first%20reason.jpg?raw=true" alt="my twenty first reason </3">
             <div class="song-title">my twenty first reason </3</div>
         </div>
+        
+        <!-- More songs can be added here -->
     </div>
 
     <div class="player-container">
@@ -262,17 +236,29 @@
 
         // Load the selected song
         function loadSong(url, title, artist, cover) {
+            // Pause the current song if it's playing
+            if (audio.src && audio.src !== url) {
+                audio.pause();
+                document.getElementById('playPauseButton').textContent = 'Play';
+                isPlaying = false;
+            }
+
             currentSongUrl = url;
             audio.src = url;
             audio.load();
+
+            // Update song info
             document.getElementById('current-song-title').textContent = title;
             document.getElementById('current-artist').textContent = artist;
             document.getElementById('albumArt').src = cover;
-            audio.play();  // Automatically start playing the song when loaded
 
-            // Update the play/pause button text
-            document.getElementById('playPauseButton').textContent = 'Pause';
-            isPlaying = true;
+            // Automatically play the song after it's loaded
+            audio.play().then(() => {
+                isPlaying = true;
+                document.getElementById('playPauseButton').textContent = 'Pause';
+            }).catch((err) => {
+                console.error("Error playing song:", err);
+            });
 
             // Update the progress bar every second
             audio.ontimeupdate = updateProgressBar;
@@ -284,8 +270,12 @@
                 audio.pause();
                 document.getElementById('playPauseButton').textContent = 'Play';
             } else {
-                audio.play();
-                document.getElementById('playPauseButton').textContent = 'Pause';
+                audio.play().then(() => {
+                    isPlaying = true;
+                    document.getElementById('playPauseButton').textContent = 'Pause';
+                }).catch((err) => {
+                    console.error("Error playing song:", err);
+                });
             }
             isPlaying = !isPlaying;
         }
@@ -307,9 +297,9 @@
             const volume = document.getElementById('volumeSlider').value / 100;
             audio.volume = volume;
 
-            // Update the volume percentage text in real-time as the slider is moved
             document.getElementById('volumePercentage').textContent = document.getElementById('volumeSlider').value + '%';
         }
     </script>
+
 </body>
 </html>
