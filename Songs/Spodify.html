@@ -1,0 +1,315 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syfer-eng's Music</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #121212;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-bottom: 120px; /* Add space for the fixed player at the bottom */
+        }
+
+        .navbar {
+            background-color: #1DB954;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar h1 {
+            margin: 0;
+            color: white;
+            font-size: 24px;
+        }
+
+        .song-list-container {
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .song-item {
+            position: relative;
+            background-color: #282828;
+            border-radius: 12px;
+            margin: 15px;
+            width: 160px;
+            height: 160px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .song-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .song-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        .song-item:hover img {
+            opacity: 0.6;
+            filter: brightness(0.7);
+        }
+
+        .song-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .song-item:hover .song-title {
+            opacity: 1;
+        }
+
+        .player-container {
+            position: fixed; /* Fix the player at the bottom */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1f1f1f;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-top: 2px solid #333;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .album-art {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+
+        .song-info {
+            font-size: 16px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .song-info h2 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .song-info p {
+            font-size: 14px;
+            color: #bbb;
+        }
+
+        .controls-wrapper {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .slider {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .play-pause-button {
+            padding: 12px 25px;
+            background-color: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .play-pause-button:hover {
+            background-color: #1ed760;
+        }
+
+        .volume-wrapper {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .volume-percentage {
+            margin-left: 10px;
+            font-size: 14px;
+        }
+
+        /* Hover and animation effects */
+        .song-item {
+            position: relative;
+            background-color: #282828;
+            border-radius: 12px;
+            margin: 15px;
+            width: 160px;
+            height: 160px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .song-item:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 18px rgba(0, 0, 0, 0.6);
+        }
+
+        .song-item img {
+            transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        .song-item:hover img {
+            opacity: 0.8;
+            filter: brightness(0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h1>Spotify-like Player</h1>
+    </div>
+
+    <div class="song-list-container">
+        <!-- Song 1 -->
+        <div class="song-item" onclick="loadSong('https://syfer-eng.github.io/Songs/Spotify/keeping%20secrets.mp3', 'Keeping Secrets', 'wifiskeleton', 'https://github.com/Spotify-png/Spotify-png.github.io/blob/main/Songs/icons/keeping%20secrets%20icon.jpg?raw=true')">
+            <img src="https://github.com/SYFER-eng/Syfer-eng.github.io/blob/main/Songs/Spotify/icons/keeping%20secrets.jpg?raw=true" alt="Song 1 Cover">
+            <div class="song-title">Keeping Secrets</div>
+        </div>
+
+        <!-- Add more songs here with similar structure -->
+        <div class="song-item" onclick="loadSong('https://syfer-eng.github.io/Songs/Spotify/i%20think%20she%20deserved%20it.mp3', 'i think she deserved it', 'wifiskeleton', 'https://via.placeholder.com/160x160?text=Cover+2')">
+            <img src="https://github.com/SYFER-eng/Syfer-eng.github.io/blob/main/Songs/Spotify/icons/i%20think%20she%20deserved%20it.jpg?raw=true" alt="i think she deserved it">
+            <div class="song-title">i think she deserved it</div>
+        </div>
+        
+        <div class="song-item" onclick="loadSong('http://syfer-eng.github.io/Songs/Spotify/rot.mp3', 'rot', 'aeter, imsg', 'https://via.placeholder.com/160x160?text=Cover+2')">
+            <img src="https://github.com/SYFER-eng/Syfer-eng.github.io/blob/main/Songs/Spotify/icons/rot.jpg?raw=true" alt="rot">
+            <div class="song-title">rot</div>
+        </div>
+        
+        <div class="song-item" onclick="loadSong('http://syfer-eng.github.io/Songs/Spotify/corridor.mp3', 'corridor', 'wifiskeleton, witchbox', 'https://via.placeholder.com/160x160?text=Cover+2')">
+            <img src="https://github.com/SYFER-eng/Syfer-eng.github.io/blob/main/Songs/Spotify/icons/corridor.jpg?raw=true" alt="corridor">
+            <div class="song-title">corridor</div>
+        </div>
+        
+        <div class="song-item" onclick="loadSong('http://syfer-eng.github.io/Songs/Spotify/nineteen%20forever.mp3', 'nineteen forever', 'wifiskeleton', 'https://via.placeholder.com/160x160?text=Cover+2')">
+            <img src="https://github.com/SYFER-eng/Syfer-eng.github.io/blob/main/Songs/Spotify/icons/nineteen%20forever.jpg?raw=true" alt="nineteen forever">
+            <div class="song-title">nineteen forever</div>
+        </div>
+        
+        <div class="song-item" onclick="loadSong('http://syfer-eng.github.io/Songs/my twenty first reason.mp3', 'my twenty first reason </3', 'wifiskeleton', 'https://github.com/Spotify-png/Spotify-png.github.io/blob/main/Songs/icons/my%20twenty%20first%20reason.jpg?raw=true')">
+            <img src="https://github.com/SYFER-eng/Syfer-eng.github.io/blob/main/Songs/Spotify/icons/my%20twenty%20first%20reason.jpg?raw=true" alt="my twenty first reason </3">
+            <div class="song-title">my twenty first reason </3</div>
+        </div>
+    </div>
+
+    <div class="player-container">
+        <div class="song-info">
+            <h2 id="current-song-title">No song selected</h2>
+            <p id="current-artist">No artist selected</p>
+        </div>
+        
+        <div class="controls-wrapper">
+            <button class="play-pause-button" id="playPauseButton" onclick="togglePlayPause()">Play</button>
+            <input type="range" class="slider" id="progressSlider" value="0" step="1" onchange="seekAudio()">
+            <div class="volume-wrapper">
+                <label for="volumeSlider" style="color: white;">Volume</label>
+                <input type="range" class="slider" id="volumeSlider" value="100" step="1" oninput="adjustVolume()">
+                <span id="volumePercentage" class="volume-percentage">100%</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let audio = new Audio();
+        let isPlaying = false;
+        let currentSongUrl = '';
+
+        // Load the selected song
+        function loadSong(url, title, artist, cover) {
+            currentSongUrl = url;
+            audio.src = url;
+            audio.load();
+            document.getElementById('current-song-title').textContent = title;
+            document.getElementById('current-artist').textContent = artist;
+            document.getElementById('albumArt').src = cover;
+            audio.play();  // Automatically start playing the song when loaded
+
+            // Update the play/pause button text
+            document.getElementById('playPauseButton').textContent = 'Pause';
+            isPlaying = true;
+
+            // Update the progress bar every second
+            audio.ontimeupdate = updateProgressBar;
+        }
+
+        // Toggle between play and pause
+        function togglePlayPause() {
+            if (isPlaying) {
+                audio.pause();
+                document.getElementById('playPauseButton').textContent = 'Play';
+            } else {
+                audio.play();
+                document.getElementById('playPauseButton').textContent = 'Pause';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Update the progress bar as the song plays
+        function updateProgressBar() {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('progressSlider').value = progress;
+        }
+
+        // Seek the song based on slider position
+        function seekAudio() {
+            const value = document.getElementById('progressSlider').value;
+            audio.currentTime = (value / 100) * audio.duration;
+        }
+
+        // Adjust the volume based on slider
+        function adjustVolume() {
+            const volume = document.getElementById('volumeSlider').value / 100;
+            audio.volume = volume;
+
+            // Update the volume percentage text in real-time as the slider is moved
+            document.getElementById('volumePercentage').textContent = document.getElementById('volumeSlider').value + '%';
+        }
+    </script>
+</body>
+</html>
