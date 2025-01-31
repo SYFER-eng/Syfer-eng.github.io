@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syfer-eng's Website Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .site-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: float 6s ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+
+        .site-card:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .site-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                rgba(0, 0, 0, 0.8)
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .site-card:hover::before {
+            opacity: 1;
+        }
+
+        .site-card .content {
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .site-card:hover .content {
+            transform: translateY(0);
+        }
+
+        .category-pill {
+            transition: all 0.3s ease;
+        }
+
+        .category-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-gray-900/80 backdrop-blur-lg border-b border-purple-500/20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span class="text-xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
+                        Syfer-eng's Website Hub
+                    </span>
+                </div>
+                <div class="flex space-x-4">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="py-20 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10"></div>
+        <h1 class="text-5xl font-bold mb-4">
+            Discover Amazing
+            <span class="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
+                Websites
+            </span>
+        </h1>
+        <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+            Explore my websites that are decent
+        </p>
+    </header>
+
+    <!-- Featured Websites Grid -->
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <h2 class="text-2xl font-bold mb-8">Featured Websites</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Personal Website -->
+            <div class="site-card rounded-xl bg-gradient-to-br from-purple-500/20 to-transparent border border-purple-500/20 p-6" style="--delay: 0s;">
+                <img src="https://github.com/Gba-Games-html/Gba-Games-html.github.io/blob/main/images/output.jpg?raw=true" alt="Personal Website" class="rounded-lg mb-4 w-full aspect-video object-cover">
+                <div class="content">
+                    <h3 class="text-xl font-bold mb-2">Just A Website Made By Syfer-eng!</h3>
+                    <p class="text-gray-400 mb-4">Just A Website Made By Syfer-eng!</p>
+                    <a href="https://syfer-eng.github.io/" class="inline-flex items-center text-purple-500 hover:text-purple-400">
+                        Visit Site
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Games Website -->
+            <div class="site-card rounded-xl bg-gradient-to-br from-blue-500/20 to-transparent border border-blue-500/20 p-6" style="--delay: 0.2s;">
+                <img src="https://github.com/Gba-Games-html/Gba-Games-html.github.io/blob/main/images/Games.jpg?raw=true" alt="Games Website" class="rounded-lg mb-4 w-full aspect-video object-cover">
+                <div class="content">
+                    <h3 class="text-xl font-bold mb-2">Syfer-eng Games</h3>
+                    <p class="text-gray-400 mb-4">Game Boy Games And More!</p>
+                    <a href="https://gba-games-html.github.io/hub.html" class="inline-flex items-center text-blue-500 hover:text-blue-400">
+                        Visit Site
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900/80 backdrop-blur-lg border-t border-purple-500/20 py-6 mt-20">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-gray-400">
+                © <script>document.write(new Date().getFullYear())</script> Syfer-eng | All Rights Reserved
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
