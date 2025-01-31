@@ -30,11 +30,7 @@
             left: 0;
             right: 0;
             height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent,
-                rgba(0, 0, 0, 0.8)
-            );
+            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
             opacity: 0;
             transition: opacity 0.3s ease;
         }
@@ -60,6 +56,36 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
         }
+
+        /* Menu styles */
+        .menu {
+            display: none;
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+        }
+
+        .menu.active {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 8px;
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin: 4px 0;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(168, 85, 247, 0.6);
+            border-radius: 4px;
+        }
+
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
@@ -75,11 +101,22 @@
                         Syfer-eng's Website Hub
                     </span>
                 </div>
-                <div class="flex space-x-4">
-                </div>
+                <!-- Hamburger Menu Button -->
+                <button id="menu-button" class="text-white md:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
             </div>
         </div>
     </nav>
+
+    <!-- Menu (Hidden by default) -->
+    <div id="menu" class="menu">
+        <a href="#" class="menu-item">Profile</a>
+        <a href="#" class="menu-item">Settings</a>
+        <a href="#" class="menu-item">Logout</a>
+    </div>
 
     <!-- Hero Section -->
     <header class="py-20 text-center relative overflow-hidden">
@@ -139,5 +176,15 @@
             </p>
         </div>
     </footer>
+
+    <script>
+        // Toggle menu visibility
+        const menuButton = document.getElementById('menu-button');
+        const menu = document.getElementById('menu');
+
+        menuButton.addEventListener('click', () => {
+            menu.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
