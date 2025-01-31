@@ -3,155 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syfer-eng's Website Hub</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Animation and hover effects */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .site-card {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            animation: float 6s ease-in-out infinite;
-            animation-delay: var(--delay);
-        }
-
-        .site-card:hover {
-            transform: translateY(-8px) scale(1.02);
-        }
-
-        .site-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .site-card:hover::before {
-            opacity: 1;
-        }
-
-        .site-card .content {
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-        }
-
-        .site-card:hover .content {
-            transform: translateY(0);
-        }
-
-        .category-pill {
-            transition: all 0.3s ease;
-        }
-
-        .category-pill:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
-        }
-    </style>
+    <title>Syfer-eng's Website Hub - Admin Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
-    <!-- Login Form -->
-    <div id="login-form" class="flex items-center justify-center h-screen">
-        <div class="bg-gray-800 p-8 rounded-lg shadow-xl">
-            <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
-            <form id="login" class="space-y-4">
-                <input type="text" id="username" class="w-full p-2 rounded border bg-gray-700" placeholder="Username" />
-                <input type="password" id="password" class="w-full p-2 rounded border bg-gray-700" placeholder="Password" />
-                <button type="submit" class="w-full p-2 bg-purple-500 text-white rounded">Log In</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Admin Panel (Hidden until login) -->
-    <div id="admin-panel" class="hidden">
-        <header class="py-20 text-center relative overflow-hidden">
-            <h1 class="text-5xl font-bold mb-4">Welcome, Admin</h1>
-            <button id="logout" class="p-2 bg-red-500 rounded">Log Out</button>
-        </header>
-
-        <main class="max-w-7xl mx-auto px-4 py-12">
-            <h2 class="text-2xl font-bold mb-8">Active Users</h2>
-            <div id="active-users" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Active user data will be populated here -->
+<body class="bg-gray-900 text-white">
+    <div class="max-w-md mx-auto mt-20">
+        <h2 class="text-2xl font-bold text-center mb-4">Admin Login</h2>
+        <form id="login" action="/login" method="POST">
+            <div class="mb-4">
+                <label for="username" class="block text-gray-400">Username</label>
+                <input type="text" id="username" name="username" class="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
             </div>
-        </main>
+            <div class="mb-4">
+                <label for="password" class="block text-gray-400">Password</label>
+                <input type="password" id="password" name="password" class="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500" required>
+            </div>
+            <button type="submit" class="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600">Login</button>
+        </form>
     </div>
-
-    <script>
-        document.getElementById('login').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            // Simple username and password check
-            if (username === 'Syfer-eng' && password === 'Td906045') {
-                document.getElementById('login-form').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-                fetchActiveUsers();
-            } else {
-                alert('Invalid username or password');
-            }
-        });
-
-        function fetchActiveUsers() {
-            // This is where you'd call your backend to get active users
-            fetch('/api/active-users') // Assume this endpoint gives active users
-                .then(response => response.json())
-                .then(data => {
-                    const activeUsersDiv = document.getElementById('active-users');
-                    activeUsersDiv.innerHTML = ''; // Clear any old data
-                    data.users.forEach(user => {
-                        const userDiv = document.createElement('div');
-                        userDiv.classList.add('bg-gray-800', 'p-4', 'rounded-lg');
-                        userDiv.innerHTML = `
-                            <h3 class="text-xl font-bold">${user.username}</h3>
-                            <p class="text-gray-400">IP: ${user.ip}</p>
-                            <div class="mt-4">
-                                <button class="p-2 bg-red-500 rounded mr-2" onclick="kickUser('${user.ip}')">Kick</button>
-                                <button class="p-2 bg-yellow-500 rounded mr-2" onclick="renameUser('${user.ip}')">Rename</button>
-                                <button class="p-2 bg-blue-500 rounded" onclick="banUser('${user.ip}')">Ban</button>
-                            </div>
-                        `;
-                        activeUsersDiv.appendChild(userDiv);
-                    });
-                });
-        }
-
-        function kickUser(ip) {
-            fetch(`/api/kick-user?ip=${ip}`, { method: 'POST' })
-                .then(response => response.json())
-                .then(data => alert('User kicked'));
-        }
-
-        function renameUser(ip) {
-            const newUsername = prompt('Enter new username:');
-            if (newUsername) {
-                fetch(`/api/rename-user?ip=${ip}&username=${newUsername}`, { method: 'POST' })
-                    .then(response => response.json())
-                    .then(data => alert('Username updated'));
-            }
-        }
-
-        function banUser(ip) {
-            fetch(`/api/ban-user?ip=${ip}`, { method: 'POST' })
-                .then(response => response.json())
-                .then(data => alert('User banned'));
-        }
-
-        document.getElementById('logout').addEventListener('click', function() {
-            document.getElementById('admin-panel').classList.add('hidden');
-            document.getElementById('login-form').classList.remove('hidden');
-        });
-    </script>
 </body>
 </html>
