@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syfer-eng's Website Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Same styles from your code */
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
+    <!-- Login Form -->
+    <div id="login-form" class="flex items-center justify-center h-screen">
+        <div class="bg-gray-800 p-8 rounded-lg shadow-xl">
+            <h2 class="text-2xl font-bold mb-4 text-center">Login</h2>
+            <form id="login" class="space-y-4">
+                <input type="text" id="username" class="w-full p-2 rounded border bg-gray-700" placeholder="Username" />
+                <input type="password" id="password" class="w-full p-2 rounded border bg-gray-700" placeholder="Password" />
+                <button type="submit" class="w-full p-2 bg-purple-500 text-white rounded">Log In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel (Hidden until login) -->
+    <div id="admin-panel" class="hidden">
+        <header class="py-20 text-center relative overflow-hidden">
+            <h1 class="text-5xl font-bold mb-4">Welcome, Admin</h1>
+            <button id="logout" class="p-2 bg-red-500 rounded">Log Out</button>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 py-12">
+            <h2 class="text-2xl font-bold mb-8">Active Users</h2>
+            <div id="active-users" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Active user data will be populated here -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('login').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simple username and password check
+            if (username === 'Syfer-eng' && password === 'Td906045') {
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                fetchActiveUsers();
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+
+        function fetchActiveUsers() {
+            // This is where you'd call your backend to get active users
+            fetch('/api/active-users') // Assume this endpoint gives active users
+                .then(response => response.json())
+                .then(data => {
+                    const activeUsersDiv = document.getElementById('active-users');
+                    activeUsersDiv.innerHTML = ''; // Clear any old data
+                    data.users.forEach(user => {
+                        const userDiv = document.createElement('div');
+                        userDiv.classList.add('bg-gray-800', 'p-4', 'rounded-lg');
+                        userDiv.innerHTML = `
+                            <h3 class="text-xl font-bold">${user.username}</h3>
+                            <p class="text-gray-400">IP: ${user.ip}</p>
+                            <div class="mt-4">
+                                <button class="p-2 bg-red-500 rounded mr-2" onclick="kickUser('${user.ip}')">Kick</button>
+                                <button class="p-2 bg-yellow-500 rounded mr-2" onclick="renameUser('${user.ip}')">Rename</button>
+                                <button class="p-2 bg-blue-500 rounded" onclick="banUser('${user.ip}')">Ban</button>
+                            </div>
+                        `;
+                        activeUsersDiv.appendChild(userDiv);
+                    });
+                });
+        }
+
+        function kickUser(ip) {
+            // Logic to kick user from the backend
+            fetch(`/api/kick-user?ip=${ip}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => alert('User kicked'));
+        }
+
+        function renameUser(ip) {
+            const newUsername = prompt('Enter new username:');
+            if (newUsername) {
+                fetch(`/api/rename-user?ip=${ip}&username=${newUsername}`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => alert('Username updated'));
+            }
+        }
+
+        function banUser(ip) {
+            fetch(`/api/ban-user?ip=${ip}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => alert('User banned'));
+        }
+
+        document.getElementById('logout').addEventListener('click', function() {
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
