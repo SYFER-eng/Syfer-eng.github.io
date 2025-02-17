@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server Hoster</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77aaff 3px solid;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .server-status {
+            margin-bottom: 20px;
+        }
+        .player-list {
+            margin-bottom: 20px;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        .controls button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        .controls button:hover {
+            background-color: #45a049;
+        }
+        #server-status {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #player-list {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #player-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>Minecraft Server Hoster</h1>
+            </div>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Status</a></li>
+                <li><a href="#">Players</a></li>
+                <li><a href="#">Controls</a></li>
+            </ul>
+        </header>
+        <div class="content">
+            <div class="server-status">
+                <h2>Server Status</h2>
+                <p id="server-status">Server is offline</p>
+            </div>
+            <div class="player-list">
+                <h2>Player List</h2>
+                <ul id="player-list">
+                    <!-- Player list will be populated here -->
+                </ul>
+            </div>
+            <div class="controls">
+                <h2>Controls</h2>
+                <button onclick="startServer()">Start Server</button>
+                <button onclick="stopServer()" style="background-color: #f44336;">Stop Server</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startServer() {
+            fetch('/start', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('server-status').innerText = 'Server is online';
+                    document.getElementById('server-status').style.color = '#4CAF50';
+                });
+        }
+
+        function stopServer() {
+            fetch('/stop', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('server-status').innerText = 'Server is offline';
+                    document.getElementById('server-status').style.color = '#f44336';
+                });
+        }
+
+        function updatePlayerList() {
+            fetch('/players')
+                .then(response => response.json())
+                .then(data => {
+                    const playerList = document.getElementById('player-list');
+                    playerList.innerHTML = data.players.map(player => `<li>${player}</li>`).join('');
+                });
+        }
+
+        // Update player list every 5 seconds
+        setInterval(updatePlayerList, 5000);
+        
+        // Initial player list update
+        updatePlayerList();
+    </script>
+</body>
+</html>
