@@ -7,6 +7,8 @@ const https = require('https');
 const app = express();
 const port = 3000;
 
+// Middleware
+app.use(express.static(__dirname));
 app.use(express.json());
 
 const MINECRAFT_VERSION = '1.16.5';
@@ -17,7 +19,10 @@ const MINECRAFT_DIR = path.join(__dirname, 'mc_server');
 let serverProcess = null;
 let serverStatus = "offline";
 let startupProgress = 0;
+let players = [];
+let tps = 20;
 
+// Create minecraft server directory if it doesn't exist
 if (!fs.existsSync(MINECRAFT_DIR)) {
     fs.mkdirSync(MINECRAFT_DIR);
 }
@@ -36,6 +41,13 @@ function downloadServerJar() {
                     startupProgress = 30;
                     resolve();
                 });
+                file.on('error', (err) => {
+                    fs.unlink(jarPath);
+                    reject(err);
+                });
+            }).on('error', (err) => {
+                fs.unlink(jarPath);
+                reject(err);
             });
         } else {
             startupProgress = 30;
@@ -51,12 +63,18 @@ function createEula() {
     }
 }
 
+// Routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/progress', (req, res) => {
-    res.json({ progress: startupProgress, status: serverStatus });
+    res.json({
+        progress: startupProgress,
+        status: serverStatus,
+        players: players.length,
+        tps: tps
+    });
 });
 
 app.post('/start', async (req, res) => {
@@ -79,6 +97,7 @@ app.post('/start', async (req, res) => {
                 const output = data.toString();
                 console.log(output);
                 
+                // Update progress based on server output
                 if (output.includes('Done')) {
                     startupProgress = 100;
                     serverStatus = "online";
@@ -86,6 +105,15 @@ app.post('/start', async (req, res) => {
                     startupProgress = 60;
                 } else if (output.includes('Preparing')) {
                     startupProgress = 80;
+                }
+
+                // Track player joins/leaves
+                if (output.includes('joined the game')) {
+                    const player = output.split('[')[2].split(':')[0].trim();
+                    players.push(player);
+                } else if (output.includes('left the game')) {
+                    const player = output.split('[')[2].split(':')[0].trim();
+                    players = players.filter(p => p !== player);
                 }
             });
 
@@ -98,15 +126,27 @@ app.post('/start', async (req, res) => {
                 serverStatus = "offline";
                 serverProcess = null;
                 startupProgress = 0;
+                players = [];
             });
             
-            res.json({ status: "Server starting", progress: startupProgress });
+            res.json({ 
+                status: "Server starting", 
+                progress: startupProgress 
+            });
+
         } catch (error) {
             serverStatus = "offline";
-            res.status(500).json({ error: "Failed to start server" });
+            startupProgress = 0;
+            res.status(500).json({ 
+                error: "Failed to start server",
+                details: error.message 
+            });
         }
     } else {
-        res.json({ status: serverStatus, progress: startupProgress });
+        res.json({ 
+            status: serverStatus, 
+            progress: startupProgress 
+        });
     }
 });
 
@@ -116,11 +156,39 @@ app.post('/stop', (req, res) => {
         serverProcess = null;
         serverStatus = "offline";
         startupProgress = 0;
+        players = [];
+        res.json({ status: "Server stopped" });
+    } else {
+        res.json({ status: "Server already stopped" });
     }
-    res.json({ status: "Server stopped" });
 });
 
+app.get('/stats', (req, res) => {
+    res.json({
+        status: serverStatus,
+        players: players,
+        tps: tps,
+        uptime: serverProcess ? process.uptime() : 0
+    });
+});
+
+// Start the web server
 app.listen(port, () => {
     console.log(`Web interface running at http://localhost:${port}`);
     console.log(`Minecraft server files will be in: ${MINECRAFT_DIR}`);
+});
+
+// Handle process termination
+process.on('SIGTERM', () => {
+    if (serverProcess) {
+        serverProcess.kill();
+    }
+    process.exit(0);
+});
+
+process.on('SIGINT', () => {
+    if (serverProcess) {
+        serverProcess.kill();
+    }
+    process.exit(0);
 });
