@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>Cherr Chat Platform</title>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --background: 240, 10%, 3.9%;
+      --foreground: 0, 0%, 98%;
+      --muted: 240, 3.7%, 15.9%;
+      --muted-foreground: 240, 5%, 64.9%;
+      --popover: 240, 10%, 3.9%;
+      --popover-foreground: 0, 0%, 98%;
+      --card: 240, 10%, 3.9%;
+      --card-foreground: 0, 0%, 98%;
+      --border: 240, 3.7%, 15.9%;
+      --input: 240, 3.7%, 15.9%;
+      --primary: 252, 88%, 66%;
+      --primary-foreground: 0, 0%, 100%;
+      --secondary: 199, 89%, 48%;
+      --secondary-foreground: 0, 0%, 100%;
+      --accent: 252, 88%, 66%;
+      --accent-foreground: 0, 0%, 100%;
+      --destructive: 0, 84.2%, 60.2%;
+      --destructive-foreground: 0, 0%, 100%;
+      --ring: 240, 5%, 64.9%;
+      --radius: 0.5rem;
+      
+      --dark-surface: 240, 9%, 15%;
+      --dark-elevated: 240, 9%, 18%;
+      --status-success: 142, 71%, 45%;
+      --status-error: 0, 84.2%, 60.2%;
+      --status-warning: 38, 92%, 50%;
+      --status-info: 217, 91%, 60%;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: hsl(var(--background));
+      color: hsl(var(--foreground));
+      line-height: 1.5;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      background: none;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background-color: hsla(var(--muted), 0.5);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background-color: hsla(var(--primary), 0.3);
+      border-radius: 2px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: hsla(var(--primary), 0.5);
+    }
+
+    .message-appear {
+      animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .message-deleted {
+      animation: fadeOut 0.3s forwards;
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.8); }
+    }
+
+    @keyframes slideIn {
+      0% { transform: translateY(10px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px rgba(124, 93, 250, 0.2); }
+      50% { box-shadow: 0 0 15px rgba(124, 93, 250, 0.5); }
+      100% { box-shadow: 0 0 5px rgba(124, 93, 250, 0.2); }
+    }
+
+    .animate-glow {
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 0.3s ease-in forwards;
+    }
+
+    @keyframes highlightPulse {
+      0% { background-color: rgba(124, 93, 250, 0.1); }
+      50% { background-color: rgba(124, 93, 250, 0.2); }
+      100% { background-color: rgba(124, 93, 250, 0.1); }
+    }
+
+    .highlight-pulse {
+      animation: highlightPulse 2s ease-in-out;
+    }
+
+    .hover-lift {
+      transition: transform 0.2s ease-out;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-2px);
+    }
+
+    .gradient-text {
+      background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    @keyframes borderPulse {
+      0% { border-color: rgba(124, 93, 250, 0.3); }
+      50% { border-color: rgba(124, 93, 250, 0.7); }
+      100% { border-color: rgba(124, 93, 250, 0.3); }
+    }
+
+    .animate-border {
+      animation: borderPulse 2s infinite;
+    }
+
+    .transition-all-smooth {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes bubblePulse {
+      0% { transform: scale(0.8); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.8); opacity: 0.5; }
+    }
+
+    .typing-bubble {
+      animation: bubblePulse 1s infinite;
+    }
+
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(124, 93, 250, 0.4) 0%, rgba(25, 147, 229, 0.2) 100%);
+      transition: all 0.3s ease-out;
+    }
+
+    /* Layout styles */
+    .app-container {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sidebar {
+      width: 260px;
+      border-right: 1px solid hsla(var(--border), 0.3);
+      background-color: hsl(var(--dark-surface));
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-glow {
+      position: absolute;
+      pointer-events: none;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: 0.1;
+      background: linear-gradient(to bottom right, hsl(var(--primary)), hsl(var(--primary)), transparent);
+      transform: translate(-50%, -50%);
+      transition: all 2s ease-in-out;
+    }
+
+    .logo-section {
+      padding: 20px;
+      border-bottom: 1px solid hsla(var(--border), 0.3);
+      position: relative;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .logo-icon {
+      color: hsl(var(--primary));
+      margin-right: 8px;
+      font-size: 1.5rem;
+    }
+
+    .logo-text {
+      background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--secondary)));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .invite-btn {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      background-color: hsla(var(--primary), 0.1);
+      border: 1px solid hsla(var(--primary), 0.3);
+      color: hsl(var(--primary));
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .invite-btn:hover {
+      background-color: hsla(var(--primary), 0.2);
+    }
+
+    .invite-btn i {
+      margin-right: 6px;
+    }
+
+    .channels-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .channels-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+    }
+
+    .channels-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      margin-right: 8px;
+      background-color: hsla(var(--primary), 0.2);
+      border-radius: 4px;
+      color: hsl(var(--primary));
+    }
+
+    .add-channel-btn {
+      height: 24px;
+      width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: hsl(var(--dark-elevated));
+      color: hsl(var(--muted-foreground));
+      transition: all 0.2s ease;
+    }
+
+    .add-channel-btn:hover {
+      background-color: hsla(var(--primary), 0.2);
+      color: hsl(var(--primary));
+    }
+
+    .channels-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 8px;
+    }
+
+    .channel-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      margin: 2px 0;
+      border-radius: 4px;
+      color: hsl(var(--muted-foreground));
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+    }
+
+    .channel-item:hover {
+      background-color: hsla(var(--muted), 0.3);
+      color: hsl(var(--foreground));
+    }
+
+    .channel-item.active {
+      background: linear-gradient(to right, hsla(var(--primary), 0.2), hsla(var(--primary), 0.05));
+      color: white;
+      border-left: 2px solid hsl(var(--primary));
+    }
+
+    .channel-icon {
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      border-radius: 4px;
+    }
+
+    .active .channel-icon {
+      color: hsl(var(--primary));
+    }
+
+    .channel-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-section {
+      padding: 12px;
+      border-top: 1px solid hsla(var(--border), 0.3);
+      background: linear-gradient(to right, hsl(var(--dark-elevated)), hsl(var(--dark-surface)));
+      display: flex;
+      align-items: center;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .user-avatar::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      border: 2px solid hsla(var(--primary), 0.3);
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+    }
+
+    .user-badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 9999px;
+      background-color: hsla(var(--primary), 0.2);
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      color: hsl(var(--primary));
+      margin-left: 6px;
+    }
+
+    .user-badge i {
+      font-size: 0.625rem;
+      margin-right: 2px;
+    }
+
+    .user-status {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+      display: flex;
+      align-items: center;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: hsl(var(--status-success));
+      margin-right: 6px;
+      animation: pulseOpacity 2s infinite;
+    }
+
+    @keyframes pulseOpacity {
+      0% { opacity: 0.7; }
+      50% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
+
+    .settings-btn {
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: hsl(var(--muted-foreground));
+      transition: all 0.2s ease;
+    }
+
+    .settings-btn:hover {
+      background-color: hsla(var(--primary), 0.2);
+      color: hsl(var(--primary));
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .topbar {
+      height: 60px;
+      border-bottom: 1px solid hsla(var(--border), 0.3);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background-color: hsla(var(--dark-surface), 0.7);
+      backdrop-filter: blur(10px);
+    }
+
+    .channel-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .channel-info-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background-color: hsla(var(--primary), 0.1);
+      color: hsl(var(--primary));
+      margin-right: 12px;
+    }
+
+    .channel-info-text h2 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .channel-info-text p {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .topbar-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: hsl(var(--muted-foreground));
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background-color: hsla(var(--muted), 0.3);
+      color: hsl(var(--foreground));
+    }
+
+    .messages-container {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .messages-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .date-separator {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      margin: 24px 0;
+    }
+
+    .date-separator::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      border-top: 1px solid hsla(var(--border), 0.3);
+      z-index: -1;
+    }
+
+    .date-separator-text {
+      background: linear-gradient(to right, hsl(var(--background)), hsl(var(--dark-elevated)), hsl(var(--background)));
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+      display: flex;
+      align-items: center;
+    }
+
+    .date-separator-text i {
+      color: hsla(var(--primary), 0.7);
+      margin-right: 8px;
+    }
+
+    .message-item {
+      display: flex;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 4px;
+      animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .message-item:hover {
+      background-color: hsla(var(--muted), 0.2);
+      transform: translateY(-2px);
+    }
+
+    .message-avatar {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .message-avatar.admin::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      border: 2px solid hsla(var(--primary), 0.5);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .message-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .message-header {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 2px;
+    }
+
+    .message-username {
+      font-weight: 500;
+      margin-right: 4px;
+    }
+
+    .message-time {
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .message-text {
+      color: hsl(var(--foreground));
+      line-height: 1.5;
+    }
+
+    .message-actions {
+      display: none;
+      align-items: center;
+      margin-left: auto;
+      font-size: 0.75rem;
+      gap: 4px;
+      transition: opacity 0.2s;
+      opacity: 0;
+    }
+
+    .message-item:hover .message-actions {
+      display: flex;
+      opacity: 1;
+    }
+
+    .message-action-btn {
+      height: 28px;
+      width: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: hsl(var(--muted-foreground));
+      transition: all 0.2s ease;
+    }
+
+    .message-action-btn:hover {
+      background-color: hsla(var(--muted), 0.4);
+      color: hsl(var(--foreground));
+    }
+
+    .message-action-btn.delete:hover {
+      background-color: hsla(var(--destructive), 0.1);
+      color: hsl(var(--destructive));
+    }
+
+    .empty-messages {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+      padding: 48px 16px;
+    }
+
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(to bottom right, hsla(var(--primary), 0.3), hsla(var(--secondary), 0.3));
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+    }
+
+    .empty-icon i {
+      font-size: 1.75rem;
+      color: hsl(var(--primary));
+    }
+
+    .empty-title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .empty-desc {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+      max-width: 300px;
+    }
+
+    .input-area {
+      padding: 12px 16px;
+      border-top: 1px solid hsla(var(--border), 0.3);
+      background: linear-gradient(to bottom, hsl(var(--dark-surface)), hsl(var(--dark-elevated)));
+    }
+
+    .message-form {
+      display: flex;
+    }
+
+    .input-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background: linear-gradient(to right, hsl(var(--dark-elevated)), hsla(var(--dark-elevated), 0.9));
+      border-radius: 8px;
+      border: 1px solid hsla(var(--border), 0.3);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+    }
+
+    .input-container:focus-within {
+      box-shadow: 0 0 15px rgba(124, 93, 250, 0.2);
+      border-color: hsla(var(--primary), 0.5);
+    }
+
+    .input-btn {
+      color: hsl(var(--muted-foreground));
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 4px;
+      transition: all 0.2s;
+    }
+
+    .input-btn:hover {
+      color: hsl(var(--primary));
+      background-color: hsla(var(--primary), 0.1);
+    }
+
+    .message-input {
+      flex: 1;
+      height: 44px;
+      padding: 10px 8px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: hsl(var(--foreground));
+      font-family: inherit;
+      font-size: 0.9375rem;
+      resize: none;
+    }
+
+    .message-input::placeholder {
+      color: hsla(var(--muted-foreground), 0.7);
+    }
+
+    .input-actions {
+      display: flex;
+      align-items: center;
+      padding-right: 8px;
+    }
+
+    .input-actions-divider {
+      height: 20px;
+      width: 1px;
+      background-color: hsla(var(--border), 0.3);
+      margin: 0 4px;
+    }
+
+    .send-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: hsl(var(--muted-foreground));
+      transition: all 0.2s;
+    }
+
+    .send-btn.active {
+      background-color: hsl(var(--primary));
+      color: white;
+      box-shadow: 0 2px 6px rgba(124, 93, 250, 0.3);
+    }
+
+    .send-btn.active:hover {
+      background-color: hsla(var(--primary), 0.9);
+    }
+
+    .channel-restricted {
+      padding: 12px;
+      margin-bottom: 12px;
+      background-color: hsla(var(--destructive), 0.1);
+      border: 1px solid hsla(var(--destructive), 0.4);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      color: hsl(var(--destructive));
+    }
+
+    .restricted-icon {
+      width: 36px;
+      height: 36px;
+      background-color: hsla(var(--destructive), 0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .restricted-text {
+      margin-left: 12px;
+    }
+
+    .restricted-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .restricted-desc {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    /* Modal styles */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-content {
+      width: 100%;
+      max-width: 400px;
+      background: linear-gradient(to bottom, hsl(var(--dark-elevated)), hsl(var(--dark-surface)));
+      border: 1px solid hsla(var(--border), 0.3);
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      position: relative;
+      animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    @keyframes modalSlideIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-icon {
+      position: absolute;
+      top: -48px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: hsla(var(--destructive), 0.1);
+      display: grid;
+      place-items: center;
+      border: 4px solid hsl(var(--dark-elevated));
+    }
+
+    .modal-icon i {
+      font-size: 1.5rem;
+      color: hsl(var(--destructive));
+    }
+
+    .modal-header {
+      padding: 24px 24px 12px;
+      text-align: center;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .modal-description {
+      color: hsl(var(--muted-foreground));
+      font-size: 0.875rem;
+    }
+
+    .modal-warning {
+      color: hsla(var(--destructive), 0.8);
+      font-size: 0.75rem;
+      margin-top: 4px;
+    }
+
+    .modal-info {
+      margin: 12px 24px;
+      padding: 12px;
+      background-color: hsla(var(--destructive), 0.05);
+      border: 1px solid hsla(var(--destructive), 0.1);
+      border-radius: 6px;
+    }
+
+    .modal-info-header {
+      display: flex;
+      align-items: center;
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 4px;
+    }
+
+    .modal-info-header i {
+      color: hsla(var(--destructive), 0.7);
+      margin-right: 6px;
+    }
+
+    .modal-info-list {
+      padding-left: 24px;
+      font-size: 0.75rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .modal-info-list li {
+      margin-bottom: 6px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .modal-btn {
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .modal-btn-cancel {
+      background-color: transparent;
+      border: 1px solid hsla(var(--border), 0.3);
+      color: hsl(var(--foreground));
+    }
+
+    .modal-btn-cancel:hover {
+      background-color: hsla(var(--muted), 0.2);
+    }
+
+    .modal-btn-confirm {
+      background: linear-gradient(to right, hsl(var(--destructive)), hsla(var(--destructive), 0.9));
+      color: white;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(240, 82, 82, 0.2);
+    }
+
+    .modal-btn-confirm:hover {
+      opacity: 0.9;
+    }
+
+    .modal-btn-confirm i {
+      margin-right: 8px;
+    }
+
+    /* Login dialog */
+    .login-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: hsl(var(--background));
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background-color: hsl(var(--card));
+      border-radius: 8px;
+      border: 1px solid hsla(var(--border), 0.5);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      padding: 24px;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .login-logo {
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .login-logo-icon {
+      color: hsl(var(--primary));
+      margin-right: 8px;
+      font-size: 1.75rem;
+    }
+
+    .login-description {
+      font-size: 0.875rem;
+      color: hsl(var(--muted-foreground));
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .form-input {
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid hsla(var(--border), 0.5);
+      background-color: hsla(var(--muted), 0.3);
+      color: hsl(var(--foreground));
+      font-family: inherit;
+      font-size: 0.9375rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: hsla(var(--primary), 0.5);
+      box-shadow: 0 0 0 2px hsla(var(--primary), 0.2);
+    }
+
+    .login-btn {
+      padding: 10px;
+      background-color: hsl(var(--primary));
+      color: white;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .login-btn:hover {
+      background-color: hsla(var(--primary), 0.9);
+    }
+
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Mobile responsiveness */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 20;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: hsla(var(--dark-elevated), 0.8);
+      color: hsl(var(--muted-foreground));
+      font-size: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s;
+    }
+
+    .menu-toggle:hover {
+      background-color: hsla(var(--primary), 0.2);
+      color: hsl(var(--primary));
+    }
+
+    .mobile-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: hsla(var(--background), 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 10;
+    }
+
+    /* Notifications */
+    .notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background-color: hsl(var(--dark-elevated));
+      color: hsl(var(--foreground));
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .notification-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .notification-success .notification-icon {
+      background-color: hsla(var(--status-success), 0.15);
+      color: hsl(var(--status-success));
+    }
+    
+    .notification-error .notification-icon {
+      background-color: hsla(var(--status-error), 0.15);
+      color: hsl(var(--status-error));
+    }
+    
+    .notification-info .notification-icon {
+      background-color: hsla(var(--status-info), 0.15);
+      color: hsl(var(--status-info));
+    }
+    
+    .notification-content {
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 20;
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mobile-backdrop {
+        display: none;
+      }
+
+      .mobile-backdrop.open {
+        display: block;
+      }
+
+      .close-sidebar {
+        display: flex;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: transparent;
+        color: hsl(var(--muted-foreground));
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+
+      .close-sidebar:hover {
+        background-color: hsla(var(--muted), 0.3);
+        color: hsl(var(--foreground));
+      }
+      
+      .notification {
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Particles Background -->
+  <div id="particles" class="particles"></div>
+
+  <!-- App Container -->
+  <div class="app-container">
+    <!-- Sidebar Toggle (Mobile) -->
+    <button id="menuToggle" class="menu-toggle">
+      <i class="ri-menu-line"></i>
+    </button>
+
+    <!-- Mobile Backdrop -->
+    <div id="mobileBackdrop" class="mobile-backdrop"></div>
+    
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <!-- Ambient Glow Effect -->
+      <div id="sidebarGlow" class="sidebar-glow"></div>
+
+      <!-- Close Sidebar Button (Mobile) -->
+      <button id="closeSidebar" class="close-sidebar">
+        <i class="ri-close-line"></i>
+      </button>
+      
+      <!-- Logo Section -->
+      <div class="logo-section">
+        <div class="logo">
+          <span class="logo-icon"><i class="ri-chat-4-fill"></i></span>
+          <span class="logo-text">Cherr Chat</span>
+        </div>
+        <div class="subtitle" style="text-align: center; font-size: 0.75rem; color: hsl(var(--muted-foreground)); margin-top: 4px;">
+          Modern chatting experience
+        </div>
+        
+        <!-- Invite Button -->
+        <a href="http://syfer-eng.github.io/testing.html" target="_blank" rel="noopener noreferrer" class="invite-btn">
+          <i class="ri-user-add-line"></i> Invite Friends
+        </a>
+      </div>
+      
+      <!-- Channels Header -->
+      <div class="channels-header">
+        <h3 class="channels-title">
+          <span class="channels-icon">
+            <i class="ri-chat-3-line"></i>
+          </span>
+          Channels
+        </h3>
+        <button class="add-channel-btn">
+          <i class="ri-add-line"></i>
+        </button>
+      </div>
+      
+      <!-- Channel List -->
+      <div class="channels-list">
+        <button class="channel-item active" data-channel-id="1" data-channel-name="general">
+          <span class="channel-icon">
+            <i class="ri-hash-straight"></i>
+          </span>
+          <span class="channel-name">general</span>
+        </button>
+        
+        <button class="channel-item" data-channel-id="2" data-channel-name="announcements">
+          <span class="channel-icon">
+            <i class="ri-hash-straight"></i>
+          </span>
+          <span class="channel-name">announcements</span>
+        </button>
+        
+        <button class="channel-item" data-channel-id="3" data-channel-name="resources">
+          <span class="channel-icon">
+            <i class="ri-hash-straight"></i>
+          </span>
+          <span class="channel-name">resources</span>
+        </button>
+        
+        <button class="channel-item" data-channel-id="4" data-channel-name="off-topic">
+          <span class="channel-icon">
+            <i class="ri-hash-straight"></i>
+          </span>
+          <span class="channel-name">off-topic</span>
+        </button>
+      </div>
+      
+      <!-- User Section -->
+      <div class="user-section">
+        <div id="userAvatar" class="user-avatar admin" style="background-color: rgba(124, 93, 250, 0.25);">S</div>
+        <div class="user-info">
+          <div class="user-name">
+            Syfer-eng
+            <span class="user-badge">
+              <i class="ri-shield-star-line"></i>
+              Owner
+            </span>
+          </div>
+          <div class="user-status">
+            <span class="status-indicator"></span>
+            <span>Online</span>
+          </div>
+        </div>
+        <button class="settings-btn">
+          <i class="ri-settings-3-line"></i>
+        </button>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Topbar -->
+      <div class="topbar">
+        <div class="channel-info">
+          <div class="channel-info-icon">
+            <i class="ri-chat-3-line"></i>
+          </div>
+          <div class="channel-info-text">
+            <h2 id="channelTitle">general</h2>
+            <p id="channelDescription">General chat for everyone</p>
+          </div>
+        </div>
+        
+        <div class="topbar-actions">
+          <button class="action-btn">
+            <i class="ri-search-line"></i>
+          </button>
+          <button class="action-btn">
+            <i class="ri-notification-3-line"></i>
+          </button>
+          <button class="action-btn">
+            <i class="ri-more-2-fill"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Messages Container -->
+      <div class="messages-container">
+        <!-- Messages List -->
+        <div id="messagesList" class="messages-list">
+          <!-- Empty state (shown when no messages) -->
+          <div id="emptyMessages" class="empty-messages">
+            <div class="empty-icon">
+              <i class="ri-chat-3-line"></i>
+            </div>
+            <h3 class="empty-title">No messages yet</h3>
+            <p class="empty-desc">
+              Be the first to send a message in this channel! Get the conversation started.
+            </p>
+            <div style="margin-top: 16px; animation: bounce 1s infinite;">
+              <i class="ri-arrow-down-line" style="color: hsl(var(--muted-foreground));"></i>
+            </div>
+          </div>
+          
+          <!-- Messages will be added here by JavaScript -->
+        </div>
+        
+        <!-- Input Area -->
+        <div class="input-area">
+          <!-- Channel restrictions notice (conditionally shown) -->
+          <div id="channelRestricted" class="channel-restricted" style="display: none;">
+            <div class="restricted-icon">
+              <i class="ri-lock-line"></i>
+            </div>
+            <div class="restricted-text">
+              <div class="restricted-title">Channel Restricted</div>
+              <div class="restricted-desc">Only the owner can send messages in this channel</div>
+            </div>
+          </div>
+          
+          <form id="messageForm" class="message-form">
+            <div id="inputContainer" class="input-container">
+              <button type="button" class="input-btn">
+                <i class="ri-add-circle-line"></i>
+              </button>
+              
+              <textarea 
+                id="messageInput" 
+                class="message-input" 
+                placeholder="Message #general"
+                rows="1"
+              ></textarea>
+              
+              <div class="input-actions">
+                <button type="button" class="input-btn">
+                  <i class="ri-emotion-line"></i>
+                </button>
+                <button type="button" id="attachBtn" class="input-btn">
+                  <i class="ri-attachment-2"></i>
+                </button>
+                
+                <div class="input-actions-divider"></div>
+                
+                <button type="submit" id="sendBtn" class="send-btn">
+                  <i class="ri-send-plane-fill"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- Delete Message Modal (Hidden by default) -->
+  <div id="deleteModal" class="modal-backdrop" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="ri-delete-bin-5-line"></i>
+      </div>
+      
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Message</h3>
+        <p class="modal-description">
+          Are you sure you want to delete this message?
+          <div class="modal-warning">This action cannot be undone.</div>
+        </p>
+      </div>
+      
+      <div class="modal-info">
+        <div class="modal-info-header">
+          <i class="ri-information-line"></i>
+          Message deletion will:
+        </div>
+        <ul class="modal-info-list">
+          <li>Remove this message from the channel permanently</li>
+          <li>Be visible to all channel members</li>
+          <li>Cannot be recovered after completion</li>
+        </ul>
+      </div>
+      
+      <div class="modal-footer">
+        <button id="cancelDeleteBtn" class="modal-btn modal-btn-cancel">Cancel</button>
+        <button id="confirmDeleteBtn" class="modal-btn modal-btn-confirm">
+          <i class="ri-delete-bin-6-line"></i>
+          Delete Message
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Login Dialog -->
+  <div id="loginDialog" class="login-backdrop">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="login-logo">
+          <span class="login-logo-icon"><i class="ri-chat-4-fill"></i></span>
+          <span class="gradient-text">Cherr Chat</span>
+        </div>
+        <p class="login-description">Login to start chatting</p>
+      </div>
+      
+      <form id="loginForm" class="login-form">
+        <div class="form-group">
+          <label for="username" class="form-label">Username</label>
+          <input 
+            type="text" 
+            id="username" 
+            class="form-input" 
+            placeholder="Enter your username" 
+            value="Syfer-eng"
+            autocomplete="username"
+          >
+        </div>
+        
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            class="form-input" 
+            placeholder="Enter your password" 
+            value="Cheechers1!1"
+            autocomplete="current-password"
+          >
+        </div>
+        
+        <button type="submit" id="loginBtn" class="login-btn">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // App state
+    const state = {
+      user: null,
+      channels: [
+        { id: 1, name: 'general', description: 'General chat for everyone' },
+        { id: 2, name: 'announcements', description: 'Important announcements' },
+        { id: 3, name: 'resources', description: 'Useful resources' },
+        { id: 4, name: 'off-topic', description: 'Off-topic discussions' }
+      ],
+      activeChannelId: 1,
+      messages: {},
+      deleteTargetId: null,
+      isMobile: window.innerWidth < 768
+    };
+
+    // DOM Elements
+    const elements = {
+      // Particles
+      particles: document.getElementById('particles'),
+      
+      // Sidebar 
+      sidebar: document.getElementById('sidebar'),
+      sidebarGlow: document.getElementById('sidebarGlow'),
+      menuToggle: document.getElementById('menuToggle'),
+      closeSidebar: document.getElementById('closeSidebar'),
+      mobileBackdrop: document.getElementById('mobileBackdrop'),
+      channelItems: document.querySelectorAll('.channel-item'),
+      userAvatar: document.getElementById('userAvatar'),
+      
+      // Main content
+      channelTitle: document.getElementById('channelTitle'),
+      channelDescription: document.getElementById('channelDescription'),
+      messagesList: document.getElementById('messagesList'),
+      emptyMessages: document.getElementById('emptyMessages'),
+      channelRestricted: document.getElementById('channelRestricted'),
+      
+      // Message form
+      messageForm: document.getElementById('messageForm'),
+      inputContainer: document.getElementById('inputContainer'),
+      messageInput: document.getElementById('messageInput'),
+      sendBtn: document.getElementById('sendBtn'),
+      attachBtn: document.getElementById('attachBtn'),
+      
+      // Delete modal
+      deleteModal: document.getElementById('deleteModal'),
+      cancelDeleteBtn: document.getElementById('cancelDeleteBtn'),
+      confirmDeleteBtn: document.getElementById('confirmDeleteBtn'),
+      
+      // Login dialog
+      loginDialog: document.getElementById('loginDialog'),
+      loginForm: document.getElementById('loginForm'),
+      usernameInput: document.getElementById('username'),
+      passwordInput: document.getElementById('password'),
+      loginBtn: document.getElementById('loginBtn')
+    };
+
+    // Initialize particles
+    function initParticles() {
+      const particleCount = 50;
+      const particles = [];
+      
+      // Create particles
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 2 and 6px
+        const size = Math.random() * 4 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        particle.style.left = `${x}%`;
+        particle.style.top = `${y}%`;
+        
+        // Random opacity
+        const opacity = Math.random() * 0.6 + 0.2;
+        particle.style.opacity = opacity.toString();
+        
+        elements.particles.appendChild(particle);
+        
+        // Store particle data
+        particles.push({
+          element: particle,
+          x,
+          y,
+          size,
+          speed: Math.random() * 0.1 + 0.05,
+          opacity
+        });
+      }
+      
+      // Animate particles
+      function animateParticles() {
+        particles.forEach(particle => {
+          // Move particle slightly in a floating motion
+          particle.y -= particle.speed;
+          
+          // Reset position if particle moves out of view
+          if (particle.y < -10) {
+            particle.y = 110;
+            particle.x = Math.random() * 100;
+          }
+          
+          // Update position
+          particle.element.style.top = `${particle.y}%`;
+          particle.element.style.left = `${particle.x}%`;
+        });
+        
+        requestAnimationFrame(animateParticles);
+      }
+      
+      animateParticles();
+    }
+
+    // Initialize sidebar glow effect
+    function initSidebarGlow() {
+      // Create a subtle moving glow effect
+      function updateGlowPosition() {
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        
+        elements.sidebarGlow.style.left = `${x}%`;
+        elements.sidebarGlow.style.top = `${y}%`;
+      }
+      
+      // Initial position
+      updateGlowPosition();
+      
+      // Update position every 3 seconds
+      setInterval(updateGlowPosition, 3000);
+    }
+
+    // Toggle sidebar on mobile
+    function setupMobileMenu() {
+      // Toggle sidebar
+      elements.menuToggle.addEventListener('click', () => {
+        elements.sidebar.classList.add('open');
+        elements.mobileBackdrop.classList.add('open');
+      });
+      
+      // Close sidebar
+      elements.closeSidebar.addEventListener('click', () => {
+        elements.sidebar.classList.remove('open');
+        elements.mobileBackdrop.classList.remove('open');
+      });
+      
+      // Close sidebar when clicking on backdrop
+      elements.mobileBackdrop.addEventListener('click', () => {
+        elements.sidebar.classList.remove('open');
+        elements.mobileBackdrop.classList.remove('open');
+      });
+      
+      // Close sidebar when changing channel on mobile
+      if (state.isMobile) {
+        elements.channelItems.forEach(item => {
+          item.addEventListener('click', () => {
+            elements.sidebar.classList.remove('open');
+            elements.mobileBackdrop.classList.remove('open');
+          });
+        });
+      }
+      
+      // Update on resize
+      window.addEventListener('resize', () => {
+        state.isMobile = window.innerWidth < 768;
+      });
+    }
+
+    // Channel switching
+    function setupChannelSwitching() {
+      elements.channelItems.forEach(item => {
+        item.addEventListener('click', () => {
+          // Update active channel in state
+          const channelId = parseInt(item.dataset.channelId);
+          state.activeChannelId = channelId;
+          
+          // Update UI
+          elements.channelItems.forEach(ch => ch.classList.remove('active'));
+          item.classList.add('active');
+          
+          // Update channel info
+          const channel = state.channels.find(c => c.id === channelId);
+          elements.channelTitle.textContent = channel.name;
+          elements.channelDescription.textContent = channel.description;
+          
+          // Check if channel is restricted
+          updateChannelRestrictions();
+          
+          // Update message list
+          renderMessages();
+        });
+      });
+    }
+
+    // Check if user can send messages in this channel
+    function canSendInChannel() {
+      // If user is not logged in
+      if (!state.user) return false;
+      
+      // Owner can send messages in all channels
+      if (state.user.isAdmin) return true;
+      
+      // Regular users can only send messages in "general" (id 1) and "off-topic" (id 4) channels
+      return state.activeChannelId === 1 || state.activeChannelId === 4;
+    }
+
+    // Update channel restrictions
+    function updateChannelRestrictions() {
+      const isRestricted = !canSendInChannel();
+      
+      // Show/hide channel restricted notice
+      elements.channelRestricted.style.display = isRestricted ? 'flex' : 'none';
+      
+      // Update input state
+      if (isRestricted) {
+        elements.inputContainer.style.opacity = '0.6';
+        elements.messageInput.disabled = true;
+        elements.messageInput.placeholder = "You cannot send messages in this channel";
+      } else {
+        elements.inputContainer.style.opacity = '1';
+        elements.messageInput.disabled = false;
+        elements.messageInput.placeholder = `Message #${state.channels.find(c => c.id === state.activeChannelId)?.name || ''}`;
+      }
+    }
+
+    // Render messages for current channel
+    function renderMessages() {
+      const messages = state.messages[state.activeChannelId] || [];
+      
+      // Group messages by date
+      const messagesByDate = groupMessagesByDate(messages);
+      
+      // Show empty state if no messages
+      if (messages.length === 0) {
+        elements.emptyMessages.style.display = 'flex';
+        elements.messagesList.innerHTML = '';
+        elements.messagesList.appendChild(elements.emptyMessages);
+        return;
+      }
+      
+      // Hide empty state and render messages
+      elements.emptyMessages.style.display = 'none';
+      
+      // Clear messages list (except empty state)
+      elements.messagesList.innerHTML = '';
+      
+      // Render message groups by date
+      Object.keys(messagesByDate).forEach(date => {
+        // Add date separator
+        const dateSeparator = document.createElement('div');
+        dateSeparator.className = 'date-separator';
+        dateSeparator.innerHTML = `
+          <div class="date-separator-text">
+            <i class="ri-calendar-line"></i>
+            ${date}
+          </div>
+        `;
+        elements.messagesList.appendChild(dateSeparator);
+        
+        // Render messages for this date
+        messagesByDate[date].forEach(message => {
+          const messageEl = createMessageElement(message);
+          elements.messagesList.appendChild(messageEl);
+        });
+      });
+      
+      // Scroll to bottom
+      elements.messagesList.scrollTop = elements.messagesList.scrollHeight;
+    }
+
+    // Create message element
+    function createMessageElement(message) {
+      const isOwner = state.user && state.user.id === message.userId;
+      const isAdmin = message.user && message.user.isAdmin;
+      const canDelete = state.user && (state.user.isAdmin || isOwner);
+      
+      const messageEl = document.createElement('div');
+      messageEl.className = 'message-item';
+      messageEl.dataset.messageId = message.id;
+      
+      // Random avatar background color if not provided
+      const avatarColor = message.user?.avatarColor || `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`;
+      
+      messageEl.innerHTML = `
+        <div class="message-avatar ${isAdmin ? 'admin' : ''}" style="background-color: ${avatarColor}40">
+          ${message.user?.username.charAt(0).toUpperCase() || 'S'}
+        </div>
+        
+        <div class="message-content">
+          <div class="message-header">
+            <span class="message-username">${message.user?.username || 'Syfer-eng'}</span>
+            
+            ${isAdmin ? `
+              <span class="user-badge">
+                <i class="ri-shield-star-line"></i>
+                OWNER
+              </span>
+            ` : ''}
+            
+            <span class="message-time">${formatMessageTime(message.timestamp)}</span>
+            
+            <div class="message-actions">
+              <button class="message-action-btn">
+                <i class="ri-emotion-line"></i>
+              </button>
+              
+              ${canDelete ? `
+                <button class="message-action-btn delete" data-action="delete" data-message-id="${message.id}">
+                  <i class="ri-delete-bin-6-line"></i>
+                </button>
+              ` : ''}
+            </div>
+          </div>
+          
+          <div class="message-text">${message.content}</div>
+        </div>
+      `;
+      
+      // Add delete event listener
+      if (canDelete) {
+        const deleteBtn = messageEl.querySelector('[data-action="delete"]');
+        deleteBtn.addEventListener('click', () => {
+          showDeleteModal(message.id);
+        });
+      }
+      
+      return messageEl;
+    }
+
+    // Group messages by date
+    function groupMessagesByDate(messages) {
+      const groups = {};
+      
+      messages.forEach(message => {
+        // Format the date
+        let date;
+        try {
+          date = new Date(message.timestamp);
+          if (isNaN(date.getTime())) {
+            date = new Date();
+          }
+        } catch (e) {
+          date = new Date();
+        }
+        
+        const dateKey = formatDate(date);
+        
+        if (!groups[dateKey]) {
+          groups[dateKey] = [];
+        }
+        
+        groups[dateKey].push(message);
+      });
+      
+      return groups;
+    }
+
+    // Format date for message grouping
+    function formatDate(date) {
+      const options = { month: 'short', day: 'numeric', year: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    }
+
+    // Format time for message display
+    function formatMessageTime(timestamp) {
+      let date;
+      try {
+        date = new Date(timestamp);
+        if (isNaN(date.getTime())) {
+          date = new Date();
+        }
+      } catch (e) {
+        date = new Date();
+      }
+      
+      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    }
+
+    // Show delete message modal
+    function showDeleteModal(messageId) {
+      state.deleteTargetId = messageId;
+      elements.deleteModal.style.display = 'flex';
+    }
+
+    // Hide delete message modal
+    function hideDeleteModal() {
+      elements.deleteModal.style.display = 'none';
+      state.deleteTargetId = null;
+    }
+
+    // Delete message
+    function deleteMessage(messageId) {
+      // Find the channel that contains this message
+      for (const channelId in state.messages) {
+        const channelMessages = state.messages[channelId];
+        const messageIndex = channelMessages.findIndex(m => m.id === messageId);
+        
+        if (messageIndex >= 0) {
+          // Remove message from state
+          state.messages[channelId].splice(messageIndex, 1);
+          
+          // Update UI
+          renderMessages();
+          
+          // Find and animate-out the message element
+          const messageEl = document.querySelector(`.message-item[data-message-id="${messageId}"]`);
+          if (messageEl) {
+            messageEl.classList.add('message-deleted');
+            setTimeout(() => {
+              messageEl.remove();
+            }, 300);
+          }
+          
+          // Show success notification
+          showNotification('Message deleted successfully', 'success');
+          
+          break;
+        } else {
+          // Message not found, show error
+          showNotification('Message not found or already deleted', 'error');
+        }
+      }
+    }
+    
+    // Show notification
+    function showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.innerHTML = `
+        <div class="notification-icon">
+          <i class="ri-${type === 'success' ? 'check-line' : type === 'error' ? 'error-warning-line' : 'information-line'}"></i>
+        </div>
+        <div class="notification-content">${message}</div>
+      `;
+      
+      // Add to document
+      document.body.appendChild(notification);
+      
+      // Animation
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 10);
+      
+      // Auto remove
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          notification.remove();
+        }, 300);
+      }, 3000);
+    }
+
+    // Handle message form submission
+    function setupMessageForm() {
+      elements.messageForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const content = elements.messageInput.value.trim();
+        if (!content || !state.user) return;
+        
+        // Check if user can send message
+        if (!canSendInChannel()) return;
+        
+        // Create a new message
+        const message = {
+          id: Date.now(), // Simple unique ID
+          content,
+          userId: state.user.id,
+          channelId: state.activeChannelId,
+          timestamp: new Date().toISOString(),
+          user: state.user
+        };
+        
+        // Initialize channel messages array if it doesn't exist
+        if (!state.messages[state.activeChannelId]) {
+          state.messages[state.activeChannelId] = [];
+        }
+        
+        // Add message to state
+        state.messages[state.activeChannelId].push(message);
+        
+        // Clear input
+        elements.messageInput.value = '';
+        
+        // Update UI
+        renderMessages();
+        
+        // Reset send button state
+        updateSendButtonState();
+      });
+      
+      // Update send button state based on input
+      elements.messageInput.addEventListener('input', updateSendButtonState);
+      
+      // Handle send button state
+      function updateSendButtonState() {
+        const hasContent = elements.messageInput.value.trim().length > 0;
+        
+        if (hasContent && canSendInChannel()) {
+          elements.sendBtn.classList.add('active');
+        } else {
+          elements.sendBtn.classList.remove('active');
+        }
+      }
+      
+      // Check for Enter key
+      elements.messageInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          elements.messageForm.dispatchEvent(new Event('submit'));
+        }
+      });
+    }
+
+    // Setup delete modal
+    function setupDeleteModal() {
+      // Cancel button
+      elements.cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+      
+      // Confirm button
+      elements.confirmDeleteBtn.addEventListener('click', () => {
+        if (state.deleteTargetId) {
+          deleteMessage(state.deleteTargetId);
+          hideDeleteModal();
+        }
+      });
+      
+      // Close on backdrop click
+      elements.deleteModal.addEventListener('click', (e) => {
+        if (e.target === elements.deleteModal) {
+          hideDeleteModal();
+        }
+      });
+    }
+
+    // Setup login form
+    function setupLoginForm() {
+      // Check if user is already logged in
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        try {
+          state.user = JSON.parse(savedUser);
+          hideLoginDialog();
+          updateUI();
+        } catch (e) {
+          // Invalid user data, continue with login flow
+        }
+      }
+      
+      // Handle login form submission
+      elements.loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const username = elements.usernameInput.value.trim();
+        const password = elements.passwordInput.value.trim();
+        
+        if (!username || !password) {
+          alert('Please enter both username and password');
+          return;
+        }
+        
+        // For demo purposes, only accept the admin user
+        if (username === 'Syfer-eng' && password === 'Cheechers1!1') {
+          // Login successful
+          state.user = {
+            id: 1,
+            username: 'Syfer-eng',
+            isAdmin: true,
+            avatarColor: '#7C5DFA',
+          };
+          
+          // Save user to localStorage
+          localStorage.setItem('user', JSON.stringify(state.user));
+          
+          // Hide login dialog
+          hideLoginDialog();
+          
+          // Update UI
+          updateUI();
+        } else {
+          alert('Invalid username or password');
+        }
+      });
+      
+      // Auto-login after a short delay
+      if (elements.usernameInput.value === 'Syfer-eng' && elements.passwordInput.value === 'Cheechers1!1') {
+        setTimeout(() => {
+          if (!state.user) {
+            elements.loginForm.dispatchEvent(new Event('submit'));
+          }
+        }, 800);
+      }
+    }
+
+    // Hide login dialog
+    function hideLoginDialog() {
+      elements.loginDialog.style.display = 'none';
+    }
+
+    // Update UI based on current state
+    function updateUI() {
+      // Update channel restrictions
+      updateChannelRestrictions();
+      
+      // Update UI based on user
+      if (state.user) {
+        // Show messages
+        renderMessages();
+      }
+    }
+
+    // Initialize app
+    function initApp() {
+      // Initialize particle background
+      initParticles();
+      
+      // Initialize sidebar glow effect
+      initSidebarGlow();
+      
+      // Setup mobile menu
+      setupMobileMenu();
+      
+      // Setup channel switching
+      setupChannelSwitching();
+      
+      // Setup message form
+      setupMessageForm();
+      
+      // Setup delete modal
+      setupDeleteModal();
+      
+      // Setup login form
+      setupLoginForm();
+      
+      // Initial UI update
+      updateUI();
+    }
+
+    // Start the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
