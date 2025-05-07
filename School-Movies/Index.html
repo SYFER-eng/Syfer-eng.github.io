@@ -1,0 +1,1065 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>꧁༺ 𝓢𝔂𝓯𝓮𝓻-𝓮𝓷𝓰 ༻꧂</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="https://github.com/Gba-Games-html/Gba-Games-html.github.io/blob/main/images/Transparent.jpg?raw=true"/>
+  <!-- particles.js for snow effect -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <style>
+    /* Base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      background-color: #000000;
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+    }
+    
+    #particles-js, #player-particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(to bottom, #111111, #000000);
+    }
+    
+    canvas {
+      display: block;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #ffffff;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #cccccc;
+    }
+    
+    ::selection {
+      background-color: #ffffff;
+      color: #000000;
+    }
+    
+    /* Main Container */
+    .container {
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Header styles */
+    header {
+      text-align: center;
+      padding: 1rem 0;
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.7s ease;
+    }
+    
+    header.loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .title {
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      background-image: linear-gradient(to right, white, #a0a0a0);
+    }
+    
+    .title::after {
+      content: '';
+      position: absolute;
+      bottom: -0.25rem;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: white;
+    }
+    
+    /* Navigation styles */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding: 0 1rem;
+    }
+    
+    .tab-btn {
+      position: relative;
+      padding: 0.5rem 1rem;
+      border: 1px solid white;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+      overflow: hidden;
+      background-color: transparent;
+      color: white;
+    }
+    
+    .tab-btn.active {
+      background-color: white;
+      color: black;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
+    }
+    
+    .tab-btn:not(.active):hover {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    }
+    
+    .tab-btn:not(.active):hover span {
+      color: black;
+    }
+    
+    .tab-btn span {
+      position: relative;
+      z-index: 10;
+      transition: color 0.3s ease;
+    }
+    
+    .tab-btn:not(.active)::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 0;
+      transition: all 0.3s ease-out;
+      background-color: white;
+      z-index: 0;
+    }
+    
+    .tab-btn:not(.active):hover::after {
+      height: 100%;
+    }
+    
+    /* Content section styles */
+    section.content {
+      padding: 0 0.75rem;
+      padding-bottom: 2.5rem;
+      transition: all 0.5s ease;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+      z-index: 0;
+    }
+    
+    section.content.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      position: relative;
+      z-index: 5;
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: 640px) {
+      .content-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .content-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
+      }
+      
+      header .title {
+        font-size: 2rem;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .content-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+    
+    @media (min-width: 1280px) {
+      .content-grid {
+        grid-template-columns: repeat(8, 1fr);
+      }
+    }
+    
+    /* Content Card styles - MODIFIED to be full width/height */
+    .content-card {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.7s ease;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .content-card.loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .card {
+      position: relative;
+      border: 1px solid white;
+      border-radius: 0.375rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.7);
+      aspect-ratio: 2/3;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.15);
+    }
+    
+    .card-image {
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: all 0.5s ease;
+    }
+    
+    .card:hover .card-image {
+      transform: scale(1.05);
+    }
+    
+    /* MODIFIED: Title only shows on hover */
+    .card-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.5rem;
+      text-align: center;
+      font-weight: 500;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+      border-top: 1px solid white;
+      font-size: 0.75rem;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    
+    .card:hover .card-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent, black);
+      opacity: 0.3;
+    }
+    
+    .card-tag {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      display: inline-block;
+      padding: 0.125rem 0.375rem;
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background-color: white;
+      color: black;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+    
+    /* Footer styles */
+    footer {
+      text-align: center;
+      padding: 0.5rem 0;
+      font-size: 0.75rem;
+      color: #a0a0a0;
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      transition: all 0.7s ease;
+    }
+    
+    footer.loaded {
+      opacity: 0.7;
+    }
+    
+    /* Player styles */
+    .player-container {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background-color: black;
+      display: none;
+    }
+    
+    .player-container.active {
+      display: block;
+    }
+    
+    .back-btn {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 10;
+      padding: 0.375rem 0.75rem;
+      background-color: black;
+      color: white;
+      border: 1px solid white;
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+      transform: translateY(-10px);
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .back-btn.loaded {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .back-btn:hover {
+      background-color: white;
+      color: black;
+    }
+    
+    .player-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      height: 100vh;
+      padding-top: 3rem;
+      transition: opacity 0.7s ease;
+      opacity: 0;
+      align-items: center;
+    }
+    
+    .player-content.loaded {
+      opacity: 1;
+    }
+    
+    /* Video container - auto-adjusts to video size */
+    .video-container {
+      flex: 3;
+      border: 1px solid white;
+      border-radius: 0.375rem;
+      overflow: hidden;
+      background-color: black;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      width: 100%;
+      /* Fixed aspect ratio for video container */
+      aspect-ratio: 16/9;
+      position: relative;
+    }
+    
+    #videoPlayer {
+      border: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+    }
+    
+    @media (min-width: 768px) {
+      .player-content {
+        flex-direction: row;
+        padding: 1.5rem;
+      }
+    }
+    
+    /* Sidebar for shows */
+    .sidebar {
+      flex: 1;
+      border: 1px solid white;
+      border-radius: 0.375rem;
+      padding: 0.75rem;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 25%;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      transition: all 0.5s ease;
+    }
+    
+    @media (min-width: 768px) {
+      .sidebar {
+        height: auto;
+      }
+    }
+    
+    .sidebar-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      position: relative;
+      display: inline-block;
+      align-self: center;
+    }
+    
+    .sidebar-title::after {
+      content: '';
+      position: absolute;
+      bottom: -0.125rem;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: white;
+    }
+    
+    .seasons-grid {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    
+    .season-btn {
+      flex: 1;
+      padding: 0.25rem 0.5rem;
+      border: 1px solid white;
+      border-radius: 0.25rem;
+      transition: all 0.3s ease;
+      min-width: 30px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.75rem;
+      background-color: transparent;
+      color: white;
+      cursor: pointer;
+    }
+    
+    .season-btn.active {
+      background-color: white;
+      color: black;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    
+    .season-btn:hover:not(.active) {
+      background-color: white;
+      color: black;
+    }
+    
+    .episode-list {
+      flex-grow: 1;
+      border: 1px solid white;
+      border-radius: 0.25rem;
+      overflow: hidden;
+    }
+    
+    .episode-select {
+      width: 100%;
+      height: 100%;
+      padding: 0.5rem;
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 0.25rem;
+      outline: none;
+      font-size: 0.75rem;
+      overflow-y: auto;
+    }
+    
+    .episode-select:focus {
+      box-shadow: 0 0 0 1px white;
+    }
+    
+    .episode-select option {
+      padding: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Particles container for snow effect -->
+  <div id="particles-js"></div>
+  <div id="player-particles-js"></div>
+
+  <div class="container">
+    <header>
+      <h1 class="title">꧁༺𝚂𝚢𝚏𝚎𝚛-𝚎𝚗𝚐 ༻꧂
+      <nav>
+        <button class="tab-btn active" data-tab="movies"><span>Movies</span></button>
+        <button class="tab-btn" data-tab="shows"><span>TV Shows</span></button>
+      </nav>
+    </header>
+
+    <section id="movies" class="content active">
+      <div class="content-grid" id="moviesGrid">
+        <!-- Movies will be dynamically added here -->
+      </div>
+    </section>
+
+    <section id="shows" class="content">
+      <div class="content-grid" id="showsGrid">
+        <!-- Shows will be dynamically added here -->
+      </div>
+    </section>
+
+    <footer>
+      <p> 𝙼𝚊𝚍𝚎 𝙱𝚢 ꧁༺ 𝓢𝔂𝓯𝓮𝓻-𝓮𝓷𝓰 ༻꧂, 𝙰𝚕𝚕 𝚛𝚒𝚐𝚑𝚝𝚜 𝚛𝚎𝚜𝚎𝚛𝚟𝚎𝚍 ◔_◔</p>
+    </footer>
+  </div>
+
+  <div class="player-container">
+    <button class="back-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      <span>Back</span>
+    </button>
+    <div class="player-content">
+      <div class="video-container">
+        <!-- Using iframe for Google Drive videos -->
+        <iframe id="videoPlayer" allowfullscreen allow="autoplay" src=""></iframe>
+      </div>
+      <div class="sidebar">
+        <h3 class="sidebar-title">Episodes</h3>
+        <div class="seasons-grid" id="seasonsGrid">
+          <!-- Season buttons will be dynamically added here -->
+        </div>
+        <div class="episode-list">
+          <select class="episode-select" id="episodeSelect" size="10">
+            <!-- Episodes will be dynamically added here -->
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample data for movies and shows
+    const movies = [
+      // You can add Google Drive links directly as the video source
+      // Example with the link you provided
+      { id: 1, title: "Terrifier", image: "https://image.tmdb.org/t/p/original/4lwh4MX2yCogHflyAYMRbfdnpnm.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/17g-2rrulET5RfVDAaJkHAWX1p3G2Q6g-/preview" },
+      { id: 2, title: "Terrifier 2", image: "https://wallpapercave.com/wp/wp11570036.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1s15nZ5Y3cby2dAiz8uLmtZWxU5-VGNEL/preview" },
+      { id: 3, title: "Terrifier 3", image: "https://mlpnk72yciwc.i.optimole.com/cqhiHLc.IIZS~2ef73/w:auto/h:auto/q:75/https://bleedingcool.com/wp-content/uploads/2024/08/terrifier_three_ver2_xxlg.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1MKAvj7e9nSE1lsLRC6uFGOTqTHiAeM6l/preview" },
+      { id: 4, title: "Art Attack The Dissection of Terrifier 3", image: "https://raw.githubusercontent.com/Website-Tree/Website-Tree.github.io/refs/heads/main/Movie%20Website/pic/OIP.png", tag: "", videoUrl: "https://drive.google.com/file/d/1Y2XPYXug37JQCJWuw_U6wjz6iDOEUZlM/preview" },
+      { id: 5, title: "Boss Level", image: "https://m.media-amazon.com/images/S/pv-target-images/8d5a4010e92695fda74acf97d4b5daac9ef5269be31a18167ef4b3a49e23fd32.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1czrvF08FZ9z60LMEzOJeoKXUfWBBWmIW/preview" },
+      { id: 6, title: "I Want to Eat Your Pancreas", image: "https://th.bing.com/th/id/R.b4e9bc8dd7146f060083710ce6f4b7f6?rik=o6KbV5xgbDBz7g&pid=ImgRaw&r=0", tag: "", videoUrl: "https://drive.google.com/file/d/1joB-F1BS8IuTatp_SeJR7Qy-vWP6kwXT/preview" },
+      { id: 7, title: "Just Friends", image: "https://www.themoviedb.org/t/p/original/jgs2mdFlx8NJzbxXTHeQxvQbN6n.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1fv1lEHQdstZr8dX3JzlnRPzCsXV_GPS1/preview" },
+      { id: 8, title: "Five Nights at Freddys", image: "https://m.media-amazon.com/images/S/pv-target-images/209fac05a1e266f8ce561ba32744c3263c0397ab78f6dd3f968e43e53dd6557c.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1u33kRzaT8kOUyfxosEUIBWKglOegRyNu/preview" },
+      { id: 9, title: "Pacific Rim", image: "https://image.tmdb.org/t/p/original/zvEoMy4g1TbpKyQlcCPeoTo9JKY.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1BBeoAzaD2QAtiEn3k9EhL__3Ju9A6vH0/preview" },
+      { id: 10, title: "Pacific Rim Uprising", image: "https://th.bing.com/th/id/R.260032a7fe3ccabdf1be61c148296fff?rik=1ZGwZ6gVp9VkwA&pid=ImgRaw&r=0", tag: "", videoUrl: "https://drive.google.com/file/d/1aTTPEnc2mTt7IC_Oex_lCLsqSKgMpcmK/preview" },
+      { id: 11, title: "Chappie", image: "https://th.bing.com/th/id/R.3ffa77d9c1a342489aacc9f4c45e0a4e?rik=E9X87xTq8uWrVw&pid=ImgRaw&r=0", tag: "", videoUrl: "https://drive.google.com/file/d/1q3-pdc4U0qVRk1KuOG1I3VWhbylQgM8E/preview" },
+      { id: 12, title: "The Truman Show", image: "https://image.tmdb.org/t/p/original/vuza0WqY239yBXOadKlGwJsZJFE.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1ibLRfGjjmbnXgwJmg244Zq-GVmUAK-dk/preview" },
+      { id: 13, title: "Red One", image: "https://www.dvdsreleasedates.com/posters/800/R/Red-One-2024-movie-poster.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1jzzlt2LB9iVtpkvqt1ax5hgYDSI43D6s/preview" },
+      { id: 14, title: "Y2K", image: "https://th.bing.com/th/id/OIP.Pdf2_Kl0HrJ0h3uA2It1_gHaK8?rs=1&pid=ImgDetMain", tag: "", videoUrl: "https://drive.google.com/file/d/1Uc4HJW3sVYNBRkqXjhSJYqSdyOMoU-ug/preview" },
+      { id: 15, title: "The Simpsons O Cmon All Ye Faithful", image: "https://image.tmdb.org/t/p/original/9veQs3Kiew5e6M9tixzi0Vj13Yb.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/13Q_VyV3ki3KoK05vOGd57eI1faNt-wRB/preview" },
+      { id: 16, title: "A Silent Voice", image: "https://th.bing.com/th/id/OIP.XsYB2GewrfshMVOHaS0qqwHaNK?rs=1&pid=ImgDetMain", tag: "", videoUrl: "https://drive.google.com/file/d/173Fvd2ubE9FRJcTAEqt3ruO_e2tfhEK-/preview" },
+      { id: 17, title: "Inside Out 2", image: "https://th.bing.com/th/id/OIP.MAxOZws4vnhTbsqJCKfCIwHaJQ?rs=1&pid=ImgDetMain", tag: "", videoUrl: "https://drive.google.com/file/d/1vL-lG6BqGolI7QPsYJsEg4KW3hrsjDFQ/preview" },
+      { id: 18, title: "Naruto Shippûden The Movie", image: "https://www.themoviedb.org/t/p/original/vDkct38sSFSWJIATlfJw0l3QOIR.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1YZxUYXZLYHiGFVuFrHOxxrjKMkVA3HIt/preview" },
+      { id: 19, title: "Despicable Me 4", image: "https://image.tmdb.org/t/p/original/dbtxg1bQYYuWMQvtEuoiUe4uvFJ.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/18C9tMLU9sehlA5eRdJyxNwsttKkMpS2U/preview" },
+      { id: 20, title: "I Robot", image: "https://c8.alamy.com/comp/BCYE86/i-robot-year-2004r-director-alex-proya-will-smith-movie-poster-BCYE86.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1IB0sZ_vqMeG5rcVa__otRKXUsGsoo2le/preview" },
+      { id: 21, title: "Scooby Doo", image: "https://tse3.mm.bing.net/th/id/OIP.X3FGjvxIf7rA2obNUyNNhQHaLH?rs=1&pid=ImgDetMain", tag: "", videoUrl: "https://drive.google.com/file/d/166sogtI3irkWxODWEGmqV0AZOWv0ETlf/preview" },
+      { id: 22, title: "Jimmy Neutron Boy Genius", image: "https://1.bp.blogspot.com/-x_ZX2pX1Obs/XvlMVkmfkXI/AAAAAAAADl4/nbQwf-LjmV8AV42qJ3ENLXPoYGiGaZ0rwCLcBGAsYHQ/s1600/jimmy_neutron_boy_genius_ver2_xxlg.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/14Z7kXLeb5JvNK46lE7ZEG9EoLc2GxHvA/preview" },
+      { id: 23, title: "300", image: "https://picfiles.alphacoders.com/997/99760.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1nrH1HzUcvQkyNjf2NsGIRWi4VKELyDN3/preview" },
+      { id: 24, title: "Scream", image: "https://th.bing.com/th/id/OIP.bmt_6I0hmNi_Ysf2Mi4YXQHaLH?rs=1&pid=ImgDetMain", tag: "", videoUrl: "https://drive.google.com/file/d/1E4FWTECykjf8P2OZeDBOV9afiMUcjU9J/preview" },
+      { id: 25, title: "Scream 2", image: "https://tse2.mm.bing.net/th/id/OIP.pm-aPHx0U-zbhfXRF0u23gHaOG?rs=1&pid=ImgDetMain", tag: "", videoUrl: "https://drive.google.com/file/d/1zaKNAoWOnLYtCLxi55xlP1iWllSaY7nV/preview" },
+      { id: 26, title: "Scream 3", image: "https://images-na.ssl-images-amazon.com/images/S/pv-target-images/e5c87bb649a39f03244fd792a4325e0434e27ddce8e3541b85ed37282ee9c441._RI_TTW_.jpg", tag: "", videoUrl: "https://drive.google.com/file/d/1BVhCJj7Q1t9IiY3SKF2ZpQeVxR_KFNcW/preview" },
+      { id: 27, title: "Scream 4", image: "https://tse2.mm.bing.net/th/id/OIP.YaSwePH7YgrBMSt99JraXwHaKs?rs=1&pid=ImgDetMain", tag: "", videoUrl: "https://drive.google.com/file/d/1VXNaCCkhtb9PYHJ1jcQNZ9wCSdTYYwOS/preview" },
+
+    ];
+
+    const shows = [
+      { 
+        id: 1, 
+        title: "The Boys", 
+        image: "https://m.media-amazon.com/images/M/MV5BMWJlN2U5MzItNjU4My00NTM2LWFjOWUtOWFiNjg3ZTMxZDY1XkEyXkFqcGc@._V1_.jpg", 
+        tag: "",
+        seasons: [
+          { 
+            number: 1, 
+            episodes: [
+              { number: 1, title: "The Name of the Game", url: "https://drive.google.com/file/d/1A3MxpBP92BV5ep6e7Xq6_pTXpXI9n7Yi/preview" },
+              { number: 2, title: "Cherry", url: "https://drive.google.com/file/d/1HtiIQHMzgQbSdoOe3Cj7OxuKmShP8d_I/preview" },
+              { number: 3, title: "Get Some", url: "https://drive.google.com/file/d/19LEfUALsAQdrAPhRS2KYejgDqWTyzpoO/preview" },
+                            { number: 4, title: "The Female of the Species", url: "https://drive.google.com/file/d/1TFFIb3th7LIWQAq2z6_FStusBPJ_B-1n/preview" },
+              { number: 5, title: "Good for the Soul", url: "https://drive.google.com/file/d/1yeh_pcq_ifJZWZsMf21N1Q2wuZxPEXgd/preview" },
+              { number: 6, title: "The Innocents", url: "https://drive.google.com/file/d/1Ww52tSqq3Vh4GxWZAV4ct1g11cdZu8yY/preview" },
+                            { number: 7, title: "The Self-Preservation Society", url: "https://drive.google.com/file/d/1e6Gg5tOx4xamQOcOLdQ4LEUig0lt-T55/preview" },
+              { number: 8, title: "You Found Me", url: "https://drive.google.com/file/d/1vYREqLDFcl-RtaHOPYZ4hRR7j2NNGu-B/preview" }
+            ]
+          },
+          {
+                        number: 2, 
+            episodes: [
+              { number: 1, title: "The Big Ride", url: "https://drive.google.com/file/d/1_weKxqD7nzznG9CvH-sToSxli12mNwh-/preview" },
+              { number: 2, title: "Proper Preparation and Planning", url: "https://drive.google.com/file/d/1gwJnjy2QML-pm6KwgEzLNgEjkuBcNCBA/preview" },
+              { number: 3, title: "Over the Hill with the Swords of a Thousand Men", url: "https://drive.google.com/file/d/19op7cT5N0aBeVFyE6eiu7g6UPL4RocXn/preview" },
+                            { number: 4, title: "Nothing Like It in the World", url: "https://drive.google.com/file/d/1VZpu9mxWrQ6Ov9uldqt3EdJqxYEIlebC/preview" },
+              { number: 5, title: "We Gotta Go Now", url: "https://drive.google.com/file/d/1nd4PTutWxM3LlzdYbrCf848S2Pfflzgn/preview" },
+              { number: 6, title: "The Bloody Doors Off", url: "https://drive.google.com/file/d/1XsNrV9LOQK50sf46xnvP5u4T2PFLxWG3/preview" },
+                            { number: 7, title: "Butcher, Baker, Candlestick Maker", url: "https://drive.google.com/file/d/1ncWjNIIqFZzdRCV9PNClTU_JSXNoqs7H/preview" },
+              { number: 8, title: "What I Know", url: "https://drive.google.com/file/d/1v__gLI6R3_YixR__9rvTvFUxeVSOV9hE/preview" }
+            ]
+          },
+          {
+          number: 3, 
+            episodes: [
+              { number: 1, title: "Payback", url: "https://drive.google.com/file/d/1lKKBhHjiOvXSFs5kyiiJ7EQ8R-L3jVJQ/preview" },
+              { number: 2, title: "The Only Man in the Sky", url: "https://drive.google.com/file/d/19aqLtizvmjJCKElLx_D0GmfdRbzpYwfk/preview" },
+              { number: 3, title: "Barbary Coast", url: "https://drive.google.com/file/d/1LsCsOnQwdJXXe2mFHlmZx6mdv7rvBLWe/preview" },
+                            { number: 4, title: "Glorious Five Year Plan", url: "https://drive.google.com/file/d/1a5XhHw7-W0w7bHYSh72HLQG7MIsVyV3Q/preview" },
+              { number: 5, title: "The Last Time to Look on This World of Lies", url: "https://drive.google.com/file/d/1k8D9XjISq6qII7AHlUBaH4nHvcLdTUb1/preview" },
+              { number: 6, title: "Herogasm", url: "https://drive.google.com/file/d/1EugbYvhRxME1EAFxB-x5QEetuKgjsbli/preview" },
+                            { number: 7, title: "Here Comes a Candle to Light You to Bed", url: "https://drive.google.com/file/d/1OFrwLqS6sOFKPZb4ReTyoASPfU12ww0Y/preview" },
+              { number: 8, title: "The Instant White-Hot Wild", url: "https://drive.google.com/file/d/1L6FXHGTLqDaVMorh9dbV78OouNsdFvdV/preview" }
+            ]
+          },
+          {
+            number: 4, 
+            episodes: [
+              { number: 1, title: "Department of Dirty Tricks", url: "https://drive.google.com/file/d/1EWL18BAYdKqjy12XmAqBb-Nylu1AhVXm/preview" },
+              { number: 2, title: "Life Among the Septics", url: "https://drive.google.com/file/d/1lBHOA5W7dOtMDN-zVlHAB-c5iGlcqVtj/preview" },
+              { number: 3, title: "We'll Keep the Red Flag Flying Here", url: "https://drive.google.com/file/d/1uZdCngyGkeR5LjLgulcn6naBiQNtPxZe/preview" },
+             { number: 4, title: "Wisdom of the Ages", url: "https://drive.google.com/file/d/1LfcfKlVUmRMmzKdvHH2Mu4vJbhxouBON/preview" },
+              { number: 5, title: "Beware the Jabberwock, My Son", url: "https://drive.google.com/file/d/1fSspBzmbA9tNhpxCfvYMCI_rTYkF31lm/preview" },
+            { number: 6, title: "Dirty Business", url: "https://drive.google.com/file/d/1aw-dyFVz6C58WRvqky8ETEQPfW0-NRGA/preview" },
+                { number: 7, title: "The Insider", url: "https://drive.google.com/file/d/1gGopY-9oyJwHY8QImbBbR5tvRpGDcQbw/preview" },
+               { number: 8, title: "Season Four Finale", url: "https://drive.google.com/file/d/1gXIikuTzM2e4-lllBmx2yeso9AFFUqDr/preview" }
+            ]
+          }
+        ]
+      },
+    ];
+
+    // Configure snow particles
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize particles.js for main background
+      particlesJS('particles-js', {
+        "particles": {
+          "number": {
+            "value": 200,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": "#ffffff"
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            }
+          },
+          "opacity": {
+            "value": 0.5,
+            "random": true,
+            "anim": {
+              "enable": false,
+              "speed": 1,
+              "opacity_min": 0.1,
+              "sync": false
+            }
+          },
+          "size": {
+            "value": 3,
+            "random": true,
+            "anim": {
+              "enable": false,
+              "speed": 40,
+              "size_min": 0.1,
+              "sync": false
+            }
+          },
+          "line_linked": {
+            "enable": false
+          },
+          "move": {
+            "enable": true,
+            "speed": 2,
+            "direction": "bottom",
+            "random": false,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "repulse"
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "push"
+            },
+            "resize": true
+          },
+          "modes": {
+            "repulse": {
+              "distance": 50,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            }
+          }
+        },
+        "retina_detect": true
+      });
+
+      // Initialize particles for player background
+      particlesJS('player-particles-js', {
+        "particles": {
+          "number": {
+            "value": 200,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": "#ffffff"
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            }
+          },
+          "opacity": {
+            "value": 0.5,
+            "random": true,
+            "anim": {
+              "enable": false,
+              "speed": 1,
+              "opacity_min": 0.1,
+              "sync": false
+            }
+          },
+          "size": {
+            "value": 3,
+            "random": true,
+            "anim": {
+              "enable": false,
+              "speed": 40,
+              "size_min": 0.1,
+              "sync": false
+            }
+          },
+          "line_linked": {
+            "enable": false
+          },
+          "move": {
+            "enable": true,
+            "speed": 2,
+            "direction": "bottom",
+            "random": false,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "repulse"
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "push"
+            },
+            "resize": true
+          },
+          "modes": {
+            "repulse": {
+              "distance": 50,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            }
+          }
+        },
+        "retina_detect": true
+      });
+      
+      // Load UI components with animation
+      setTimeout(() => {
+        document.querySelector('header').classList.add('loaded');
+        document.querySelector('footer').classList.add('loaded');
+        loadMovies();
+        loadShows();
+      }, 300);
+
+      // Handle tab switching
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const tabName = this.getAttribute('data-tab');
+          
+          // Update tab buttons
+          tabBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Show corresponding content
+          document.querySelectorAll('.content').forEach(content => {
+            content.classList.remove('active');
+          });
+          document.getElementById(tabName).classList.add('active');
+        });
+      });
+
+      // Handle back button click (FIX: stop video when clicking back)
+      const backBtn = document.querySelector('.back-btn');
+      backBtn.addEventListener('click', function() {
+        const playerContainer = document.querySelector('.player-container');
+        const videoPlayer = document.getElementById('videoPlayer');
+        
+        // Stop video playback by clearing the iframe source
+        videoPlayer.src = "";
+        
+        // Hide player
+        playerContainer.classList.remove('active');
+      });
+    });
+
+    // Load movies into grid
+    function loadMovies() {
+      const moviesGrid = document.getElementById('moviesGrid');
+      moviesGrid.innerHTML = '';
+      
+      movies.forEach((movie, index) => {
+        const delay = 100 + (index * 50);
+        const card = createCard(movie, delay, 'movie');
+        moviesGrid.appendChild(card);
+      });
+    }
+
+    // Load shows into grid
+    function loadShows() {
+      const showsGrid = document.getElementById('showsGrid');
+      showsGrid.innerHTML = '';
+      
+      shows.forEach((show, index) => {
+        const delay = 100 + (index * 50);
+        const card = createCard(show, delay, 'show');
+        showsGrid.appendChild(card);
+      });
+    }
+
+    // Create a card element
+    function createCard(item, delay, type) {
+      const card = document.createElement('div');
+      card.className = 'content-card';
+      card.innerHTML = `
+        <div class="card" data-id="${item.id}" data-type="${type}">
+          <div class="card-image" style="background-image: url('${item.image}')"></div>
+          <div class="card-overlay"></div>
+          <div class="card-title">${item.title}</div>
+          <div class="card-tag">${item.tag}</div>
+        </div>
+      `;
+      
+      setTimeout(() => {
+        card.classList.add('loaded');
+      }, delay);
+      
+      // Add click event to open player
+      card.querySelector('.card').addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const type = this.getAttribute('data-type');
+        openPlayer(id, type);
+      });
+      
+      return card;
+    }
+
+    // Open the player with selected content
+    function openPlayer(id, type) {
+      const playerContainer = document.querySelector('.player-container');
+      const videoPlayer = document.getElementById('videoPlayer');
+      const backBtn = document.querySelector('.back-btn');
+      const playerContent = document.querySelector('.player-content');
+      const sidebar = document.querySelector('.sidebar');
+      
+      // Reset UI
+      backBtn.classList.remove('loaded');
+      playerContent.classList.remove('loaded');
+      
+      if (type === 'movie') {
+        // For movies, we'll hide the sidebar
+        sidebar.style.display = 'none';
+        const movie = movies.find(m => m.id == id);
+        if (movie) {
+          // Set Google Drive video URL
+          videoPlayer.src = movie.videoUrl;
+          
+          // Show player UI with animation
+          playerContainer.classList.add('active');
+          setTimeout(() => {
+            backBtn.classList.add('loaded');
+            playerContent.classList.add('loaded');
+          }, 100);
+        }
+      } else if (type === 'show') {
+        // For shows, we'll show the sidebar
+        sidebar.style.display = 'flex';
+        const show = shows.find(s => s.id == id);
+        if (show && show.seasons) {
+          // Load seasons
+          loadSeasons(show);
+          
+          // Set initial episode
+          if (show.seasons[0] && show.seasons[0].episodes[0]) {
+            videoPlayer.src = show.seasons[0].episodes[0].url;
+          }
+          
+          // Show player UI with animation
+          playerContainer.classList.add('active');
+          setTimeout(() => {
+            backBtn.classList.add('loaded');
+            playerContent.classList.add('loaded');
+          }, 100);
+        }
+      }
+    }
+
+    // Load seasons and episodes for a show
+    function loadSeasons(show) {
+      const seasonsGrid = document.getElementById('seasonsGrid');
+      const episodeSelect = document.getElementById('episodeSelect');
+      
+      // Clear previous data
+      seasonsGrid.innerHTML = '';
+      episodeSelect.innerHTML = '';
+      
+      // Load seasons
+      if (show.seasons && show.seasons.length > 0) {
+        show.seasons.forEach((season, index) => {
+          const seasonBtn = document.createElement('button');
+          seasonBtn.className = 'season-btn' + (index === 0 ? ' active' : '');
+          seasonBtn.textContent = 'S' + season.number;
+          seasonBtn.setAttribute('data-season', season.number);
+          
+          seasonBtn.addEventListener('click', function() {
+            // Update active button
+            document.querySelectorAll('.season-btn').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Load episodes for this season
+            loadEpisodes(show, season.number);
+          });
+          
+          seasonsGrid.appendChild(seasonBtn);
+        });
+        
+        // Load episodes for first season by default
+        loadEpisodes(show, show.seasons[0].number);
+      }
+    }
+
+    // Load episodes for a specific season
+    function loadEpisodes(show, seasonNumber) {
+      const episodeSelect = document.getElementById('episodeSelect');
+      const videoPlayer = document.getElementById('videoPlayer');
+      
+      // Clear previous episodes
+      episodeSelect.innerHTML = '';
+      
+      // Find the season
+      const season = show.seasons.find(s => s.number == seasonNumber);
+      if (season && season.episodes) {
+        // Add episodes to select
+        season.episodes.forEach(episode => {
+          const option = document.createElement('option');
+          option.value = episode.url;
+          option.textContent = `E${episode.number}: ${episode.title}`;
+          episodeSelect.appendChild(option);
+        });
+        
+        // Set first episode as selected
+        if (season.episodes.length > 0) {
+          episodeSelect.value = season.episodes[0].url;
+          videoPlayer.src = season.episodes[0].url;
+        }
+        
+        // Add change event to select
+        episodeSelect.addEventListener('change', function() {
+          videoPlayer.src = this.value;
+          videoPlayer.play();
+        });
+      }
+    }
+  </script>
+</body>
+</html>
