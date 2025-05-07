@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- particles.js for background effect -->
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <style>
     /* Base styles */
     * {
@@ -648,129 +648,93 @@
   <script>
     // Initialize particles.js
     document.addEventListener('DOMContentLoaded', function() {
-      particlesJS('particles-js', {
-        "particles": {
-          "number": {
-            "value": 150,
-            "density": {
-              "enable": true,
-              "value_area": 800
-            }
-          },
-          "color": {
-            "value": "#ffffff"
-          },
-          "shape": {
-            "type": "circle",
-            "stroke": {
-              "width": 0,
-              "color": "#000000"
+        const particlesConfig = {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: "#8a2be2"
+                },
+                shape: {
+                    type: "circle",
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#8a2be2",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                }
             },
-            "polygon": {
-              "nb_sides": 5
-            }
-          },
-          "opacity": {
-            "value": 0.6,
-            "random": true,
-            "anim": {
-              "enable": false,
-              "speed": 1,
-              "opacity_min": 0.1,
-              "sync": false
-            }
-          },
-          "size": {
-            "value": 4,
-            "random": true,
-            "anim": {
-              "enable": false,
-              "speed": 40,
-              "size_min": 0.3,
-              "sync": false
-            }
-          },
-          "line_linked": {
-            "enable": false,
-            "distance": 500,
-            "color": "#ffffff",
-            "opacity": 0.4,
-            "width": 2
-          },
-          "move": {
-            "enable": true,
-            "speed": 3,
-            "direction": "bottom",
-            "random": false,
-            "straight": false,
-            "out_mode": "out",
-            "bounce": false,
-            "attract": {
-              "enable": false,
-              "rotateX": 600,
-              "rotateY": 1200
-            }
-          }
-        },
-        "interactivity": {
-          "detect_on": "canvas",
-          "events": {
-            "onhover": {
-              "enable": true,
-              "mode": "repulse"
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: "grab"
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: "push"
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 1
+                        }
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
             },
-            "onclick": {
-              "enable": true,
-              "mode": "repulse"
-            },
-            "resize": true
-          },
-          "modes": {
-            "grab": {
-              "distance": 400,
-              "line_linked": {
-                "opacity": 0.5
-              }
-            },
-            "bubble": {
-              "distance": 400,
-              "size": 4,
-              "duration": 0.3,
-              "opacity": 1,
-              "speed": 3
-            },
-            "repulse": {
-              "distance": 100,
-              "duration": 0.4
-            },
-            "push": {
-              "particles_nb": 4
-            },
-            "remove": {
-              "particles_nb": 2
-            }
-          }
-        },
-        "retina_detect": true
-      });
-      
-      // Tab switching functionality
-      document.querySelectorAll('.tab-btn').forEach(button => {
-        button.addEventListener('click', () => {
-          // Update active tab button
-          document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active');
-          });
-          button.classList.add('active');
-          
-          // Update active content section
-          const tabId = button.getAttribute('data-tab');
-          document.querySelectorAll('section.content').forEach(section => {
-            section.classList.remove('active');
-          });
-          document.getElementById(tabId).classList.add('active');
+            retina_detect: true
+        };
+        
+        // Initialize main particles
+        particlesJS('particles-js', particlesConfig);
+        
+        // Initialize player particles
+        particlesJS('player-particles-js', particlesConfig);
+        
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
         });
-      });
       
       // Project card click functionality
       document.querySelectorAll('.card').forEach(card => {
