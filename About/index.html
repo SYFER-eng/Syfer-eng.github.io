@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>꧁༺𝚂𝚢𝚏𝚎𝚛-𝚎𝚗𝚐 ༻꧂</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- particles.js for background effect -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <style>
+    /* Base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      background-color: #000000;
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+    }
+    
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(to bottom, #111111, #000000);
+    }
+    
+    canvas {
+      display: block;
+    }
+    
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #ffffff;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #cccccc;
+    }
+    
+    ::selection {
+      background-color: #ffffff;
+      color: #000000;
+    }
+    
+    /* Main Container */
+    .container {
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Header styles */
+    header {
+      text-align: center;
+      padding: 2rem 0;
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeIn 0.7s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .title {
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      background-image: linear-gradient(to right, white, #a0a0a0);
+    }
+    
+    .title::after {
+      content: '';
+      position: absolute;
+      bottom: -0.25rem;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: white;
+    }
+    
+    /* Navigation styles */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding: 0 1rem;
+    }
+    
+    .tab-btn {
+      position: relative;
+      padding: 0.5rem 1rem;
+      border: 1px solid white;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+      overflow: hidden;
+      background-color: transparent;
+      color: white;
+    }
+    
+    .tab-btn.active {
+      background-color: white;
+      color: black;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
+    }
+    
+    .tab-btn:not(.active):hover {
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+    }
+    
+    .tab-btn:not(.active):hover span {
+      color: black;
+    }
+    
+    .tab-btn span {
+      position: relative;
+      z-index: 10;
+      transition: color 0.3s ease;
+    }
+    
+    .tab-btn:not(.active)::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 0;
+      transition: all 0.3s ease-out;
+      background-color: white;
+      z-index: 0;
+    }
+    
+    .tab-btn:not(.active):hover::after {
+      height: 100%;
+    }
+    
+    /* Content section styles */
+    section.content {
+      padding: 0 0.75rem;
+      padding-bottom: 2.5rem;
+      transition: all 0.5s ease;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+      z-index: 0;
+    }
+    
+    section.content.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      position: relative;
+      z-index: 5;
+    }
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: 640px) {
+      .content-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (min-width: 768px) {
+      .content-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+      }
+      
+      header .title {
+        font-size: 2.5rem;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .content-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (min-width: 1280px) {
+      .content-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    /* Card styles */
+    .content-card {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: cardFadeIn 0.7s ease forwards;
+      animation-delay: calc(var(--i) * 0.1s);
+      width: 100%;
+      height: 100%;
+    }
+    
+    @keyframes cardFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .card {
+      position: relative;
+      border: 1px solid white;
+      border-radius: 0.375rem;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.7);
+      aspect-ratio: 2/3;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.15);
+    }
+    
+    .card-image {
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: all 0.5s ease;
+    }
+    
+    .card:hover .card-image {
+      transform: scale(1.05);
+    }
+    
+    .card-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.5rem;
+      text-align: center;
+      font-weight: 500;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+      border-top: 1px solid white;
+      font-size: 0.75rem;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    
+    .card:hover .card-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent, black);
+      opacity: 0.3;
+    }
+    
+    .card-tag {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      display: inline-block;
+      padding: 0.125rem 0.375rem;
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background-color: white;
+      color: black;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+    
+    /* About Me Section */
+    .about-me {
+      padding: 2rem;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 0.375rem;
+      border: 1px solid white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      margin-bottom: 2rem;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      animation: fadeIn 0.7s ease forwards;
+      animation-delay: 0.2s;
+      backdrop-filter: blur(4px);
+    }
+    
+    @media (min-width: 768px) {
+      .about-me {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 2rem;
+      }
+    }
+    
+    .about-image {
+      flex-shrink: 0;
+      margin-bottom: 1.5rem;
+      align-self: center;
+    }
+    
+    @media (min-width: 768px) {
+      .about-image {
+        margin-bottom: 0;
+        align-self: flex-start;
+      }
+    }
+    
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+    
+    .about-content {
+      flex-grow: 1;
+    }
+    
+    .about-name {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: white;
+    }
+    
+    .about-title {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #a0a0a0;
+      margin-bottom: 1rem;
+    }
+    
+    .about-bio {
+      margin-bottom: 1.5rem;
+      color: #e2e2e2;
+      line-height: 1.6;
+    }
+    
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: #c9c9c9;
+    }
+    
+    .contact-item i {
+      color: white;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: transparent;
+      color: white;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      border: 1px solid white;
+    }
+    
+    .social-link:hover {
+      background-color: white;
+      color: black;
+      transform: translateY(-3px);
+    }
+    
+    /* Footer styles */
+    footer {
+      text-align: center;
+      padding: 0.5rem 0;
+      font-size: 0.75rem;
+      color: #a0a0a0;
+      position: relative;
+      z-index: 10;
+      opacity: 0;
+      animation: fadeIn 0.7s ease forwards;
+      animation-delay: 0.3s;
+    }
+    
+    /* Detail panel styles */
+    .detail-panel {
+      position: fixed;
+      top: 0;
+      right: -500px;
+      width: 100%;
+      max-width: 500px;
+      height: 100vh;
+      background-color: white;
+      z-index: 100;
+      box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      overflow-y: auto;
+      transition: right 0.5s ease;
+    }
+    
+    .detail-panel.open {
+      right: 0;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #64748b;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    
+    .close-btn:hover {
+      color: #4b6cb7;
+    }
+    
+    .detail-content {
+      margin-top: 2rem;
+    }
+    
+    .detail-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #182848;
+    }
+    
+    .detail-subtitle {
+      font-size: 1rem;
+      color: #4b6cb7;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    
+    .detail-description {
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+    
+    .detail-image {
+      width: 100%;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .detail-link {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: #4b6cb7;
+      color: white;
+      text-decoration: none;
+      border-radius: 0.375rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .detail-link:hover {
+      background-color: #182848;
+      transform: translateY(-2px);
+    }
+    
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Particles container for background effect -->
+  <div id="particles-js"></div>
+
+  <div class="container">
+    <header>
+      <h1 class="title">꧁༺𝚂𝚢𝚏𝚎𝚛-𝚎𝚗𝚐 ༻꧂</h1>
+      <nav>
+        <button class="tab-btn active" data-tab="about"><span>About</span></button>
+      </nav>
+    </header>
+
+    <section id="about" class="content active">
+      <div class="about-me">
+        <div class="about-image">
+          <img src="https://avatars.githubusercontent.com/u/182472538?v=4" alt="Syfer-eng" class="profile-pic">
+        </div>
+        <div class="about-content">
+          <h2 class="about-name">Syfer-eng</h2>
+          <p class="about-title">High Schooler</p>
+          <p class="about-bio">
+            I Am A Bannana
+          </p>
+          
+          <div class="contact-info">
+            <div class="contact-item">
+              <i class="fas fa-building"></i>
+              <span>Coder</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>A Place</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>TeeganDunlap123@gmail.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-globe"></i>
+              <span>Syfer-eng.github.io</span>
+            </div>
+          </div>
+          
+          <div class="social-links">
+            <a href="https://github.com/SYFER-eng" class="social-link">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="Tur_tle818" class="social-link">
+              <i class="fab fa-snapchat"></i>
+            </a>
+            <a href="https://www.tiktok.com/@__galaxy_stars__" class="social-link">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="Idk" class="social-link">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+
+
+    <footer>
+      <p>Sup</p>
+    </footer>
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="detail-panel">
+    <button class="close-btn">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="detail-content">
+      <!-- Content will be dynamically loaded here -->
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay"></div>
+
+  <script>
+    // Initialize particles.js
+    document.addEventListener('DOMContentLoaded', function() {
+      particlesJS('particles-js', {
+        "particles": {
+          "number": {
+            "value": 150,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": "#ffffff"
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#000000"
+            },
+            "polygon": {
+              "nb_sides": 5
+            }
+          },
+          "opacity": {
+            "value": 0.6,
+            "random": true,
+            "anim": {
+              "enable": false,
+              "speed": 1,
+              "opacity_min": 0.1,
+              "sync": false
+            }
+          },
+          "size": {
+            "value": 4,
+            "random": true,
+            "anim": {
+              "enable": false,
+              "speed": 40,
+              "size_min": 0.3,
+              "sync": false
+            }
+          },
+          "line_linked": {
+            "enable": false,
+            "distance": 500,
+            "color": "#ffffff",
+            "opacity": 0.4,
+            "width": 2
+          },
+          "move": {
+            "enable": true,
+            "speed": 3,
+            "direction": "bottom",
+            "random": false,
+            "straight": false,
+            "out_mode": "out",
+            "bounce": false,
+            "attract": {
+              "enable": false,
+              "rotateX": 600,
+              "rotateY": 1200
+            }
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": true,
+              "mode": "repulse"
+            },
+            "onclick": {
+              "enable": true,
+              "mode": "repulse"
+            },
+            "resize": true
+          },
+          "modes": {
+            "grab": {
+              "distance": 400,
+              "line_linked": {
+                "opacity": 0.5
+              }
+            },
+            "bubble": {
+              "distance": 400,
+              "size": 4,
+              "duration": 0.3,
+              "opacity": 1,
+              "speed": 3
+            },
+            "repulse": {
+              "distance": 100,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            },
+            "remove": {
+              "particles_nb": 2
+            }
+          }
+        },
+        "retina_detect": true
+      });
+      
+      // Tab switching functionality
+      document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          // Update active tab button
+          document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+          });
+          button.classList.add('active');
+          
+          // Update active content section
+          const tabId = button.getAttribute('data-tab');
+          document.querySelectorAll('section.content').forEach(section => {
+            section.classList.remove('active');
+          });
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+      
+      // Project card click functionality
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', () => {
+          const detailPanel = document.querySelector('.detail-panel');
+          const overlay = document.querySelector('.overlay');
+          
+          // For demonstration purposes, we'll just show/hide the panel
+          detailPanel.classList.add('open');
+          overlay.classList.add('open');
+          
+          // In a real implementation, you would load the specific project details here
+          const detailContent = detailPanel.querySelector('.detail-content');
+          const projectId = card.getAttribute('data-id');
+          if (projectId) {
+            // Example of dynamic content loading based on clicked card
+            const title = card.querySelector('.card-title')?.textContent || 'Project Details';
+            detailContent.innerHTML = `
+              <h2 class="detail-title">${title}</h2>
+              <p class="detail-subtitle">Detailed Project Information</p>
+              <img src="${card.querySelector('.card-image').style.backgroundImage.slice(5, -2)}" class="detail-image" alt="${title}">
+              <p class="detail-description">
+                This is a detailed description of the project. In a real implementation, this would contain comprehensive information about the project, including its purpose, challenges, solutions, and outcomes.
+              </p>
+              <div class="detail-tags">
+                ${Array.from(card.querySelectorAll('.card-tag')).map(tag => `<span class="card-tag">${tag.textContent}</span>`).join('')}
+              </div>
+              <a href="#" class="detail-link">View Project</a>
+            `;
+          }
+        });
+      });
+      
+      // Close panel functionality
+      document.querySelector('.close-btn').addEventListener('click', () => {
+        document.querySelector('.detail-panel').classList.remove('open');
+        document.querySelector('.overlay').classList.remove('open');
+      });
+      
+      document.querySelector('.overlay').addEventListener('click', () => {
+        document.querySelector('.detail-panel').classList.remove('open');
+        document.querySelector('.overlay').classList.remove('open');
+      });
+    });
+  </script>
+</body>
+</html>
