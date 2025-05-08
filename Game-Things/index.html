@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameStream - Play Your Favorite Games</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset and Base Styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-color: #121212;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.5;
+    }
+    
+    /* Typography */
+    .font-orbitron {
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    /* Layout */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    /* Navbar */
+    .navbar {
+      background-color: rgba(18, 18, 18, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(123, 63, 228, 0.2);
+    }
+    
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: white;
+      text-decoration: none;
+    }
+    
+    .logo span {
+      color: #7b3fe4; /* Primary color */
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .nav-link {
+      color: #f8f8f8;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      color: #7b3fe4;
+    }
+    
+    .admin-link {
+      color: #7b3fe4;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 3rem 0;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .hero p {
+      font-size: 1.25rem;
+      color: #d1d1d1;
+      max-width: 700px;
+      margin: 0 auto 2rem auto;
+    }
+    
+    /* Game Grid */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem 0;
+    }
+    
+    /* Game Card */
+    .game-card {
+      background-color: #1e1e1e;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      border: 1px solid rgba(123, 63, 228, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .game-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(123, 63, 228, 0.3);
+    }
+    
+    .game-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    
+    .game-content {
+      padding: 1.25rem;
+    }
+    
+    .game-category {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .game-action, .category-action {
+      background-color: #32a37d;
+      color: white;
+    }
+    
+    .game-adventure, .category-adventure {
+      background-color: #7b3fe4;
+      color: white;
+    }
+    
+    .game-puzzle, .category-puzzle {
+      background-color: #e4613f;
+      color: white;
+    }
+    
+    .game-racing, .category-racing {
+      background-color: #3f8ce4;
+      color: white;
+    }
+    
+    .game-strategy, .category-strategy {
+      background-color: #e43f8c;
+      color: white;
+    }
+    
+    .game-card h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .game-card p {
+      color: #a0a0a0;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+    
+    .play-btn {
+      background-color: rgba(123, 63, 228, 0.2);
+      color: #7b3fe4;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.875rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .play-btn:hover {
+      background-color: rgba(123, 63, 228, 0.3);
+    }
+    
+    /* Game Player */
+    .game-player {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background-color: black;
+      display: none;
+      flex-direction: column;
+    }
+    
+    .game-player.active {
+      display: flex;
+    }
+    
+    .player-header {
+      padding: 1rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .close-btn {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .close-btn:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    
+    .player-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .game-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    /* Request Form Section */
+    .request-section {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: #1e1e1e;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(123, 63, 228, 0.2);
+    }
+    
+    .request-section h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .request-section p {
+      color: #a0a0a0;
+      margin-bottom: 2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.375rem;
+      background-color: #2a2a2a;
+      border: 1px solid #3a3a3a;
+      color: white;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #7b3fe4;
+    }
+    
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .form-button {
+      background-color: #7b3fe4;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .form-button:hover {
+      background-color: #6a34c5;
+    }
+    
+    .form-button:disabled {
+      background-color: #4a4a4a;
+      cursor: not-allowed;
+    }
+    
+    /* Success message */
+    .success-message {
+      text-align: center;
+      padding: 2rem 0;
+    }
+    
+    .success-icon {
+      width: 4rem;
+      height: 4rem;
+      background-color: rgba(123, 63, 228, 0.2);
+      border-radius: 50%;
+      margin: 0 auto 1rem auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7b3fe4;
+      font-size: 1.5rem;
+    }
+    
+    .success-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .success-desc {
+      color: #d1d1d1;
+      margin-bottom: 1.5rem;
+    }
+    
+    .home-btn {
+      background-color: rgba(123, 63, 228, 0.2);
+      color: #7b3fe4;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.875rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .home-btn:hover {
+      background-color: rgba(123, 63, 228, 0.3);
+    }
+    
+    /* Admin Section */
+    .admin-section {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: #1e1e1e;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(123, 63, 228, 0.2);
+    }
+    
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .admin-badge {
+      background-color: #7b3fe4;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    /* Table styles */
+    .table-container {
+      overflow-x: auto;
+    }
+    
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .admin-table th, .admin-table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    
+    .admin-table th {
+      font-weight: 600;
+      color: #a0a0a0;
+    }
+    
+    .view-btn {
+      background-color: transparent;
+      color: #d1d1d1;
+      border: 1px solid #3a3a3a;
+      border-radius: 0.25rem;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .view-btn:hover {
+      background-color: #2a2a2a;
+    }
+    
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    
+    .modal {
+      background-color: #1e1e1e;
+      border-radius: 0.75rem;
+      width: 90%;
+      max-width: 500px;
+      padding: 1.5rem;
+      border: 1px solid rgba(123, 63, 228, 0.2);
+    }
+    
+    .modal-header {
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .modal-content {
+      margin-bottom: 1.5rem;
+    }
+    
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .detail-label {
+      color: #a0a0a0;
+      font-size: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .detail-value {
+      font-weight: 500;
+    }
+    
+    .description-box {
+      background-color: #121212;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-top: 0.25rem;
+    }
+    
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+    
+    .ack-btn {
+      background-color: #7b3fe4;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .ack-btn:hover {
+      background-color: #6a34c5;
+    }
+    
+    /* Auth Page */
+    .auth-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: calc(100vh - 73px);
+    }
+    
+    @media (min-width: 768px) {
+      .auth-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .auth-form {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .auth-hero {
+      background: linear-gradient(135deg, #7b3fe4 0%, #3b1e70 100%);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .auth-hero h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .auth-hero p {
+      max-width: 400px;
+      margin-bottom: 2rem;
+    }
+    
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    
+    .auth-tab {
+      padding: 0.75rem 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s ease, border-color 0.3s ease;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .auth-tab.active {
+      color: #7b3fe4;
+      border-color: #7b3fe4;
+    }
+    
+    /* Footer */
+    .footer {
+      background-color: #1a1a1a;
+      padding: 2rem 0;
+      margin-top: 3rem;
+    }
+    
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 768px) {
+      .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    
+    .footer-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: white;
+      text-decoration: none;
+    }
+    
+    .footer-logo span {
+      color: #7b3fe4;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .footer-link {
+      color: #a0a0a0;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-link:hover {
+      color: #7b3fe4;
+    }
+    
+    .footer-text {
+      color: #a0a0a0;
+      font-size: 0.875rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .hero h1 {
+        font-size: 1.75rem;
+      }
+      
+      .hero p {
+        font-size: 1rem;
+      }
+      
+      .game-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Hide the game request form and admin modal by default */
+    #requestForm, #requestSuccess, #adminModal {
+      display: none;
+    }
+
+    /* Show active sections */
+    .section.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container navbar-container">
+      <a href="#" class="logo" id="logoLink"><span>Game</span>Stream</a>
+      <div class="nav-links">
+        <a href="#" class="nav-link home-nav">Home</a>
+        <a href="#" class="nav-link request-nav">Request Game</a>
+        <a href="#" class="nav-link login-nav">Login</a>
+        <a href="#" class="admin-link admin-nav" style="display: none;">Admin Panel</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Home Section -->
+  <section id="homeSection" class="section active">
+    <div class="container">
+      <div class="hero">
+        <h1><span style="color: #7b3fe4;">Game</span>Stream</h1>
+        <p>Play your favorite games instantly in your browser. No downloads, no installations - just pure gaming fun!</p>
+      </div>
+      
+      <div class="game-grid" id="gameGrid">
+        <!-- Game cards will be dynamically added here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Request Game Section -->
+  <section id="requestSection" class="section" style="display: none;">
+    <div class="container">
+      <div class="request-section">
+        <h2>Request a Game</h2>
+        <p>What game do you want me to add to the website?</p>
+        
+        <div id="requestForm">
+          <form id="gameRequestForm">
+            <div class="form-group">
+              <label for="name" class="form-label">Your Name</label>
+              <input type="text" id="name" class="form-input" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" id="email" class="form-input" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="gameName" class="form-label">Game Name</label>
+              <input type="text" id="gameName" class="form-input" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="gameType" class="form-label">Game Type</label>
+              <select id="gameType" class="form-input">
+                <option value="action">Action</option>
+                <option value="adventure">Adventure</option>
+                <option value="puzzle">Puzzle</option>
+                <option value="racing">Racing</option>
+                <option value="strategy">Strategy</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="description" class="form-label">Description (Optional)</label>
+              <textarea id="description" class="form-textarea"></textarea>
+            </div>
+            
+            <button type="submit" class="form-button" id="submitRequestBtn">Submit Request</button>
+          </form>
+        </div>
+        
+        <div id="requestSuccess" style="display: none;">
+          <div class="success-message">
+            <div class="success-icon">✓</div>
+            <h3 class="success-title">Request Submitted!</h3>
+            <p class="success-desc">Thank you for your game request. We'll review it and notify you when it's available.</p>
+            <a href="#" class="home-btn" id="backToHomeBtn">BACK TO HOME</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Auth Section -->
+  <section id="authSection" class="section" style="display: none;">
+    <div class="auth-container">
+      <div class="auth-form">
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="loginTab">Login</div>
+          <div class="auth-tab" id="registerTab">Register</div>
+        </div>
+        
+        <div id="loginForm">
+          <form id="userLoginForm">
+            <div class="form-group">
+              <label for="loginUsername" class="form-label">Username</label>
+              <input type="text" id="loginUsername" class="form-input" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="loginPassword" class="form-label">Password</label>
+              <input type="password" id="loginPassword" class="form-input" required>
+            </div>
+            
+            <button type="submit" class="form-button">Login</button>
+          </form>
+        </div>
+        
+        <div id="registerForm" style="display: none;">
+          <form id="userRegisterForm">
+            <div class="form-group">
+              <label for="registerUsername" class="form-label">Username</label>
+              <input type="text" id="registerUsername" class="form-input" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="registerPassword" class="form-label">Password</label>
+              <input type="password" id="registerPassword" class="form-input" required>
+            </div>
+            
+            <button type="submit" class="form-button">Register</button>
+          </form>
+        </div>
+      </div>
+      
+      <div class="auth-hero">
+        <h2>Welcome to GameStream</h2>
+        <p>Login or create an account to manage game requests and access exclusive features.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Admin Section -->
+  <section id="adminSection" class="section" style="display: none;">
+    <div class="container">
+      <div class="admin-section">
+        <div class="admin-header">
+          <h2 class="font-orbitron">Game Requests</h2>
+          <div class="admin-badge">Admin: <span id="adminUsername">Syfer-eng</span></div>
+        </div>
+        
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Game</th>
+                <th>Requested By</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="requestsTableBody">
+              <!-- Game requests will be dynamically added here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Game Player -->
+  <div class="game-player" id="gamePlayer">
+    <div class="player-header">
+      <button class="close-btn" id="closePlayerBtn">✕</button>
+    </div>
+    <div class="player-content">
+      <iframe id="gameIframe" class="game-iframe" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- Admin Request Detail Modal -->
+  <div id="adminModal" style="display: none;">
+    <div class="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Request Details</h3>
+        </div>
+        <div class="modal-content" id="modalContent">
+          <!-- Request details will be dynamically added here -->
+        </div>
+        <div class="modal-footer">
+          <button class="ack-btn" id="acknowledgeBtn">✓ Acknowledge</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <a href="#" class="footer-logo"><span>Game</span>Stream</a>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Home</a>
+        <a href="#" class="footer-link">Request Game</a>
+        <a href="#" class="footer-link">Terms</a>
+        <a href="#" class="footer-link">Privacy</a>
+      </div>
+      <p class="footer-text">© 2025 GameStream. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Sample game data
+    const gameData = [
+      {
+        id: 1,
+        title: "1v1.lol",
+        image: "https://images.crazygames.com/games/1v1-lol/cover-1585728351086.png?auto=format,compress&q=75&cs=strip",
+        gameUrl: "https://1v1.lol"
+      }
+    ];
+
+    // Sample game requests data
+    let gameRequests = [
+    ];
+
+    // DOM elements
+    const gameGrid = document.getElementById('gameGrid');
+    const gamePlayer = document.getElementById('gamePlayer');
+    const gameIframe = document.getElementById('gameIframe');
+    const closePlayerBtn = document.getElementById('closePlayerBtn');
+    const requestsTableBody = document.getElementById('requestsTableBody');
+    const adminModal = document.getElementById('adminModal');
+    const modalContent = document.getElementById('modalContent');
+    const acknowledgeBtn = document.getElementById('acknowledgeBtn');
+    const requestForm = document.getElementById('requestForm');
+    const requestSuccess = document.getElementById('requestSuccess');
+    const gameRequestForm = document.getElementById('gameRequestForm');
+    const submitRequestBtn = document.getElementById('submitRequestBtn');
+    const backToHomeBtn = document.getElementById('backToHomeBtn');
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const userLoginForm = document.getElementById('userLoginForm');
+    const userRegisterForm = document.getElementById('userRegisterForm');
+
+    // Navigation elements
+    const logoLink = document.getElementById('logoLink');
+    const homeNav = document.querySelector('.home-nav');
+    const requestNav = document.querySelector('.request-nav');
+    const loginNav = document.querySelector('.login-nav');
+    const adminNav = document.querySelector('.admin-nav');
+
+    // Sections
+    const homeSection = document.getElementById('homeSection');
+    const requestSection = document.getElementById('requestSection');
+    const authSection = document.getElementById('authSection');
+    const adminSection = document.getElementById('adminSection');
+    
+    // Global variables
+    let isAuthenticated = false;
+    let isAdmin = false;
+    let currentUser = null;
+    let currentRequestId = null;
+    let cooldownTimeLeft = 0;
+    let cooldownInterval = null;
+
+    // Initialize the app
+    function initApp() {
+      // Render game cards
+      renderGameCards();
+      
+      // Render game requests table if admin
+      if (isAdmin) {
+        renderGameRequests();
+        adminNav.style.display = 'block';
+      }
+      
+      // Add Event Listeners
+      setupEventListeners();
+    }
+
+    // Render game cards
+    function renderGameCards() {
+      gameGrid.innerHTML = '';
+      
+      gameData.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.innerHTML = `
+          <img src="${game.image}" alt="${game.title}" class="game-img">
+          <div class="game-content">
+            <span class="game-category ${game.categoryClass}">${game.category}</span>
+            <h3>${game.title}</h3>
+            <p>${game.description}</p>
+            <button class="play-btn" data-id="${game.id}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              PLAY NOW
+            </button>
+          </div>
+        `;
+        gameGrid.appendChild(card);
+      });
+    }
+
+    // Render game requests table
+    function renderGameRequests() {
+      requestsTableBody.innerHTML = '';
+      
+      gameRequests.forEach(request => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="font-medium">${request.gameName}</td>
+          <td>${request.name}</td>
+          <td>${formatDate(request.requestTime)}</td>
+          <td>
+            <button class="view-btn" data-id="${request.id}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              View
+            </button>
+          </td>
+        `;
+        requestsTableBody.appendChild(row);
+      });
+    }
+
+    // Format date for display
+    function formatDate(date) {
+      return new Date(date).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // Navigation listeners
+      logoLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(homeSection);
+      });
+      
+      homeNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(homeSection);
+      });
+      
+      requestNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(requestSection);
+        requestForm.style.display = 'block';
+        requestSuccess.style.display = 'none';
+      });
+      
+      loginNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (isAuthenticated) {
+          // Logout
+          isAuthenticated = false;
+          isAdmin = false;
+          currentUser = null;
+          adminNav.style.display = 'none';
+          loginNav.textContent = 'Login';
+          showSection(homeSection);
+        } else {
+          showSection(authSection);
+        }
+      });
+      
+      adminNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (isAdmin) {
+          showSection(adminSection);
+          renderGameRequests();
+        }
+      });
+      
+      // Play game button listeners
+      gameGrid.addEventListener('click', function(e) {
+        const playBtn = e.target.closest('.play-btn');
+        if (playBtn) {
+          const gameId = parseInt(playBtn.dataset.id);
+          const game = gameData.find(g => g.id === gameId);
+          
+          if (game) {
+            openGamePlayer(game);
+          }
+        }
+      });
+      
+      // Close game player
+      closePlayerBtn.addEventListener('click', function() {
+        closeGamePlayer();
+      });
+      
+      // Game request form submission
+      gameRequestForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const gameName = document.getElementById('gameName').value;
+        const gameType = document.getElementById('gameType').value;
+        const description = document.getElementById('description').value;
+        
+        // Create request object
+        const request = {
+          id: gameRequests.length > 0 ? Math.max(...gameRequests.map(r => r.id)) + 1 : 1,
+          name,
+          email,
+          gameName,
+          gameType,
+          description,
+          requestTime: new Date(),
+          ipAddress: '127.0.0.1', // Mock IP address
+          status: 'pending'
+        };
+        
+        // Add to requests array
+        gameRequests.push(request);
+        
+        // Show success message
+        requestForm.style.display = 'none';
+        requestSuccess.style.display = 'block';
+        
+        // Reset form
+        gameRequestForm.reset();
+      });
+      
+      // Back to home button
+      backToHomeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(homeSection);
+      });
+      
+      // Auth tab switching
+      loginTab.addEventListener('click', function() {
+        loginTab.classList.add('active');
+        registerTab.classList.remove('active');
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      });
+      
+      registerTab.addEventListener('click', function() {
+        registerTab.classList.add('active');
+        loginTab.classList.remove('active');
+        registerForm.style.display = 'block';
+        loginForm.style.display = 'none';
+      });
+      
+      // Login form submission
+      userLoginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        // Check for admin
+        if (username === 'Syfer-eng' && password === 'Cheechers1!1') {
+          isAuthenticated = true;
+          isAdmin = true;
+          currentUser = { username, isAdmin: true };
+          
+          // Update UI
+          adminNav.style.display = 'block';
+          loginNav.textContent = 'Logout';
+          
+          // Show admin section
+          showSection(adminSection);
+          renderGameRequests();
+          
+          // Reset form
+          userLoginForm.reset();
+        } else {
+          alert('Invalid credentials. Try Syfer-eng/Cheechers1!1 for admin access.');
+        }
+      });
+      
+      // Register form submission
+      userRegisterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Registration is not implemented in this demo. Use Syfer-eng/Cheechers1!1 for admin access.');
+      });
+      
+      // View request details
+      requestsTableBody.addEventListener('click', function(e) {
+        const viewBtn = e.target.closest('.view-btn');
+        if (viewBtn) {
+          const requestId = parseInt(viewBtn.dataset.id);
+          const request = gameRequests.find(r => r.id === requestId);
+          
+          if (request) {
+            showRequestDetails(request);
+          }
+        }
+      });
+      
+      // Acknowledge request
+      acknowledgeBtn.addEventListener('click', function() {
+        if (currentRequestId !== null) {
+          // Remove the request
+          gameRequests = gameRequests.filter(r => r.id !== currentRequestId);
+          
+          // Update UI
+          renderGameRequests();
+          adminModal.style.display = 'none';
+          currentRequestId = null;
+          
+          // Show success message
+          alert('Game request acknowledged and removed.');
+        }
+      });
+    }
+
+    // Open game player
+    function openGamePlayer(game) {
+      gameIframe.src = game.gameUrl;
+      gamePlayer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close game player
+    function closeGamePlayer() {
+      gamePlayer.classList.remove('active');
+      gameIframe.src = '';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Show request details in modal
+    function showRequestDetails(request) {
+      currentRequestId = request.id;
+      
+      modalContent.innerHTML = `
+        <div class="detail-grid">
+          <div>
+            <p class="detail-label">Game Name</p>
+            <p class="detail-value">${request.gameName}</p>
+          </div>
+          <div>
+            <p class="detail-label">Game Type</p>
+            <p class="detail-value">${request.gameType}</p>
+          </div>
+        </div>
+        
+        <div>
+          <p class="detail-label">Description</p>
+          <p class="detail-value description-box">
+            ${request.description || "No description provided."}
+          </p>
+        </div>
+        
+        <div class="detail-grid" style="margin-top: 1rem;">
+          <div>
+            <p class="detail-label">Requested By</p>
+            <p class="detail-value">${request.name}</p>
+          </div>
+          <div>
+            <p class="detail-label">Email</p>
+            <p class="detail-value">${request.email}</p>
+          </div>
+        </div>
+        
+        <div style="margin-top: 1rem;">
+          <p class="detail-label">Date Requested</p>
+          <p class="detail-value">${formatDate(request.requestTime)}</p>
+        </div>
+      `;
+      
+      adminModal.style.display = 'block';
+    }
+
+    // Show a specific section and hide others
+    function showSection(section) {
+      const sections = [homeSection, requestSection, authSection, adminSection];
+      
+      sections.forEach(s => {
+        if (s === section) {
+          s.style.display = 'block';
+        } else {
+          s.style.display = 'none';
+        }
+      });
+    }
+
+    // Initialize app on load
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
