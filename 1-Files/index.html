@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syfer-eng's File Gallery</title>
+    <meta name="description" content="A Website That Hostes My Files So You Guys Can Download Them">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Notification system */
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            z-index: 9999;
+        }
+
+        .notification {
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            border-left: 4px solid #ffffff;
+            border-radius: 4px;
+            padding: 16px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            background-color: #ffffff;
+            color: #000000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Enhanced Header Styles */
+        .cool-header-bg {
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(41, 41, 41, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(41, 41, 41, 0.25) 0%, transparent 40%);
+            background-color: #111;
+            position: relative;
+            padding: 4rem 1rem;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .cool-header-bg::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-bg-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(10, 10, 10, 0.9));
+            opacity: 0.95;
+        }
+
+        .header-icon {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            transform: rotate(3deg);
+            transition: transform 0.5s ease;
+        }
+
+        .header-icon:hover {
+            transform: rotate(0);
+        }
+
+        .header-icon i {
+            font-size: 3rem;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: textGlowPulse 3s ease-in-out infinite;
+            position: relative;
+            display: inline-block;
+        }
+
+        .header-title::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, white, transparent);
+        }
+
+        .header-description {
+            font-size: 1.25rem;
+            color: #a0a0a0;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .header-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .nav-item {
+            position: relative;
+            color: #a0a0a0;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .nav-item:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        .nav-item:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .nav-item:hover {
+            color: white;
+        }
+
+        .nav-item::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background-color: white;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-item:hover::after {
+            width: 80%;
+        }
+
+        .nav-item i {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            margin-right: 0.5rem;
+        }
+
+        .nav-item:hover i {
+            opacity: 1;
+        }
+
+        /* Content Section */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .section-title .divider {
+            width: 6rem;
+            height: 1px;
+            margin: 0 auto;
+            background: linear-gradient(to right, transparent, white, transparent);
+        }
+
+        /* Gallery Grid */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* File Cards */
+        .file-card {
+            background-color: #111;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s ease;
+            border: 1px solid #222;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .file-card:nth-child(1) { animation-delay: 0.1s; }
+        .file-card:nth-child(2) { animation-delay: 0.15s; }
+        .file-card:nth-child(3) { animation-delay: 0.2s; }
+        .file-card:nth-child(4) { animation-delay: 0.25s; }
+        .file-card:nth-child(5) { animation-delay: 0.3s; }
+        .file-card:nth-child(6) { animation-delay: 0.35s; }
+
+        .file-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+            border-color: #333;
+        }
+
+        .file-img-container {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(to bottom right, #111, #000);
+            overflow: hidden;
+        }
+
+        .file-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            mix-blend-mode: luminosity;
+            transition: all 0.5s ease;
+        }
+
+        .file-card:hover .file-img {
+            transform: scale(1.1);
+            mix-blend-mode: normal;
+        }
+
+        .file-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .file-card:hover .file-overlay {
+            background-color: rgba(0, 0, 0, 0.75);
+            opacity: 1;
+        }
+
+        .file-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            transition: opacity 0.3s ease;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .download-btn {
+            background-color: white;
+            color: black;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        /* About Section */
+        .about-content {
+            background-color: #111;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            border: 1px solid #222;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-content h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .about-content .text {
+            color: #d0d0d0;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Snow particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background-color: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.7;
+            will-change: transform;
+        }
+
+        .particle-glitter {
+            background-color: rgba(255, 255, 255, 0.9);
+            filter: blur(0.5px);
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes textGlowPulse {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+            }
+            100% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2.25rem;
+            }
+            .header-description {
+                font-size: 1rem;
+            }
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Snow Particles Container -->
+    <div id="particles-container"></div>
+    
+    <!-- Notification Container -->
+    <div class="notification-container" id="notification-container"></div>
+
+    <!-- Home Section -->
+    <section id="home-section" class="page-section active">
+        <!-- Header -->
+        <header class="cool-header-bg">
+            <div class="header-bg-overlay"></div>
+            <div class="header-content">
+                <div class="text-center">
+                    <div class="header-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h1 class="header-title">Syfer-eng's File Gallery</h1>
+                    <p class="header-description">A Website That Hostes My Files So You Guys Can Download Them</p>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="header-nav">
+                    <a href="#" class="nav-item" data-page="home-section">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Browse Files</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="about-section">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About</span>
+                    </a>
+                </nav>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <div class="section-title">
+                <h2>Available Files</h2>
+                <div class="divider"></div>
+            </div>
+            
+            <div class="gallery">
+                <!-- File Cards -->
+                <div class="file-card">
+                    <div class="file-img-container">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500" alt="Project Report" class="file-img">
+                        <div class="file-overlay">
+                            <h3 class="file-title">Project Report</h3>
+                            <a href="#" class="download-btn">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about-section" class="page-section">
+        <!-- Header (Same as Home) -->
+        <header class="cool-header-bg">
+            <div class="header-bg-overlay"></div>
+            <div class="header-content">
+                <div class="text-center">
+                    <div class="header-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h1 class="header-title">Syfer-eng's File Gallery</h1>
+                    <p class="header-description">A collection of files with stylish black & white animations</p>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="header-nav">
+                    <a href="#" class="nav-item" data-page="home-section">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Browse Files</span>
+                    </a>
+                    <a href="#" class="nav-item" data-page="about-section">
+                        <i class="fas fa-info-circle"></i>
+                        <span>About</span>
+                    </a>
+                </nav>
+            </div>
+        </header>
+        
+        <!-- About Content -->
+        <div class="content">
+            <div class="about-content">
+                <h2>About this Gallery</h2>
+                
+                <div class="text-container">
+                    <p class="text">
+                        This is a simple file gallery application built with a modern black and white theme. 
+                        It features a clean, minimalist design with interactive hover effects and beautiful 
+                        animations throughout the interface.
+                    </p>
+                    
+                    <p class="text">
+                        The background features gently falling snow particles that create a calm, 
+                        mesmerizing effect as you browse through the available files.
+                    </p>
+                    
+                    <p class="text">
+                        Feel free to browse the collection and download any files that interest you.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Snow Particles
+        class Particles {
+            constructor() {
+                this.container = document.getElementById('particles-container');
+                this.particles = [];
+                this.animationFrame = null;
+
+                // Initialize particles
+                this.init();
+
+                // Handle window resize
+                window.addEventListener('resize', () => this.init());
+            }
+
+            init() {
+                // Clear existing particles
+                this.container.innerHTML = '';
+                this.particles = [];
+
+                // Create particles based on window size
+                const particleCount = window.innerWidth < 768 ? 70 : 150;
+                for (let i = 0; i < particleCount; i++) {
+                    this.createParticle();
+                }
+
+                // Start animation
+                if (this.animationFrame) {
+                    cancelAnimationFrame(this.animationFrame);
+                }
+                this.animate();
+            }
+
+            createParticle() {
+                const particle = document.createElement('div');
+                
+                // Determine if this will be a snow particle or a glitter particle (10% chance for glitter)
+                const isGlitter = Math.random() < 0.1;
+                
+                particle.classList.add('particle');
+                if (isGlitter) {
+                    particle.classList.add('particle-glitter');
+                }
+
+                // Random position, size and animation properties
+                const size = isGlitter 
+                    ? Math.random() * 2 + 1 // Smaller glitter
+                    : Math.random() * 4 + 2; // Larger snow
+                    
+                const posX = Math.random() * window.innerWidth;
+                const posY = -20;
+                const speed = isGlitter 
+                    ? Math.random() * 0.8 + 0.3 // Slower glitter
+                    : Math.random() * 2 + 0.5;  // Faster snow
+                    
+                const opacity = isGlitter 
+                    ? Math.random() * 0.8 + 0.6 // Brighter glitter
+                    : Math.random() * 0.5 + 0.2; // Dimmer snow
+                    
+                const delay = Math.random() * 15;
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}px`;
+                particle.style.top = `${posY}px`;
+                particle.style.opacity = `${opacity}`;
+                
+                if (isGlitter) {
+                    // Create shimmering effect for glitter
+                    particle.style.boxShadow = `0 0 ${Math.random() * 3 + 2}px rgba(255, 255, 255, 0.8)`;
+                }
+
+                this.container.appendChild(particle);
+
+                // Animation state
+                this.particles.push({
+                    element: particle,
+                    type: isGlitter ? 'glitter' : 'snow',
+                    x: posX,
+                    y: posY,
+                    speed: speed,
+                    oscillationSpeed: 1 + Math.random() * 2,
+                    oscillationDistance: Math.random() * (isGlitter ? 5 : 15),
+                    angle: Math.random() * Math.PI * 2, // Random start angle
+                    delay: delay,
+                    size: size
+                });
+            }
+
+            animate() {
+                this.particles.forEach((particle, index) => {
+                    if (particle.delay > 0) {
+                        particle.delay -= 0.016;
+                        return;
+                    }
+
+                    particle.y += particle.speed;
+                    particle.angle += particle.oscillationSpeed * 0.01;
+
+                    // Gentle horizontal oscillation
+                    const oscillation = Math.sin(particle.angle) * particle.oscillationDistance;
+
+                    // For glitter particles, add a pulsating effect
+                    if (particle.type === 'glitter') {
+                        const pulseScale = 0.7 + Math.sin(particle.angle * 5) * 0.3;
+                        const glowIntensity = Math.abs(Math.sin(particle.angle * 5));
+                        particle.element.style.transform = `translate(${oscillation}px, ${particle.y}px) scale(${pulseScale})`;
+                        particle.element.style.boxShadow = `0 0 ${Math.random() * 3 + 2}px rgba(255, 255, 255, ${0.5 + glowIntensity * 0.5})`;
+                    } else {
+                        // Regular snow particle
+                        particle.element.style.transform = `translate(${oscillation}px, ${particle.y}px) rotate(${particle.angle * 10}deg)`;
+                    }
+
+                    // Remove particles that have moved off screen and create new ones
+                    if (particle.y > window.innerHeight + 20) {
+                        particle.element.remove();
+                        this.particles.splice(index, 1);
+                        this.createParticle();
+                    }
+                });
+
+                this.animationFrame = requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Navigation
+        function setupNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Get the target page
+                    const targetPage = item.getAttribute('data-page');
+                    
+                    // Hide all sections
+                    document.querySelectorAll('.page-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show the target section
+                    document.getElementById(targetPage).classList.add('active');
+                });
+            });
+        }
+
+        // Notification system
+        function showNotification(title, message, icon = 'fa-check') {
+            const notificationContainer = document.getElementById('notification-container');
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            // Add content to notification
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+            `;
+            
+            // Add notification to container
+            notificationContainer.appendChild(notification);
+            
+            // Trigger animation
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                
+                // Remove from DOM after animation completes
+                setTimeout(() => {
+                    notificationContainer.removeChild(notification);
+                }, 400);
+            }, 5000);
+        }
+        
+        // Download button click handler
+        function setupDownloadButtons() {
+            const downloadButtons = document.querySelectorAll('.download-btn');
+            
+            downloadButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Get file name from the parent card's title
+                    const fileCard = button.closest('.file-card');
+                    const fileName = fileCard.querySelector('.file-title').textContent.trim();
+                    
+                    // Show notification
+                    showNotification(
+                        'Download Started', 
+                        `${fileName} is being downloaded...`, 
+                        'fa-download'
+                    );
+                    
+                    // In a real app, you would trigger the actual download here
+                    // For demo purposes, we're just showing the notification
+                });
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize particles
+            new Particles();
+            
+            // Setup navigation
+            setupNavigation();
+            
+            // Setup download buttons
+            setupDownloadButtons();
+        });
+    </script>
+</body>
+</html>
