@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -465,6 +466,25 @@
         let songs = [];
         let currentView = 'grid';
 
+        // Add placeholder songs if no songs exist
+        function addPlaceholderSongs() {
+            const existingSongs = JSON.parse(localStorage.getItem('musicHubSongs') || '[]');
+            
+            if (existingSongs.length === 0) {
+                const placeholderSongs = [
+                    {
+                        songName: "Bohemian Rhapsody",
+                        artistName: "Queen",
+                        songLink: "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
+                        description: "A masterpiece that never gets old. The perfect blend of rock, opera, and pure genius! This song takes you on an emotional journey.",
+                        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
+                    }
+                ];
+                
+                localStorage.setItem('musicHubSongs', JSON.stringify(placeholderSongs));
+            }
+        }
+
         // Load songs from localStorage
         function loadSongs() {
             const storedSongs = localStorage.getItem('musicHubSongs');
@@ -629,47 +649,16 @@
             }
         });
 
-        // Load songs on page load
+        // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
+            // Add placeholder songs first
+            addPlaceholderSongs();
+            
             // Simulate loading delay
             setTimeout(() => {
                 loadSongs();
             }, 1000);
         });
-
-        // Add some sample data if no songs exist (for demo purposes)
-        function addSampleData() {
-            if (songs.length === 0) {
-                const sampleSongs = [
-                    {
-                        songName: "Bohemian Rhapsody",
-                        artistName: "Queen",
-                        songLink: "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
-                        description: "A masterpiece that never gets old. The perfect blend of rock, opera, and pure genius!",
-                        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
-                    },
-                    {
-                        songName: "Blinding Lights",
-                        artistName: "The Weeknd",
-                        songLink: "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b",
-                        description: "This song gives me 80s vibes and I absolutely love it!",
-                        timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString() // 5 hours ago
-                    },
-                    {
-                        songName: "Watermelon Sugar",
-                        artistName: "Harry Styles",
-                        songLink: "",
-                        description: "Perfect summer vibes! Makes me feel happy every time.",
-                        timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 1 day ago
-                    }
-                ];
-                
-                localStorage.setItem('musicHubSongs', JSON.stringify(sampleSongs));
-            }
-        }
-
-        // Uncomment the line below to add sample data for testing
-        // addSampleData();
     </script>
 </body>
 </html>
