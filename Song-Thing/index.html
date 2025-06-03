@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Hub - Discover Songs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #121212;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .logo span {
+            margin-left: 10px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #1db954;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            color: #b3b3b3;
+            margin-bottom: 30px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #1db954;
+        }
+
+        .stat-label {
+            color: #b3b3b3;
+            font-size: 0.9em;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: #282828;
+            border-radius: 25px;
+            padding: 4px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: #b3b3b3;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn.active {
+            background: #1db954;
+            color: #ffffff;
+        }
+
+        .songs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .songs-list {
+            display: none;
+        }
+
+        .song-card {
+            background: #181818;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .song-card:hover {
+            background: #282828;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(29, 185, 84, 0.3);
+        }
+
+        .song-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1db954, #1ed760);
+        }
+
+        .song-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .song-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .song-artist {
+            color: #b3b3b3;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .song-description {
+            color: #b3b3b3;
+            font-size: 0.8em;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .song-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .song-link {
+            color: #1db954;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .song-link:hover {
+            text-decoration: underline;
+        }
+
+        .song-time {
+            font-size: 0.7em;
+        }
+
+        .songs-list-view {
+            background: #181818;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .list-header {
+            background: #282828;
+            padding: 15px 20px;
+            display: grid;
+            grid-template-columns: 50px 1fr 150px 100px;
+            gap: 20px;
+            font-weight: bold;
+            color: #b3b3b3;
+            font-size: 0.9em;
+        }
+
+        .list-item {
+            padding: 15px 20px;
+            display: grid;
+            grid-template-columns: 50px 1fr 150px 100px;
+            gap: 20px;
+            align-items: center;
+            border-bottom: 1px solid #282828;
+            transition: background 0.2s ease;
+        }
+
+        .list-item:hover {
+            background: #282828;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-number {
+            color: #b3b3b3;
+            font-weight: bold;
+        }
+
+        .list-song-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .list-song-info p {
+            color: #b3b3b3;
+            font-size: 0.9em;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #b3b3b3;
+        }
+
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #b3b3b3;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #282828;
+            border-top: 4px solid #1db954;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .songs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .list-header, .list-item {
+                grid-template-columns: 1fr 100px;
+                gap: 10px;
+            }
+
+            .list-header :nth-child(1),
+            .list-header :nth-child(3),
+            .list-item :nth-child(1),
+            .list-item :nth-child(3) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                🎵 <span>Music Hub</span>
+            </div>
+            <div class="nav-buttons">
+                <a href="#" class="btn btn-secondary" onclick="refreshSongs()">
+                    🔄 Refresh
+                </a>
+                <a href="song-request.html" class="btn btn-primary">
+                    ➕ Request Song
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Discover Music</h1>
+            <p>Explore songs requested by our community</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="totalSongs">0</div>
+                    <div class="stat-label">Total Songs</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="todaySongs">0</div>
+                    <div class="stat-label">Added Today</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="withLinks">0</div>
+                    <div class="stat-label">With Links</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h2 class="section-title">Recent Requests</h2>
+            <div class="view-toggle">
+                <button class="toggle-btn active" onclick="switchView('grid')">Grid</button>
+                <button class="toggle-btn" onclick="switchView('list')">List</button>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading songs...</p>
+        </div>
+
+        <div id="songsGrid" class="songs-grid" style="display: none;"></div>
+        
+        <div id="songsList" class="songs-list">
+            <div class="songs-list-view">
+                <div class="list-header">
+                    <div>#</div>
+                    <div>Song</div>
+                    <div>Added</div>
+                    <div>Link</div>
+                </div>
+                <div id="songsListContent"></div>
+            </div>
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">🎵</div>
+            <h3>No songs yet</h3>
+            <p>Be the first to request a song!</p>
+            <br>
+            <a href="song-request.html" class="btn btn-primary">Request First Song</a>
+        </div>
+    </div>
+
+    <script>
+        let songs = [];
+        let currentView = 'grid';
+
+        // Load songs from localStorage
+        function loadSongs() {
+            const storedSongs = localStorage.getItem('musicHubSongs');
+            if (storedSongs) {
+                songs = JSON.parse(storedSongs);
+            }
+            displaySongs();
+            updateStats();
+        }
+
+        function displaySongs() {
+            const loading = document.getElementById('loading');
+            const songsGrid = document.getElementById('songsGrid');
+            const songsList = document.getElementById('songsList');
+            const emptyState = document.getElementById('emptyState');
+
+            loading.style.display = 'none';
+
+            if (songs.length === 0) {
+                songsGrid.style.display = 'none';
+                songsList.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            if (currentView === 'grid') {
+                songsGrid.style.display = 'grid';
+                songsList.style.display = 'none';
+                displayGridView();
+            } else {
+                songsGrid.style.display = 'none';
+                songsList.style.display = 'block';
+                displayListView();
+            }
+        }
+
+        function displayGridView() {
+            const songsGrid = document.getElementById('songsGrid');
+            songsGrid.innerHTML = '';
+
+            songs.forEach(song => {
+                const songCard = document.createElement('div');
+                songCard.className = 'song-card';
+                
+                const timeAgo = getTimeAgo(song.timestamp);
+                const hasLink = song.songLink && song.songLink.trim() !== '';
+                
+                songCard.innerHTML = `
+                    <div class="song-icon">🎵</div>
+                    <div class="song-title">${escapeHtml(song.songName)}</div>
+                    ${song.artistName ? `<div class="song-artist">by ${escapeHtml(song.artistName)}</div>` : ''}
+                    ${song.description ? `<div class="song-description">${escapeHtml(song.description)}</div>` : ''}
+                    <div class="song-meta">
+                        ${hasLink ? `<a href="${song.songLink}" target="_blank" class="song-link">🎧 Listen</a>` : '<span style="color: #666;">No link</span>'}
+                        <span class="song-time">${timeAgo}</span>
+                    </div>
+                `;
+                
+                if (hasLink) {
+                    songCard.addEventListener('click', () => {
+                        window.open(song.songLink, '_blank');
+                    });
+                }
+                
+                songsGrid.appendChild(songCard);
+            });
+        }
+
+        function displayListView() {
+            const songsListContent = document.getElementById('songsListContent');
+            songsListContent.innerHTML = '';
+
+            songs.forEach((song, index) => {
+                const listItem = document.createElement('div');
+                listItem.className = 'list-item';
+                
+                const timeAgo = getTimeAgo(song.timestamp);
+                const hasLink = song.songLink && song.songLink.trim() !== '';
+                
+                listItem.innerHTML = `
+                    <div class="list-number">${index + 1}</div>
+                    <div class="list-song-info">
+                        <h4>${escapeHtml(song.songName)}</h4>
+                        <p>${song.artistName ? escapeHtml(song.artistName) : 'Unknown Artist'}</p>
+                    </div>
+                    <div class="song-time">${timeAgo}</div>
+                    <div>
+                        ${hasLink ? `<a href="${song.songLink}" target="_blank" class="song-link">🎧 Play</a>` : '<span style="color: #666;">No link</span>'}
+                    </div>
+                `;
+                
+                songsListContent.appendChild(listItem);
+            });
+        }
+
+        function updateStats() {
+            const totalSongs = songs.length;
+            const today = new Date().toDateString();
+            const todaySongs = songs.filter(song => new Date(song.timestamp).toDateString() === today).length;
+            const withLinks = songs.filter(song => song.songLink && song.songLink.trim() !== '').length;
+
+            document.getElementById('totalSongs').textContent = totalSongs;
+            document.getElementById('todaySongs').textContent = todaySongs;
+            document.getElementById('withLinks').textContent = withLinks;
+        }
+
+        function switchView(view) {
+            currentView = view;
+            
+            // Update toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            displaySongs();
+        }
+
+        function refreshSongs() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('songsGrid').style.display = 'none';
+            document.getElementById('songsList').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                loadSongs();
+            }, 500);
+        }
+
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const songTime = new Date(timestamp);
+            const diffInSeconds = Math.floor((now - songTime) / 1000);
+
+            if (diffInSeconds < 60) {
+                return 'Just now';
+            } else if (diffInSeconds < 3600) {
+                const minutes = Math.floor(diffInSeconds / 60);
+                return `${minutes}m ago`;
+            } else if (diffInSeconds < 86400) {
+                const hours = Math.floor(diffInSeconds / 3600);
+                return `${hours}h ago`;
+            } else {
+                const days = Math.floor(diffInSeconds / 86400);
+                return `${days}d ago`;
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Listen for storage changes (when new songs are added)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'musicHubSongs') {
+                loadSongs();
+            }
+        });
+
+        // Load songs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate loading delay
+            setTimeout(() => {
+                loadSongs();
+            }, 1000);
+        });
+
+        // Add some sample data if no songs exist (for demo purposes)
+        function addSampleData() {
+            if (songs.length === 0) {
+                const sampleSongs = [
+                    {
+                        songName: "Bohemian Rhapsody",
+                        artistName: "Queen",
+                        songLink: "https://www.youtube.com/watch?v=fJ9rUzIMcZQ",
+                        description: "A masterpiece that never gets old. The perfect blend of rock, opera, and pure genius!",
+                        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() // 2 hours ago
+                    },
+                    {
+                        songName: "Blinding Lights",
+                        artistName: "The Weeknd",
+                        songLink: "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b",
+                        description: "This song gives me 80s vibes and I absolutely love it!",
+                        timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString() // 5 hours ago
+                    },
+                    {
+                        songName: "Watermelon Sugar",
+                        artistName: "Harry Styles",
+                        songLink: "",
+                        description: "Perfect summer vibes! Makes me feel happy every time.",
+                        timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() // 1 day ago
+                    }
+                ];
+                
+                localStorage.setItem('musicHubSongs', JSON.stringify(sampleSongs));
+            }
+        }
+
+        // Uncomment the line below to add sample data for testing
+        // addSampleData();
+    </script>
+</body>
+</html>
