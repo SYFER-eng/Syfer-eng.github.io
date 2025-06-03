@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Music Player</title>
+    <title>Snow Music Player</title>
     <style>
         * {
             margin: 0;
@@ -13,22 +13,51 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Snow Animation */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            user-select: none;
+            pointer-events: none;
+            font-size: 20px;
+            animation-name: snowfall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         .player-container {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             padding: 40px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
             text-align: center;
-            min-width: 400px;
+            min-width: 450px;
+            z-index: 10;
+            position: relative;
         }
 
         .song-picker {
@@ -40,17 +69,23 @@
             margin-bottom: 10px;
             font-size: 18px;
             font-weight: bold;
+            color: white;
         }
 
         .song-picker select {
             width: 100%;
             padding: 12px;
             font-size: 16px;
-            border: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
             cursor: pointer;
+        }
+
+        .song-picker select option {
+            background: #000;
+            color: white;
         }
 
         .song-picker input[type="file"] {
@@ -72,7 +107,8 @@
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 10px;
-            color: #fff;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .controls {
@@ -86,9 +122,9 @@
         .control-btn {
             width: 60px;
             height: 60px;
-            border: none;
+            border: 2px solid white;
             border-radius: 50%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: rgba(0, 0, 0, 0.8);
             color: white;
             font-size: 24px;
             cursor: pointer;
@@ -96,12 +132,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
         }
 
         .control-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
         }
 
         .control-btn:active {
@@ -112,11 +149,7 @@
             width: 80px;
             height: 80px;
             font-size: 32px;
-            background: linear-gradient(45deg, #1db954, #1ed760);
-        }
-
-        .play-pause-btn:hover {
-            background: linear-gradient(45deg, #1ed760, #1db954);
+            border: 3px solid white;
         }
 
         .progress-container {
@@ -133,9 +166,10 @@
 
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -143,33 +177,82 @@
 
         .progress {
             height: 100%;
-            background: linear-gradient(90deg, #1db954, #1ed760);
-            border-radius: 4px;
+            background: white;
+            border-radius: 5px;
             width: 0%;
             transition: width 0.1s ease;
+            position: relative;
+        }
+
+        .progress-handle {
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 50%;
+            cursor: grab;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .progress-bar:hover .progress-handle {
+            opacity: 1;
+        }
+
+        .progress-handle:active {
+            cursor: grabbing;
         }
 
         .volume-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
         }
 
         .volume-bar {
             width: 120px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
             cursor: pointer;
             position: relative;
         }
 
         .volume-progress {
             height: 100%;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            border-radius: 3px;
+            background: white;
+            border-radius: 4px;
             width: 70%;
+            position: relative;
+        }
+
+        .volume-handle {
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 50%;
+            cursor: grab;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .volume-bar:hover .volume-handle {
+            opacity: 1;
+        }
+
+        .volume-handle:active {
+            cursor: grabbing;
         }
 
         .custom-icons {
@@ -248,14 +331,18 @@
                 <span id="totalTime">0:00</span>
             </div>
             <div class="progress-bar" id="progressBar">
-                <div class="progress" id="progress"></div>
+                <div class="progress" id="progress">
+                    <div class="progress-handle" id="progressHandle"></div>
+                </div>
             </div>
         </div>
 
         <div class="volume-container">
             <span class="custom-icons volume-icon"></span>
             <div class="volume-bar" id="volumeBar">
-                <div class="volume-progress" id="volumeProgress"></div>
+                <div class="volume-progress" id="volumeProgress">
+                    <div class="volume-handle" id="volumeHandle"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -273,15 +360,39 @@
         const forwardBtn = document.getElementById('forwardBtn');
         const progressBar = document.getElementById('progressBar');
         const progress = document.getElementById('progress');
+        const progressHandle = document.getElementById('progressHandle');
         const currentTimeEl = document.getElementById('currentTime');
         const totalTimeEl = document.getElementById('totalTime');
         const volumeBar = document.getElementById('volumeBar');
         const volumeProgress = document.getElementById('volumeProgress');
+        const volumeHandle = document.getElementById('volumeHandle');
 
         let isPlaying = false;
+        let isDraggingProgress = false;
+        let isDraggingVolume = false;
 
         // Initialize volume
         audioPlayer.volume = 0.7;
+
+        // Snow Animation
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snowflake.style.opacity = Math.random();
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+            
+            document.body.appendChild(snowflake);
+            
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+
+        // Create snowflakes continuously
+        setInterval(createSnowflake, 300);
 
         // Song selection from dropdown
         songSelect.addEventListener('change', (e) => {
@@ -296,7 +407,7 @@
             if (file) {
                 const url = URL.createObjectURL(file);
                 loadSong(url, file.name);
-                songSelect.value = ''; // Clear dropdown selection
+                songSelect.value = '';
             }
         });
 
@@ -306,7 +417,6 @@
             songTitle.textContent = title;
             songTitle.classList.remove('no-song');
             
-            // Reset player state
             isPlaying = false;
             playPauseIcon.className = 'custom-icons play-icon';
             progress.style.width = '0%';
@@ -328,23 +438,93 @@
             }
         });
 
-        // Rewind button (go back 10 seconds)
+        // Rewind button
         rewindBtn.addEventListener('click', () => {
             if (audioPlayer.src) {
                 audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
             }
         });
 
-        // Fast forward button (go forward 10 seconds)
+        // Fast forward button
         forwardBtn.addEventListener('click', () => {
             if (audioPlayer.src) {
                 audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
             }
         });
 
+        // Progress bar dragging
+        let progressRect;
+
+        progressHandle.addEventListener('mousedown', (e) => {
+            isDraggingProgress = true;
+            progressRect = progressBar.getBoundingClientRect();
+            e.preventDefault();
+        });
+
+        progressBar.addEventListener('mousedown', (e) => {
+            if (e.target === progressBar || e.target === progress) {
+                isDraggingProgress = true;
+                progressRect = progressBar.getBoundingClientRect();
+                updateProgress(e);
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDraggingProgress && audioPlayer.duration) {
+                updateProgress(e);
+            }
+            if (isDraggingVolume) {
+                updateVolume(e);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDraggingProgress = false;
+            isDraggingVolume = false;
+        });
+
+        function updateProgress(e) {
+            if (!progressRect) progressRect = progressBar.getBoundingClientRect();
+            const clickX = e.clientX - progressRect.left;
+            const width = progressRect.width;
+            const clickPercent = Math.max(0, Math.min(1, clickX / width));
+            
+            if (audioPlayer.duration) {
+                audioPlayer.currentTime = clickPercent * audioPlayer.duration;
+                progress.style.width = (clickPercent * 100) + '%';
+            }
+        }
+
+        // Volume bar dragging
+        let volumeRect;
+
+        volumeHandle.addEventListener('mousedown', (e) => {
+            isDraggingVolume = true;
+            volumeRect = volumeBar.getBoundingClientRect();
+            e.preventDefault();
+        });
+
+        volumeBar.addEventListener('mousedown', (e) => {
+            if (e.target === volumeBar || e.target === volumeProgress) {
+                isDraggingVolume = true;
+                volumeRect = volumeBar.getBoundingClientRect();
+                updateVolume(e);
+            }
+        });
+
+        function updateVolume(e) {
+            if (!volumeRect) volumeRect = volumeBar.getBoundingClientRect();
+            const clickX = e.clientX - volumeRect.left;
+            const width = volumeRect.width;
+            const clickPercent = Math.max(0, Math.min(1, clickX / width));
+            
+            audioPlayer.volume = clickPercent;
+            volumeProgress.style.width = (clickPercent * 100) + '%';
+        }
+
         // Update progress and time automatically
         audioPlayer.addEventListener('timeupdate', () => {
-            if (audioPlayer.duration) {
+            if (audioPlayer.duration && !isDraggingProgress) {
                 const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
                 progress.style.width = progressPercent + '%';
                 
@@ -355,29 +535,6 @@
         // Get total time when metadata loads
         audioPlayer.addEventListener('loadedmetadata', () => {
             totalTimeEl.textContent = formatTime(audioPlayer.duration);
-        });
-
-        // Progress bar click
-        progressBar.addEventListener('click', (e) => {
-            if (!audioPlayer.duration) return;
-            
-            const rect = progressBar.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const width = rect.width;
-            const clickPercent = clickX / width;
-            
-            audioPlayer.currentTime = clickPercent * audioPlayer.duration;
-        });
-
-        // Volume control
-        volumeBar.addEventListener('click', (e) => {
-            const rect = volumeBar.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const width = rect.width;
-            const clickPercent = Math.max(0, Math.min(1, clickX / width));
-            
-            audioPlayer.volume = clickPercent;
-            volumeProgress.style.width = (clickPercent * 100) + '%';
         });
 
         // Format time helper
@@ -396,6 +553,57 @@
             audioPlayer.currentTime = 0;
         });
 
+        // Touch support for mobile
+        progressHandle.addEventListener('touchstart', (e) => {
+            isDraggingProgress = true;
+            progressRect = progressBar.getBoundingClientRect();
+            e.preventDefault();
+        });
+
+        volumeHandle.addEventListener('touchstart', (e) => {
+            isDraggingVolume = true;
+            volumeRect = volumeBar.getBoundingClientRect();
+            e.preventDefault();
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDraggingProgress && audioPlayer.duration) {
+                const touch = e.touches[0];
+                updateProgressTouch(touch);
+            }
+            if (isDraggingVolume) {
+                const touch = e.touches[0];
+                updateVolumeTouch(touch);
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            isDraggingProgress = false;
+            isDraggingVolume = false;
+        });
+
+        function updateProgressTouch(touch) {
+            if (!progressRect) progressRect = progressBar.getBoundingClientRect();
+            const touchX = touch.clientX - progressRect.left;
+            const width = progressRect.width;
+            const touchPercent = Math.max(0, Math.min(1, touchX / width));
+            
+            if (audioPlayer.duration) {
+                audioPlayer.currentTime = touchPercent * audioPlayer.duration;
+                progress.style.width = (touchPercent * 100) + '%';
+            }
+        }
+
+        function updateVolumeTouch(touch) {
+            if (!volumeRect) volumeRect = volumeBar.getBoundingClientRect();
+            const touchX = touch.clientX - volumeRect.left;
+            const width = volumeRect.width;
+            const touchPercent = Math.max(0, Math.min(1, touchX / width));
+            
+            audioPlayer.volume = touchPercent;
+            volumeProgress.style.width = (touchPercent * 100) + '%';
+        }
+
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Space') {
@@ -405,8 +613,27 @@
                 rewindBtn.click();
             } else if (e.code === 'ArrowRight') {
                 forwardBtn.click();
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                const newVolume = Math.min(1, audioPlayer.volume + 0.1);
+                audioPlayer.volume = newVolume;
+                volumeProgress.style.width = (newVolume * 100) + '%';
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                const newVolume = Math.max(0, audioPlayer.volume - 0.1);
+                audioPlayer.volume = newVolume;
+                volumeProgress.style.width = (newVolume * 100) + '%';
             }
         });
+
+        // Prevent context menu on handles
+        progressHandle.addEventListener('contextmenu', (e) => e.preventDefault());
+        volumeHandle.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // Initialize snow effect immediately
+        for (let i = 0; i < 50; i++) {
+            setTimeout(createSnowflake, i * 100);
+        }
     </script>
 </body>
 </html>
