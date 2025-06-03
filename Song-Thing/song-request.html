@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Request Form - Syfer-eng's Music</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #121212;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #181818;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .tabs {
+            display: flex;
+            background: #282828;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #282828;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #b3b3b3;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #181818;
+            color: #1db954;
+            border-bottom: 3px solid #1db954;
+        }
+
+        .tab:hover:not(.active) {
+            background: #383838;
+            color: #ffffff;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="url"], textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #404040;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #282828;
+            color: #ffffff;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus, input[type="url"]:focus, textarea:focus {
+            outline: none;
+            border-color: #1db954;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .required {
+            color: #ff6b6b;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success {
+            background-color: #1db954;
+            color: #ffffff;
+        }
+
+        .error {
+            background-color: #ff6b6b;
+            color: #ffffff;
+        }
+
+        .warning {
+            background-color: #ffa726;
+            color: #ffffff;
+        }
+
+        .rate-limit-info {
+            background: #282828;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1db954;
+        }
+
+        .rate-limit-info h3 {
+            color: #1db954;
+            margin-bottom: 10px;
+        }
+
+        .rate-limit-info p {
+            color: #b3b3b3;
+            margin: 5px 0;
+        }
+
+        .countdown {
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        .info-section {
+            background: #282828;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-section h3 {
+            color: #1db954;
+            margin-bottom: 15px;
+        }
+
+        .info-section ul {
+            color: #b3b3b3;
+            padding-left: 20px;
+        }
+
+        .info-section li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .back-button {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+            
+            .tab-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-button">← Back to Home</a>
+            <h1>🎵 Song Request</h1>
+            <p>Share your favorite music with the community</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('request')">Submit Request</button>
+            <button class="tab" onclick="switchTab('info')">Information</button>
+            <button class="tab" onclick="switchTab('guidelines')">Guidelines</button>
+        </div>
+
+        <div id="request" class="tab-content active">
+            <div class="rate-limit-info">
+                <h3>⏱️ Rate Limit Status</h3>
+                <p id="rateLimitStatus">Checking rate limit...</p>
+                <p id="nextAllowedTime" style="display: none;">Next request allowed: <span class="countdown" id="countdown"></span></p>
+            </div>
+
+            <form id="songRequestForm">
+                <div class="form-group">
+                    <label for="songName">Song Name <span class="required">*</span></label>
+                    <input type="text" id="songName" name="songName" required placeholder="Enter the song name">
+                </div>
+
+                <div class="form-group">
+                    <label for="artistName">Artist Name</label>
+                    <input type="text" id="artistName" name="artistName" placeholder="Enter the artist name">
+                </div>
+
+                <div class="form-group">
+                    <label for="songLink">Song Link (Optional)</label>
+                    <input type="url" id="songLink" name="songLink" placeholder="https://spotify.com/... or https://youtube.com/...">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description (Optional)</label>
+                    <textarea id="description" name="description" placeholder="Why do you love this song? Any special memories or reasons for requesting it?"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Submit Request</button>
+            </form>
+
+            <div id="message" class="message" style="display: none;"></div>
+        </div>
+
+        <div id="info" class="tab-content">
+            <div class="info-section">
+                <h3>📋 How It Works</h3>
+                <ul>
+                    <li><strong>Submit:</strong> Fill out the form with your song details</li>
+                    <li><strong>Instant Display:</strong> Your request appears on the home page immediately</li>
+                    <li><strong>Discord Integration:</strong> Requests are also sent to Discord</li>
+                    <li><strong>Rate Limited:</strong> One request per hour to maintain quality</li>
+                    <li><strong>Optional Fields:</strong> Add links and descriptions to enhance your request</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h3>🎵 Supported Platforms</h3>
+                <ul>
+                    <li><strong>Spotify:</strong> Share your favorite tracks and playlists</li>
+                    <li><strong>YouTube:</strong> Music videos, live performances, covers</li>
+                    <li><strong>Apple Music:</strong> Songs from the Apple Music catalog</li>
+                    <li><strong>SoundCloud:</strong> Independent artists and remixes</li>
+                    <li><strong>Other:</strong> Any music platform link is welcome!</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="guidelines" class="tab-content">
+            <div class="info-section">
+                <h3>✅ Request Guidelines</h3>
+                <ul>
+                    <li><strong>Be Respectful:</strong> Keep all content appropriate and family-friendly</li>
+                    <li><strong>One Per Hour:</strong> Wait 60 minutes between requests to prevent spam</li>
+                    <li><strong>Quality Over Quantity:</strong> Make your requests count with good descriptions</li>
+                    <li><strong>Working Links:</strong> Ensure your links are accessible and working</li>
+                    <li><strong>No Duplicates:</strong> Check recent requests before submitting</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h3>🚫 What Not to Request</h3>
+                <ul>
+                    <li>Explicit or inappropriate content</li>
+                    <li>Copyrighted material without proper links</li>
+                    <li>Spam or repetitive requests</li>
+                    <li>Broken or invalid links</li>
+                    <li>Non-music content</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h3>💡 Pro Tips</h3>
+                <ul>
+                    <li><strong>Add Context:</strong> Explain why you love the song</li>
+                    <li><strong>Include Artist:</strong> Help others discover new artists</li>
+                    <li><strong>Share Stories:</strong> Tell us about memories connected to the song</li>
+                    <li><strong>Discover Together:</strong> Use this as a way to share musical experiences</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Rate limiting functionality
+        const RATE_LIMIT_KEY = 'songRequestLastSubmit';
+        const RATE_LIMIT_HOURS = 1;
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        function checkRateLimit() {
+            const lastSubmit = localStorage.getItem(RATE_LIMIT_KEY);
+            const now = new Date().getTime();
+            
+            if (!lastSubmit) {
+                updateRateLimitStatus(true, null);
+                return true;
+            }
+
+            const lastSubmitTime = parseInt(lastSubmit);
+            const timeDiff = now - lastSubmitTime;
+            const hourInMs = RATE_LIMIT_HOURS * 60 * 60 * 1000;
+
+            if (timeDiff >= hourInMs) {
+                updateRateLimitStatus(true, null);
+                return true;
+            } else {
+                const nextAllowedTime = lastSubmitTime + hourInMs;
+                updateRateLimitStatus(false, nextAllowedTime);
+                return false;
+            }
+        }
+
+        function updateRateLimitStatus(canSubmit, nextAllowedTime) {
+            const statusElement = document.getElementById('rateLimitStatus');
+            const nextTimeElement = document.getElementById('nextAllowedTime');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (canSubmit) {
+                statusElement.textContent = '✅ You can submit a request now!';
+                statusElement.style.color = '#1db954';
+                nextTimeElement.style.display = 'none';
+                submitBtn.disabled = false;
+            } else {
+                statusElement.textContent = '⏳ Rate limit active - please wait before submitting another request';
+                statusElement.style.color = '#ffa726';
+                nextTimeElement.style.display = 'block';
+                submitBtn.disabled = true;
+                startCountdown(nextAllowedTime);
+            }
+        }
+
+        function startCountdown(nextAllowedTime) {
+            const countdownElement = document.getElementById('countdown');
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const timeLeft = nextAllowedTime - now;
+
+                if (timeLeft <= 0) {
+                    checkRateLimit();
+                    return;
+                }
+
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                countdownElement.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            updateCountdown();
+            const interval = setInterval(updateCountdown, 1000);
+
+            // Clear interval when countdown reaches zero
+            setTimeout(() => {
+                clearInterval(interval);
+                checkRateLimit();
+            }, nextAllowedTime - new Date().getTime());
+        }
+
+        function saveSongToLocalStorage(songData) {
+            // Get existing songs
+            const existingSongs = JSON.parse(localStorage.getItem('musicHubSongs') || '[]');
+            
+            // Add new song to the beginning of the array
+            existingSongs.unshift(songData);
+            
+            // Save back to localStorage
+            localStorage.setItem('musicHubSongs', JSON.stringify(existingSongs));
+            
+            // Trigger storage event for other tabs
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'musicHubSongs',
+                newValue: JSON.stringify(existingSongs)
+            }));
+        }
+
+        // Initialize rate limit check
+        document.addEventListener('DOMContentLoaded', function() {
+            checkRateLimit();
+        });
+
+        document.getElementById('songRequestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Check rate limit before submitting
+            if (!checkRateLimit()) {
+                showMessage('⏳ Please wait before submitting another request. Check the rate limit status above.', 'warning');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const messageDiv = document.getElementById('message');
+            
+            // Get form data
+            const songName = document.getElementById('songName').value.trim();
+            const artistName = document.getElementById('artistName').value.trim();
+            const songLink = document.getElementById('songLink').value.trim();
+            const description = document.getElementById('description').value.trim();
+
+            // Validate required fields
+            if (!songName) {
+                showMessage('Please enter a song name.', 'error');
+                return;
+            }
+
+            // Disable submit button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            // Create song data object
+            const songData = {
+                songName: songName,
+                artistName: artistName,
+                songLink: songLink,
+                description: description,
+                timestamp: new Date().toISOString()
+            };
+
+            // Create Discord embed message
+            let embedDescription = `**Song:** ${songName}`;
+            
+            if (artistName) {
+                embedDescription += `\n**Artist:** ${artistName}`;
+            }
+            
+            if (songLink) {
+                embedDescription += `\n**Link:** ${songLink}`;
+            }
+            
+            if (description) {
+                embedDescription += `\n**Description:** ${description}`;
+            }
+
+            const discordPayload = {
+                embeds: [{
+                    title: "🎵 New Song Request",
+                    description: embedDescription,
+                    color: 1947684, // Spotify green color
+                    timestamp: new Date().toISOString(),
+                    footer: {
+                        text: "Music Hub - Song Request"
+                    }
+                }]
+            };
+
+            try {
+                // Save to localStorage first (this always works)
+                saveSongToLocalStorage(songData);
+
+                // Try to send to Discord webhook
+                const webhookUrl = 'https://discord.com/api/webhooks/1379333544949714984/zL8gzZEvyWtGm_gGDMnOKKCK_LgcCeDLhdB81hrdZKImN_9dthCNGHsueXcnvBylOeqq';
+                
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(discordPayload)
+                });
+
+                if (response.ok) {
+                    // Set rate limit timestamp
+                    localStorage.setItem(RATE_LIMIT_KEY, new Date().getTime().toString());
+                    
+                    showMessage('🎉 Song request submitted successfully! Your song is now visible on the home page and has been sent to Discord!', 'success');
+                    document.getElementById('songRequestForm').reset();
+                    
+                    // Update rate limit status
+                    checkRateLimit();
+
+                    // Redirect to home page after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 3000);
+                } else {
+                    // Discord failed but song was saved locally
+                    localStorage.setItem(RATE_LIMIT_KEY, new Date().getTime().toString());
+                    showMessage('✅ Song request saved successfully! Your song is visible on the home page. (Discord notification failed)', 'warning');
+                    document.getElementById('songRequestForm').reset();
+                    checkRateLimit();
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 3000);
+                }
+            } catch (error) {
+                console.error('Error submitting song request:', error);
+                
+                // Even if Discord fails, the song was saved locally
+                localStorage.setItem(RATE_LIMIT_KEY, new Date().getTime().toString());
+                showMessage('✅ Song request saved successfully! Your song is visible on the home page. (Discord notification failed)', 'warning');
+                document.getElementById('songRequestForm').reset();
+                checkRateLimit();
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+            } finally {
+                // Re-enable submit button only if rate limit allows
+                if (checkRateLimit()) {
+                    submitBtn.disabled = false;
+                }
+                submitBtn.textContent = 'Submit Request';
+            }
+        });
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = 'block';
+            
+            // Hide message after 7 seconds
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 7000);
+        }
+
+        // Clear message when user starts typing
+        document.getElementById('songName').addEventListener('input', function() {
+            document.getElementById('message').style.display = 'none';
+        });
+
+        // Check rate limit every minute to update countdown
+        setInterval(checkRateLimit, 60000);
+    </script>
+</body>
+</html>
