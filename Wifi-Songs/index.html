@@ -1,0 +1,638 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wifi Songs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Snow Animation */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            user-select: none;
+            pointer-events: none;
+            font-size: 20px;
+            animation-name: snowfall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .player-container {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            min-width: 450px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .song-picker {
+            margin-bottom: 30px;
+        }
+
+        .song-picker label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .song-picker select {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            cursor: pointer;
+        }
+
+        .song-picker select option {
+            background: #000;
+            color: white;
+        }
+
+        .song-picker input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+        }
+
+        .current-song {
+            margin-bottom: 30px;
+        }
+
+        .song-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border: 2px solid white;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .play-pause-btn {
+            width: 80px;
+            height: 80px;
+            font-size: 32px;
+            border: 3px solid white;
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: white;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.1s ease;
+            position: relative;
+        }
+
+        .progress-handle {
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 50%;
+            cursor: grab;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .progress-bar:hover .progress-handle {
+            opacity: 1;
+        }
+
+        .progress-handle:active {
+            cursor: grabbing;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .volume-bar {
+            width: 120px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .volume-progress {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+            width: 70%;
+            position: relative;
+        }
+
+        .volume-handle {
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 50%;
+            cursor: grab;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .volume-bar:hover .volume-handle {
+            opacity: 1;
+        }
+
+        .volume-handle:active {
+            cursor: grabbing;
+        }
+
+        .custom-icons {
+            font-family: Arial, sans-serif;
+        }
+
+        .rewind-icon::before {
+            content: "⏪";
+        }
+
+        .play-icon::before {
+            content: "▶";
+        }
+
+        .pause-icon::before {
+            content: "⏸";
+        }
+
+        .forward-icon::before {
+            content: "⏩";
+        }
+
+        .volume-icon::before {
+            content: "🔊";
+        }
+
+        .no-song {
+            color: #ccc;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="song-picker">
+            <label for="songSelect">Choose a Song:</label>
+            <select id="songSelect">
+                <option value="">Select a song...</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%202008%20-%20wifiskeleton.mp3">2008</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20Nope%20your%20too%20late%20i%20already%20died%20-%20wifiskeleton.mp3">Nope your too late i already died</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20bipolar%20-%20wifiskeleton.mp3">bipolar</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20corridor%20-%20wifiskeleton.mp3">corridor</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20girl%20-%20wifiskeleton.mp3">girl</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20i%20must%20b%20retarded%20-%20wifiskeleton.mp3">i must b retarded</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20im%20a%20monster%20in%20your%20real%20life%20-%20wifiskeleton.mp3">im a monster in your real life</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20isnt%20it%20obvious%20-%20wifiskeleton.mp3">isnt it obvious</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20my%20twenty%20first%20reason%20__3%20-%20wifiskeleton.mp3">my twenty first reason </3</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20nineteen%20forever%20-%20wifiskeleton.mp3">nineteen forever</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20pony%20-%20wifiskeleton.mp3">pony</option>
+                <option value="https://syfer-eng.github.io/Song-Thing/folder/SpotiDownloader.com%20-%20you%20ruin%20everything%20dont%20you%20-%20wifiskeleton.mp3">you ruin everything dont you</option>
+            </select>
+            <input type="file" id="fileInput" accept="audio/*" />
+        </div>
+
+        <div class="current-song">
+            <div class="song-title" id="songTitle">No song selected</div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" id="rewindBtn">
+                <span class="custom-icons rewind-icon"></span>
+            </button>
+            
+            <button class="control-btn play-pause-btn" id="playPauseBtn">
+                <span class="custom-icons play-icon" id="playPauseIcon"></span>
+            </button>
+            
+            <button class="control-btn" id="forwardBtn">
+                <span class="custom-icons forward-icon"></span>
+            </button>
+        </div>
+
+        <div class="progress-container">
+            <div class="time-display">
+                <span id="currentTime">0:00</span>
+                <span id="totalTime">0:00</span>
+            </div>
+            <div class="progress-bar" id="progressBar">
+                <div class="progress" id="progress">
+                    <div class="progress-handle" id="progressHandle"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="volume-container">
+            <span class="custom-icons volume-icon"></span>
+            <div class="volume-bar" id="volumeBar">
+                <div class="volume-progress" id="volumeProgress">
+                    <div class="volume-handle" id="volumeHandle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const songSelect = document.getElementById('songSelect');
+        const fileInput = document.getElementById('fileInput');
+        const songTitle = document.getElementById('songTitle');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playPauseIcon = document.getElementById('playPauseIcon');
+        const rewindBtn = document.getElementById('rewindBtn');
+        const forwardBtn = document.getElementById('forwardBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progress = document.getElementById('progress');
+        const progressHandle = document.getElementById('progressHandle');
+        const currentTimeEl = document.getElementById('currentTime');
+        const totalTimeEl = document.getElementById('totalTime');
+        const volumeBar = document.getElementById('volumeBar');
+        const volumeProgress = document.getElementById('volumeProgress');
+        const volumeHandle = document.getElementById('volumeHandle');
+
+        let isPlaying = false;
+        let isDraggingProgress = false;
+        let isDraggingVolume = false;
+
+        // Initialize volume
+        audioPlayer.volume = 0.7;
+
+        // Snow Animation
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + 'vw';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snowflake.style.opacity = Math.random();
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+            
+            document.body.appendChild(snowflake);
+            
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+
+        // Create snowflakes continuously
+        setInterval(createSnowflake, 300);
+
+        // Song selection from dropdown
+        songSelect.addEventListener('change', (e) => {
+            if (e.target.value) {
+                loadSong(e.target.value, e.target.options[e.target.selectedIndex].text);
+            }
+        });
+
+        // File input for custom songs
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                loadSong(url, file.name);
+                songSelect.value = '';
+            }
+        });
+
+        // Load song
+        function loadSong(src, title) {
+            audioPlayer.src = src;
+            songTitle.textContent = title;
+            songTitle.classList.remove('no-song');
+            
+            isPlaying = false;
+            playPauseIcon.className = 'custom-icons play-icon';
+            progress.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+        }
+
+        // Play/Pause button
+        playPauseBtn.addEventListener('click', () => {
+            if (!audioPlayer.src) return;
+
+            if (isPlaying) {
+                audioPlayer.pause();
+                isPlaying = false;
+                playPauseIcon.className = 'custom-icons play-icon';
+            } else {
+                audioPlayer.play();
+                isPlaying = true;
+                playPauseIcon.className = 'custom-icons pause-icon';
+            }
+        });
+
+        // Rewind button
+        rewindBtn.addEventListener('click', () => {
+            if (audioPlayer.src) {
+                audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
+            }
+        });
+
+        // Fast forward button
+        forwardBtn.addEventListener('click', () => {
+            if (audioPlayer.src) {
+                audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
+            }
+        });
+
+        // Progress bar dragging
+        let progressRect;
+
+        progressHandle.addEventListener('mousedown', (e) => {
+            isDraggingProgress = true;
+            progressRect = progressBar.getBoundingClientRect();
+            e.preventDefault();
+        });
+
+        progressBar.addEventListener('mousedown', (e) => {
+            if (e.target === progressBar || e.target === progress) {
+                isDraggingProgress = true;
+                progressRect = progressBar.getBoundingClientRect();
+                updateProgress(e);
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDraggingProgress && audioPlayer.duration) {
+                updateProgress(e);
+            }
+            if (isDraggingVolume) {
+                updateVolume(e);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDraggingProgress = false;
+            isDraggingVolume = false;
+        });
+
+        function updateProgress(e) {
+            if (!progressRect) progressRect = progressBar.getBoundingClientRect();
+            const clickX = e.clientX - progressRect.left;
+            const width = progressRect.width;
+            const clickPercent = Math.max(0, Math.min(1, clickX / width));
+            
+            if (audioPlayer.duration) {
+                audioPlayer.currentTime = clickPercent * audioPlayer.duration;
+                progress.style.width = (clickPercent * 100) + '%';
+            }
+        }
+
+        // Volume bar dragging
+        let volumeRect;
+
+        volumeHandle.addEventListener('mousedown', (e) => {
+            isDraggingVolume = true;
+            volumeRect = volumeBar.getBoundingClientRect();
+            e.preventDefault();
+        });
+
+        volumeBar.addEventListener('mousedown', (e) => {
+            if (e.target === volumeBar || e.target === volumeProgress) {
+                isDraggingVolume = true;
+                volumeRect = volumeBar.getBoundingClientRect();
+                updateVolume(e);
+            }
+        });
+
+        function updateVolume(e) {
+            if (!volumeRect) volumeRect = volumeBar.getBoundingClientRect();
+            const clickX = e.clientX - volumeRect.left;
+            const width = volumeRect.width;
+            const clickPercent = Math.max(0, Math.min(1, clickX / width));
+            
+            audioPlayer.volume = clickPercent;
+            volumeProgress.style.width = (clickPercent * 100) + '%';
+        }
+
+        // Update progress and time automatically
+        audioPlayer.addEventListener('timeupdate', () => {
+            if (audioPlayer.duration && !isDraggingProgress) {
+                const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progress.style.width = progressPercent + '%';
+                
+                currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+            }
+        });
+
+        // Get total time when metadata loads
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            totalTimeEl.textContent = formatTime(audioPlayer.duration);
+        });
+
+        // Format time helper
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Handle song end
+        audioPlayer.addEventListener('ended', () => {
+            isPlaying = false;
+            playPauseIcon.className = 'custom-icons play-icon';
+            progress.style.width = '0%';
+            audioPlayer.currentTime = 0;
+        });
+
+        // Touch support for mobile
+        progressHandle.addEventListener('touchstart', (e) => {
+            isDraggingProgress = true;
+            progressRect = progressBar.getBoundingClientRect();
+            e.preventDefault();
+        });
+
+        volumeHandle.addEventListener('touchstart', (e) => {
+            isDraggingVolume = true;
+            volumeRect = volumeBar.getBoundingClientRect();
+            e.preventDefault();
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDraggingProgress && audioPlayer.duration) {
+                const touch = e.touches[0];
+                updateProgressTouch(touch);
+            }
+            if (isDraggingVolume) {
+                const touch = e.touches[0];
+                updateVolumeTouch(touch);
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            isDraggingProgress = false;
+            isDraggingVolume = false;
+        });
+
+        function updateProgressTouch(touch) {
+            if (!progressRect) progressRect = progressBar.getBoundingClientRect();
+            const touchX = touch.clientX - progressRect.left;
+            const width = progressRect.width;
+            const touchPercent = Math.max(0, Math.min(1, touchX / width));
+            
+            if (audioPlayer.duration) {
+                audioPlayer.currentTime = touchPercent * audioPlayer.duration;
+                progress.style.width = (touchPercent * 100) + '%';
+            }
+        }
+
+        function updateVolumeTouch(touch) {
+            if (!volumeRect) volumeRect = volumeBar.getBoundingClientRect();
+            const touchX = touch.clientX - volumeRect.left;
+            const width = volumeRect.width;
+            const touchPercent = Math.max(0, Math.min(1, touchX / width));
+            
+            audioPlayer.volume = touchPercent;
+            volumeProgress.style.width = (touchPercent * 100) + '%';
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                playPauseBtn.click();
+            } else if (e.code === 'ArrowLeft') {
+                rewindBtn.click();
+            } else if (e.code === 'ArrowRight') {
+                forwardBtn.click();
+            } else if (e.code === 'ArrowUp') {
+                e.preventDefault();
+                const newVolume = Math.min(1, audioPlayer.volume + 0.1);
+                audioPlayer.volume = newVolume;
+                volumeProgress.style.width = (newVolume * 100) + '%';
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                const newVolume = Math.max(0, audioPlayer.volume - 0.1);
+                audioPlayer.volume = newVolume;
+                volumeProgress.style.width = (newVolume * 100) + '%';
+            }
+        });
+
+        // Prevent context menu on handles
+        progressHandle.addEventListener('contextmenu', (e) => e.preventDefault());
+        volumeHandle.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // Initialize snow effect immediately
+        for (let i = 0; i < 50; i++) {
+            setTimeout(createSnowflake, i * 100);
+        }
+    </script>
+</body>
+</html>
