@@ -1,0 +1,566 @@
+:root {
+    --primary-color: #00bcd4;
+    --secondary-color: #9c27b0;
+    --accent-color: #ff4081;
+    --background: radial-gradient(circle at center, rgba(25, 25, 25, 1) 0%, rgba(0, 0, 0, 1) 100%);
+    --surface: rgba(30, 30, 30, 0.95);
+    --surface-light: rgba(50, 50, 50, 0.9);
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --shadow: rgba(0, 0, 0, 0.7);
+    --border-radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--background);
+    color: var(--text-primary);
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Animated Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://source.unsplash.com/1920x1080/?anime,cyberpunk') no-repeat center center fixed;
+    background-size: cover;
+    filter: blur(8px) brightness(0.3);
+    z-index: -1;
+    animation: backgroundShift 60s infinite ease-in-out;
+}
+
+@keyframes backgroundShift {
+    0%, 100% { 
+        filter: blur(8px) brightness(0.3) hue-rotate(0deg); 
+        transform: scale(1);
+    }
+    25% { 
+        filter: blur(12px) brightness(0.2) hue-rotate(90deg); 
+        transform: scale(1.05);
+    }
+    50% { 
+        filter: blur(6px) brightness(0.4) hue-rotate(180deg); 
+        transform: scale(1.02);
+    }
+    75% { 
+        filter: blur(10px) brightness(0.25) hue-rotate(270deg); 
+        transform: scale(1.03);
+    }
+}
+
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 100;
+}
+
+.home-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+}
+
+.home-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 188, 212, 0.4);
+}
+
+.anime-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.fullscreen-btn {
+    padding: 10px;
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.fullscreen-btn:hover {
+    background: var(--surface-light);
+    transform: scale(1.05);
+}
+
+/* Main Container */
+.player-container {
+    max-width: 1400px;
+    width: 95%;
+    margin: 100px auto 50px;
+    background: var(--surface);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 20px 60px var(--shadow);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    background: #000;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Episode Info */
+.episode-info {
+    padding: 25px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.episode-info h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.episode-info p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 25px 30px;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: var(--surface-light);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: inherit;
+}
+
+.control-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.control-btn.primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.server-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.server-selector label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.dropdown {
+    padding: 10px 15px;
+    background: var(--surface-light);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: inherit;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.dropdown:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 188, 212, 0.2);
+}
+
+/* Episode Menu */
+.episode-menu {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(20px);
+    transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 999;
+    overflow-y: auto;
+}
+
+.episode-menu.open {
+    top: 0;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.menu-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.close-button {
+    padding: 10px;
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-button:hover {
+    background: var(--accent-color);
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 64, 129, 0.3);
+}
+
+.episode-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.episode-item {
+    padding: 25px;
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.episode-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.episode-item:hover::before {
+    left: 100%;
+}
+
+.episode-item:hover {
+    transform: translateY(-5px);
+    background: var(--surface-light);
+    border-color: var(--primary-color);
+    box-shadow: 0 10px 30px rgba(0, 188, 212, 0.2);
+}
+
+.episode-item.current {
+    border-color: var(--accent-color);
+    background: linear-gradient(135deg, rgba(255, 64, 129, 0.1), rgba(156, 39, 176, 0.1));
+}
+
+.episode-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.episode-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.episode-item:hover .episode-title {
+    color: var(--primary-color);
+}
+
+.episode-item:hover .episode-description {
+    color: var(--text-primary);
+}
+
+/* Progress Indicator */
+.progress-indicator {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--surface);
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 50;
+    min-width: 200px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 12px 20px;
+    }
+    
+    .anime-title {
+        font-size: 1.2rem;
+    }
+    
+    .player-container {
+        width: 98%;
+        margin: 80px auto 30px;
+    }
+    
+    .controls {
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px;
+    }
+    
+    .server-selector {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .episode-picker {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 15px;
+    }
+    
+    .episode-info {
+        padding: 20px;
+    }
+    
+    .progress-indicator {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        min-width: auto;
+    }
+    
+    .menu-header {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-button span {
+        display: none;
+    }
+    
+    .control-btn {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .episode-item {
+        padding: 20px;
+    }
+    
+    .episode-title {
+        font-size: 1rem;
+    }
+    
+    .episode-description {
+        font-size: 0.85rem;
+    }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.episode-item {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.episode-item:nth-child(even) {
+    animation-delay: 0.1s;
+}
+
+/* Focus States for Accessibility */
+.control-btn:focus,
+.dropdown:focus,
+.close-button:focus,
+.home-button:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Loading States */
+.loading .episode-info h2,
+.loading .episode-info p {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+    border-radius: 4px;
+    color: transparent;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
