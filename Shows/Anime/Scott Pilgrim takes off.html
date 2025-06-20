@@ -1,0 +1,365 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime <3</title>
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00bcd4;
+            --secondary-color: #9c27b0;
+            --background: radial-gradient(circle, rgba(25, 25, 25, 1) 0%, rgba(0, 0, 0, 1) 100%);
+            --button-bg: linear-gradient(90deg, #00bcd4, #9c27b0);
+            --text: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.7);
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://source.unsplash.com/1600x900/?anime') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(5px);
+            z-index: -1;
+            animation: pulse 30s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { filter: blur(5px); }
+            50% { filter: blur(15px); }
+            100% { filter: blur(5px); }
+        }
+
+        .home-button,
+        .skip-button,
+        .menu-button {
+            position: relative;
+            padding: 12px 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            background: var(--button-bg);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .home-button:hover,
+        .skip-button:hover,
+        .menu-button:hover {
+            transform: translateY(-5px) scale(1.1);
+            background: linear-gradient(90deg, #9c27b0, #00bcd4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .close-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--button-bg);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            z-index: 1000;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .close-button:hover {
+            transform: rotate(90deg);
+            box-shadow: 0 8px 20px var(--shadow);
+        }
+
+        .player-container {
+            max-width: 1320px;
+            width: 90%;
+            margin: 50px auto;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 50px var(--shadow);
+            transform: scale(0.9);
+            transform-origin: center;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 30px;
+        }
+
+        .episode-menu {
+            position: fixed;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            transition: top 0.5s ease;
+            z-index: 999;
+            padding: 80px 20px 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .episode-menu.open {
+            top: 0;
+        }
+
+        .episode-picker {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .episode-item {
+            padding: 20px;
+            background: rgba(50, 50, 50, 0.9);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px var(--shadow);
+            transform: scale(0.95);
+            color: #ccc;
+        }
+
+        .episode-item:hover {
+            transform: scale(1.01);
+            background-color: #9c27b0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .episode-item:hover .episode-title,
+        .episode-item:hover .episode-description {
+            color: black;
+        }
+
+        .episode-title,
+        .episode-description {
+            transition: color 0.3s ease-in-out;
+        }
+
+        .episode-item:hover .episode-title {
+            color: black;
+        }
+
+        .episode-item:hover .episode-description {
+            color: black;
+        }
+
+        .skip-button {
+            margin: 0 10px;
+        }
+
+        .skip-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .dropdown {
+            background: var(--button-bg);
+            border-radius: 8px;
+            color: black;  /* Set the text color inside the dropdown to black */
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            width: 150px;
+        }
+
+    </style>
+</head>
+<body>
+    <a href="https://Syfer-eng.github.io/Shows/Anime.html" class="home-button">Home</a>
+    <div class="player-container">
+        <div class="video-wrapper" id="videoWrapper"></div>
+        <div class="controls">
+            <button class="menu-button skip-button" id="prevButton" onclick="skipEpisode(-1)">Previous</button>
+            <button class="menu-button" onclick="toggleMenu()">Select Episode</button>
+            <button class="menu-button skip-button" id="nextButton" onclick="skipEpisode(1)">Next</button>
+            <!-- Server Picker Dropdown moved here -->
+            <select class="dropdown" id="serverDropdown" onchange="changeServer()">
+                <option value="0">Google Drive</option>
+            </select>
+        </div>
+    </div>
+    <div class="episode-menu" id="episodeMenu">
+        <button class="close-button" onclick="toggleMenu()">×</button>
+        <div class="episode-picker" id="episodePicker"></div>
+    </div>
+
+    <script>
+        const episodes = [
+            {
+                title: "E1 ∙ Scott Pilgrim's Precious Little Life",
+                info: "Slacker Scott Pilgrim leads a sweet and simple life. Until sparks fly - and ignite total chaos - when he meets the rainbow-haired girl of his dreams.",
+                servers: [
+                    { name: "Google Drive", url: "https://drive.google.com/file/d/1_FXmtc5Tkston7yNTcFQoGg0Ub_crEHN/preview" }
+                ]
+            },
+            {
+                title: "E2 ∙ A League of Their Own",
+                info: "An eclectic crowd of familiar faces gather under unusual circumstances. Elsewhere, the League of Evil Exes meets up at a secret lair.",
+                servers: [
+                    { name: "Google Drive", url: "https://drive.google.com/file/d/1R8ww-sde1K6AFaa69NCNOZumsQfjzyw5/preview" }
+                ]
+            },
+            {
+                title: "E3 ∙ Ramona Rents a Video",
+                info: "Motivated by a dream, Ramona follows a hunch and confides in a receptive Julie. At a video rental store, a tense run-in with Roxie fuels big feelings.",
+                servers: [
+                    { name: "Google Drive", url: "https://drive.google.com/file/d/1ik_Myb8vJ3tBEeM0oJzDNnSCZ2U9V_m2/preview" }
+                ]
+            },
+            {
+                title: "E4 ∙ Whatever",
+                info: "Ramona heads to a film set to see Lucas, her movie star ex, whose role in a major Canadian motion picture attracts media attention - and the paparazzi.",
+                servers: [
+                    { name: "Google Drive", url: "https://drive.google.com/file/d/1F-JGrHwNcfxI39LGpEAUVlaAewjCQqAt/preview" }
+                ]
+            },
+            {
+                title: "E5 ∙ Lights. Camera. Sparks?!",
+                info: "A documentary about the Toronto production reveals drama - and steamy romance - behind the scenes. Ramona takes on a daring but demanding gig.",
+                servers: [
+                    { name: "Google Drive", url: "https://drive.google.com/file/d/1fD4wVJ61shi9pkjjh_JC-Vb4jS21O8Tq/preview" }
+                ]
+            },
+            {
+                title: "E6 ∙ WHODIDIT",
+                info: "Ramona arrives at Julie's doorstep with more questions and curiosity. A surprise visitor seeks forgiveness from Gideon. Knives taps into new talents.",
+                servers: [
+                    { name: "Google Drive", url: "https://drive.google.com/file/d/15H1DGGgg6Qu4-lUgDHL1GDQ0IQwrosbf/preview" }
+                ]
+            },
+            {
+                title: "E7 ∙ 2 Scott 2 Pilgrim",
+                info: "Unfinished business, mind-blowing revelations - and a mix of lovers, friends, and exes. What could go wrong?",
+                servers: [
+                    { name: "Google Drive", url: "https://drive.google.com/file/d/1AZSM2FeUxIlUUYxLts8T8ev8sqqAqOn5/preview" }
+                ]
+            },
+            {
+                title: "E8 ∙ The World Vs Scott Pilgrim",
+                info: "Scott, Ramona and their friends face their toughest challenge yet in a knockdown epic showdown that could change everything.",
+                servers: [
+                    { name: "Google Drive", url: "https://drive.google.com/file/d/1_QmjDqlqAXX94fvqX0qqmlaPEAcsPp_1/preview" }
+                ]
+            }
+        ];
+
+        let currentEpisodeIndex = 0;
+        let currentServerIndex = 0;
+
+        function updateSkipButtons() {
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            prevButton.disabled = currentEpisodeIndex === 0;
+            nextButton.disabled = currentEpisodeIndex === episodes.length - 1;
+        }
+
+        function skipEpisode(direction) {
+            const newIndex = currentEpisodeIndex + direction;
+            if (newIndex >= 0 && newIndex < episodes.length) {
+                currentEpisodeIndex = newIndex;
+                loadEpisode(episodes[currentEpisodeIndex]);
+                updateSkipButtons();
+            }
+        }
+
+        function loadEpisode(episode) {
+            const wrapper = document.getElementById('videoWrapper');
+            const serverUrl = episode.servers[currentServerIndex].url;
+            wrapper.innerHTML = `<iframe src="${serverUrl}" allowfullscreen></iframe>`;
+            currentEpisodeIndex = episodes.indexOf(episode);
+            updateSkipButtons();
+        }
+
+        function createEpisodePicker() {
+            const picker = document.getElementById('episodePicker');
+            episodes.forEach((episode) => {
+                const item = document.createElement('div');
+                item.className = 'episode-item';
+                item.onclick = () => {
+                    loadEpisode(episode);
+                    toggleMenu();
+                };
+                item.innerHTML = `
+                    <div class="episode-title">${episode.title}</div>
+                    <div class="episode-description">${episode.info}</div>
+                `;
+                picker.appendChild(item);
+            });
+            loadEpisode(episodes[0]);
+            updateSkipButtons();
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('episodeMenu');
+            menu.classList.toggle('open');
+        }
+
+        function changeServer() {
+            currentServerIndex = document.getElementById('serverDropdown').value;
+            loadEpisode(episodes[currentEpisodeIndex]);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createEpisodePicker();
+        });
+    </script>
+</body>
+</html>
