@@ -491,7 +491,7 @@
   </aside>
 
   <main role="main">
-    <h1>Anime Episode Selector</h1>
+    <h1>Episodes: </h1>
     <video id="anime-player" controls preload="metadata" tabindex="0" aria-label="Anime video player"></video>
     <div id="version-wrapper" role="region" aria-label="Select version sub or dub">
       <label for="version-select">Version:</label>
@@ -505,10 +505,29 @@
 
   <div id="season-wrapper" role="region" aria-label="Season selection region">
     <label>Season:</label>
-
   </div>
 
   <script>
+
+    // Add episode names by season and episode number
+    const episodeNames = {
+      1: {
+        1: "Awakening",
+        2: "The Journey Begins",
+        3: "Crossroads",
+        4: "The Hidden Power",
+        5: "Dawn of Destiny"
+      },
+      2: {
+        1: "New Horizons",
+        2: "Shadows Rising",
+        3: "Legacy of the Ancients"
+      },
+      3: {
+        1: "Revelations",
+        2: "The Final Stand"
+      }
+    };
 
     const allEpisodes = {
       1: {  // Seasons
@@ -603,7 +622,9 @@
 
       Object.keys(episodes).forEach(epNum => {
         const li = document.createElement('li');
-        li.textContent = `Episode ${epNum}`;
+        // Show episode number and episode name if available
+        const epName = (episodeNames[selectedSeason] && episodeNames[selectedSeason][epNum]) ? episodeNames[selectedSeason][epNum] : '';
+        li.textContent = epName ? `Episode ${epNum}: ${epName}` : `Episode ${epNum}`;
         li.dataset.episode = epNum;
         li.tabIndex = 0;
         li.setAttribute('role', 'button');
@@ -745,6 +766,7 @@
       selectEpisode(firstEpisode);
     }
     versionSelect.value = 'sub';
+
   </script>
 
 </body>
