@@ -1,406 +1,823 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anime <3</title>
-    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/HNTCGkN/icons8-kuromi-512.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #00bcd4;
-            --secondary-color: #9c27b0;
-            --background: radial-gradient(circle, rgba(25, 25, 25, 1) 0%, rgba(0, 0, 0, 1) 100%);
-            --button-bg: linear-gradient(90deg, #00bcd4, #9c27b0);
-            --text: #ffffff;
-            --shadow: rgba(0, 0, 0, 0.7);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dan Da Dan</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-        body {
-            background: var(--background);
-            color: var(--text);
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            position: relative;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    :root {
+      --primary-color: #ffffff;
+      --primary-dark: #d0d0d0;
+      --bg-dark: #000000;
+      --bg-darker: #121212;
+      --text-primary: #ffffff;
+      --text-muted: #bbbbbb;
+      --shadow-dark: rgba(255, 255, 255, 0.05);
+      --border-radius: 8px;
+      --transition-speed: 0.3s;
+      --highlight-hover: #dddddd;
+      --highlight-selected: #ffffff;
+      --highlight-selected-hover: #aaaaaa;
+      --watched-opacity: 0.6;
+      --watched-color: #888888;
+      --watched-icon-color: #95d600;
+      --season-btn-bg: #222;
+      --season-btn-bg-hover: #333;
+      --season-btn-selected-bg: #fff;
+      --season-btn-selected-color: #000;
+    }
 
-        /* Animated Background */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://source.unsplash.com/1600x900/?anime') no-repeat center center fixed;
-            background-size: cover;
-            filter: blur(5px);
-            z-index: -1;
-            animation: pulse 30s infinite ease-in-out;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        @keyframes pulse {
-            0% { filter: blur(5px); }
-            50% { filter: blur(15px); }
-            100% { filter: blur(5px); }
-        }
+    body {
+      margin: 0;
+      background: var(--bg-dark);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+      overflow: hidden;
+    }
 
-        .home-button,
-        .skip-button,
-        .menu-button {
-            position: relative;
-            padding: 12px 24px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            background: var(--button-bg);
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px var(--shadow);
-        }
+    #sidebar {
+      width: 280px;
+      background: var(--bg-darker);
+      box-shadow: 3px 0 12px var(--shadow-dark);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 20px 20px;
+      overflow-y: auto;
+      user-select: none;
+    }
 
-        .home-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
+    #sidebar button#logo-button {
+      display: block;
+      margin-bottom: 25px;
+      user-select: none;
+      flex-shrink: 0;
+      outline-offset: 3px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      width: 120px;
+      height: auto;
+      border-radius: 12px;
+      transition: filter 0.3s ease, box-shadow 0.3s ease;
+    }
 
-        .home-button:hover,
-        .skip-button:hover,
-        .menu-button:hover {
-            transform: translateY(-5px) scale(1.1);
-            background: linear-gradient(90deg, #9c27b0, #00bcd4);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
-        }
+    #sidebar button#logo-button img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      filter: none;
+      transition: filter 0.3s ease;
+      user-select: none;
+      pointer-events: none;
+    }
 
-        .close-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: var(--button-bg);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-            z-index: 1000;
-            box-shadow: 0 5px 15px var(--shadow);
-        }
+    #sidebar button#logo-button:hover,
+    #sidebar button#logo-button:focus {
+      filter: none;
+      box-shadow: 0 0 8px var(--primary-color);
+      outline: none;
+    }
 
-        .close-button:hover {
-            transform: rotate(90deg);
-            box-shadow: 0 8px 20px var(--shadow);
-        }
+    #sidebar h2 {
+      font-weight: 600;
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin: 0 0 15px;
+      letter-spacing: 1px;
+      user-select: none;
+    }
 
-        .player-container {
-            max-width: 1320px;
-            width: 90%;
-            margin: 50px auto;
-            background: rgba(0, 0, 0, 0.8);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 50px var(--shadow);
-            transform: scale(0.9);
-            transform-origin: center;
-        }
+    #episode-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+      border-radius: var(--border-radius);
+      box-shadow: inset 0 0 8px #ffffff11;
+      border: 1px solid #444;
+      background: #111111;
+    }
 
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-        }
+    #episode-list li {
+      padding: 14px 20px;
+      border-left: 4px solid transparent;
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 
+        background-color var(--transition-speed),
+        border-color var(--transition-speed),
+        color var(--transition-speed);
+      user-select: none;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      text-shadow: 0 0 4px #000;
+      position: relative;
+    }
 
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+    #episode-list li.watched {
+      opacity: var(--watched-opacity);
+      color: var(--watched-color);
+    }
+    #episode-list li.watched::after {
+      content: "✓";
+      position: absolute;
+      right: 14px;
+      font-weight: 700;
+      color: var(--watched-icon-color);
+      font-size: 1.1rem;
+      user-select: none;
+      text-shadow: none;
+    }
 
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            padding: 30px;
-        }
+    #episode-list li:not(.selected):hover {
+      background-color: var(--highlight-hover);
+      color: #000;
+      border-left-color: var(--highlight-hover);
+      text-shadow: none;
+      opacity: 1 !important;
+    }
 
-        .episode-menu {
-            position: fixed;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            transition: top 0.5s ease;
-            z-index: 999;
-            padding: 80px 20px 20px;
-            box-sizing: border-box;
-            overflow-y: auto;
-        }
+    #episode-list li.selected {
+      background-color: var(--highlight-selected);
+      color: #000;
+      border-left-color: var(--highlight-selected);
+      font-weight: 700;
+      text-shadow: none;
+      opacity: 1 !important;
+    }
 
-        .episode-menu.open {
-            top: 0;
-        }
+    #episode-list li.selected:hover {
+      background-color: var(--highlight-selected-hover);
+      border-left-color: var(--highlight-selected-hover);
+      color: #222;
+      cursor: pointer;
+      opacity: 1 !important;
+    }
 
-        .episode-picker {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+    #episode-list li:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+      background-color: var(--highlight-hover);
+      color: #000;
+      text-shadow: none;
+      opacity: 1 !important;
+    }
 
-        .episode-item {
-            padding: 20px;
-            background: rgba(50, 50, 50, 0.9);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
-            box-shadow: 0 5px 15px var(--shadow);
-            transform: scale(0.95);
-            color: #ccc;
-        }
+    main {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 30px;
+      background: var(--bg-dark);
+      box-shadow: inset 0 0 50px #000000cc;
+      position: relative;
+      overflow-x: hidden;
+      
+      padding-bottom: 100px;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+    }
 
-        .episode-item:hover {
-            transform: scale(1.01);
-            background-color: #9c27b0;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-        }
+    h1 {
+      font-weight: 600;
+      font-size: 2.8rem;
+      margin: 0 0 25px;
+      letter-spacing: 2px;
+      color: var(--primary-color);
+      user-select: none;
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 0 3px #fff, 0 0 7px #fff;
+    }
 
-        .episode-item:hover .episode-title,
-        .episode-item:hover .episode-description {
-            color: black;
-        }
+    #video-container {
+      width: 100%;
+      max-height: 540px;
+      border-radius: var(--border-radius);
+      box-shadow:
+        0 0 30px #fff,
+        inset 0 0 60px #ffffffcc;
+      background-color: #000;
+      outline: none;
+      user-select: none;
+      filter: grayscale(0%);
+      transition: filter 0.3s ease;
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+    }
 
-        .episode-title,
-        .episode-description {
-            transition: color 0.3s ease-in-out;
-        }
+    #video-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
 
-        .episode-item:hover .episode-title {
-            color: black;
-        }
+    #version-wrapper {
+      margin-top: 16px;
+      width: 100%;
+      background: #111111;
+      padding: 14px 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 20px rgba(255 255 255 / 0.05);
+      user-select: none;
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      align-items: center;
+    }
 
-        .episode-item:hover .episode-description {
-            color: black;
-        }
+    #version-wrapper label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-right: 10px;
+      user-select: none;
+    }
 
-        .skip-button {
-            margin: 0 10px;
-        }
+    #version-select {
+      background-color: #222;
+      border: none;
+      border-radius: var(--border-radius);
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 9px 14px;
+      cursor: pointer;
+      outline-offset: 3px;
+      box-shadow: inset 0 0 8px #000;
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #fff 50%),
+        linear-gradient(135deg, #fff 50%, transparent 50%);
+      background-position:
+        calc(100% - 20px) calc(1.2em + 2px),
+        calc(100% - 15px) calc(1.2em + 2px);
+      background-size: 5px 5px;
+      background-repeat: no-repeat;
+      min-width: 100px;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
 
-        .skip-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
-        .dropdown {
-            background: var(--button-bg);
-            border-radius: 8px;
-            color: black;  /* Set the text color inside the dropdown to black */
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            width: 150px;
-        }
+    #version-select:focus {
+      background-color: #333;
+      box-shadow: 0 0 12px #fff, inset 0 0 8px #000;
+      outline: none;
+      color: #fff;
+    }
 
-    </style>
+    #version-select option {
+      background-color: #222;
+      color: var(--text-primary);
+      font-weight: 400;
+    }
+
+    #episode-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    #episode-list::-webkit-scrollbar-track {
+      background: #111;
+    }
+    #episode-list::-webkit-scrollbar-thumb {
+      background-color: #bbb;
+      border-radius: 10px;
+      border: 2px solid #111;
+    }
+
+    #season-wrapper {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111111;
+      border-radius: var(--border-radius);
+      padding: 12px 20px;
+      box-shadow: 0 4px 20px rgba(255 255 255 / 0.05);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+      z-index: 1000;
+      max-width: 960px;
+      width: calc(100% - 40px);
+      box-sizing: border-box;
+    }
+
+    #season-wrapper label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-right: 10px;
+      user-select: none;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    #season-wrapper button.season-btn {
+      background-color: var(--season-btn-bg);
+      border: none;
+      border-radius: var(--border-radius);
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 9px 16px;
+      cursor: pointer;
+      outline-offset: 3px;
+      box-shadow: inset 0 0 8px #000;
+      transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+      user-select: none;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+    #season-wrapper button.season-btn:hover,
+    #season-wrapper button.season-btn:focus-visible {
+      background-color: var(--season-btn-bg-hover);
+      outline: none;
+      color: #fff;
+      box-shadow: 0 0 5px var(--primary-color), inset 0 0 12px #000;
+    }
+
+    #season-wrapper button.season-btn.selected {
+      background-color: var(--season-btn-selected-bg);
+      color: var(--season-btn-selected-color);
+      box-shadow: none;
+      cursor: default;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+      }
+
+      #sidebar {
+        width: 100%;
+        max-height: 200px;
+        flex-direction: row;
+        padding: 15px 15px 10px;
+        box-shadow: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        align-items: center;
+      }
+
+      #sidebar button#logo-button {
+        margin: 0 15px 0 0;
+        width: 120px;
+      }
+
+      #sidebar h2 {
+        flex: 1 0 100%;
+        font-size: 1.5rem;
+        text-align: center;
+        margin: 0 0 8px;
+      }
+
+      #episode-list {
+        max-height: none;
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        border-radius: 0;
+      }
+
+      #episode-list li {
+        white-space: nowrap;
+        flex: 0 0 auto;
+        border-left: none;
+        border-radius: var(--border-radius);
+        padding: 8px 14px;
+        background-color: transparent;
+        text-shadow: none;
+        color: var(--text-primary);
+        transition: color 0.3s ease, background-color 0.3s ease;
+        position: relative;
+      }
+
+      #episode-list li.watched::after {
+        right: 8px;
+        font-size: 1rem;
+      }
+
+      #episode-list li:not(.selected):hover {
+        background-color: var(--highlight-hover);
+        color: #000;
+        text-shadow: none;
+        opacity: 1 !important;
+      }
+
+      #episode-list li.selected {
+        background-color: var(--highlight-selected);
+        color: #000;
+        opacity: 1 !important;
+      }
+
+      #episode-list li.selected:hover {
+        background-color: var(--highlight-selected-hover);
+        color: #222;
+      }
+
+      main {
+        width: 100%;
+        padding: 20px 15px 100px;
+        box-sizing: border-box;
+      }
+
+      #version-wrapper {
+        max-width: 100%;
+        justify-content: center;
+      }
+
+      #season-wrapper {
+        width: calc(100% - 30px);
+        left: 15px;
+        transform: none;
+        bottom: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      #season-wrapper label {
+        flex-basis: 100%;
+        margin-bottom: 4px;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
-    <a href="https://Syfer-eng.github.io/Shows/Anime.html" class="home-button">Home</a>
-    <div class="player-container">
-        <div class="video-wrapper" id="videoWrapper"></div>
-        <div class="controls">
-            <button class="menu-button skip-button" id="prevButton" onclick="skipEpisode(-1)">Previous</button>
-            <button class="menu-button" onclick="toggleMenu()">Select Episode</button>
-            <button class="menu-button skip-button" id="nextButton" onclick="skipEpisode(1)">Next</button>
-            <!-- Server Picker Dropdown moved here -->
-            <select class="dropdown" id="serverDropdown" onchange="changeServer()">
-                <option value="0">Mega.nz</option>
-                <option value="1">Google Drive</option>
-            </select>
-        </div>
+
+  <aside id="sidebar" role="complementary" aria-label="Episode selection sidebar">
+    <button id="logo-button" aria-label="Go to homepage" title="Go to homepage">
+      <img src="https://raw.githubusercontent.com/Skeleton-Archive/cs2-offsets/refs/heads/main/cat.png" alt="Logo" />
+    </button>
+    <h2>Episodes</h2>
+    <ul id="episode-list" tabindex="0" aria-label="Anime episodes list"></ul>
+  </aside>
+
+  <main role="main">
+    <h1>Episodes</h1>
+    <div id="video-container" aria-label="Video player container">
+      <iframe id="video-iframe" allowfullscreen allow="autoplay" title="Anime Episode Player"></iframe>
     </div>
-    <div class="episode-menu" id="episodeMenu">
-        <button class="close-button" onclick="toggleMenu()">×</button>
-        <div class="episode-picker" id="episodePicker"></div>
+    <div id="version-wrapper" role="region" aria-label="Select version sub or dub">
+      <label for="version-select">Version:</label>
+      <select id="version-select" aria-label="Select version">
+        <option value="sub">Sub</option>
+        <option value="dub">Dub</option>
+      </select>
     </div>
+  </main>
 
-    <script>
-        const episodes = [
-            {
-                title: "E1 - That's How Love Starts, Ya Know!",
-                info: "Momo is a high school girl born to a family of spirit mediums, and Okarun is an occult fanatic. To settle an argument, Momo heads to an abandoned hospital famous for UFO sightings while Okarun heads to a tunnel famous as a spiritual hotspot.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/fuQxwJhb#Tr2vfXg_94ZiEEk0m1-FnHlsG_9dHFRz8iQ63RqA6bI" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1_FXmtc5Tkston7yNTcFQoGg0Ub_crEHN/preview" }
-                ]
-            },
-            {
-                title: "E2 - That's a Space Alien, Ain't It?!",
-                info: "Okarun is cursed by Turbo Granny, and Momo uses her newly found psychic powers to curb Turbo Granny from running out of control. Dawn breaks, and the two of them temporarily find shelter in Momo's house.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/2nY2EAAA#anuAtoSJDqUW8R4padsFSATJ9rBo_HiVKKjkSp9KEFQ" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1R8ww-sde1K6AFaa69NCNOZumsQfjzyw5/preview" }
-                ]
-            },
-            {
-                title: "E3 - It's a Granny vs. Granny Clash!",
-                info: "Okarun transforms from Turbo Granny's curse. He goes berserk unable to control his power, but Momo's grandmother Seiko, saves them in the nick of time. To lift the curse, Momo and Okarun decide to play tag with Turbo Granny.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/P6I3hADA#aTFVfVmwPIQ9yTDKcsRvUQZAblNCTp36LF-OggQFJoI" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1ik_Myb8vJ3tBEeM0oJzDNnSCZ2U9V_m2/preview" }
-                ]
-            },
-            {
-                title: "E4 - Kicking Turbo Granny's Ass",
-                info: "To settle the score with Turbo Granny, Momo and Okarun show up at the promised tunnel. They start the game of tag to pull the location-bound spirit away, and they managed to capture Turbo Granny using Momo's psychic powers.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/mjQwkB7Y#WzfdQX0UOW4FE-1lBgBBIQqh36bwwzVRxONWXW4EQQs" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1F-JGrHwNcfxI39LGpEAUVlaAewjCQqAt/preview" }
-                ]
-            },
-            {
-                title: "E5 - Like, Where Are Your Balls?!",
-                info: "Victorious against Turbo Granny, Momo and Okarun regain peace. They have gotten closer through the traumatic experience, but they find their relationship to be awkward. That is when Okarun discloses something important to Momo.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/r2hA2QbZ#g2aT0IIVapvpvYlYBDBU7r2fDGjQyKoiy_1HppjLn7c" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1fD4wVJ61shi9pkjjh_JC-Vb4jS21O8Tq/preview" }
-                ]
-            },
-            {
-                title: "E6 - A Dangerous Woman Arrives",
-                info: "Momo, Okarun, and Turbo Granny search for the missing golden ball. They search all over the school and find out that a pretty girl named Aira is in possession of a ball. Perhaps the effects of the ball, but Aira can now see 'invisible things' now.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/CnYQlTzb#gyT4r3LI66wcC6rmX2L_i-PZmnGpbMDCwduVyYW2viI" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/15H1DGGgg6Qu4-lUgDHL1GDQ0IQwrosbf/preview" }
-                ]
-            },
-            {
-                title: "E7 - To a Kinder World",
-                info: "Momo and Okarun manage to pull Acrobatic Silky away from Aira after a fierce battle. However, Aira herself had lost her life as a side-effect of being eaten by a yokai monster. Facing Aira in such a crisis, Acrobatic Silky has a surprising proposal…",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/f3JClKAb#NKAHpbQTiAhqDUTgF5zX-MIg4ahwCWUIZSVCA0jF8og" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1AZSM2FeUxIlUUYxLts8T8ev8sqqAqOn5/preview" }
-                ]
-            },
-            {
-                title: "E8 - I've Got This Funny Feeling",
-                info: "The battle against Acrobatic Silky is over, Aira harbors romantic feelings stemming from how Okarun had saved her. As Momo, Okarun, and Aira's feelings intertwine, Serpoians make another appearance, and the three of them are trapped in void space.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/22on1LLY#rQzaTlfdDbm3rFzYrziLV8v_0JTuUFJR_AZq5hWukSs" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1GkkCj6KmFrObayOie6BHZOLgJtygyo25/preview" }
-                ]
-            },
-            {
-                title: "E9 - Merge! Serpo Dover Demon Nessie!",
-                info: "Aira has awakened the powers of Acrobatic Silky within her and proceeds to have a seesaw battle against the Serpoians and the Dover Demon. Momo and Okarun join the fray, intensifying the battle.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/37IkBBJY#SiCk1NQUe6x4Dd1i6MO3ljQWmIKe4MrZEtJE7ZALlzs" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1buyo14ZqO06sOwKsUrH7PAt6sHXRRfx0/preview" }
-                ]
-            },
-            {
-                title: "E10 - Have You Ever Seen a Cattle Mutilation?",
-                info: "Momo, Okarun, and Aira make it through the alien assault by combining their powers. However, the Dover Demon that they thought they had defeated appears before them.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/G3pVXa7Z#GxAL5LdLMSkw5DZUki6laJ0ei2jRJrSozVm53Oaj3rA" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1ylZquHws_zSr5I6jpb4i9ZWfzASh2Ff6/preview" }
-                ]
-            },
-            {
-                title: "E11 - First Love",
-                info: "Momo's childhood friend, Jiji, appears and begins living in Momo's house. Jiji has been worrying about apparitions in the house he moved into. Okarun is clearly disturbed hearing that Jiji is Momo's first love and tries to distance himself from Momo.",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/XqJ2HDhI#a78vjptYHYYQm60Z9ENrSuNlRzOWl04w-QPzgKopEjE" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1-PGPOUWAgw36Cq6fFLuzfv8vgnARg7DY/preview" }
-                ]
-            },
-            {
-                title: "E12 - Let's Go to the Cursed House",
-                info: "Momo and Okarun head to Jiji's house in a hot springs district to investigate the case of Jiji's family. Okarun feels gloomy looking at how close Momo and Jiji are. Arriving at Jiji's house, there are several shadows watching them as they enter...",
-                servers: [
-                    { name: "Mega.nz", url: "https://mega.nz/embed/2n4ygSpb#87RoUpNYGBoX3CP3nNRYSoD72kTAOcBC18euDKikFrI" },
-                    { name: "Google Drive", url: "https://drive.google.com/file/d/1LZwq6G9St5hxDY5CoyG_IhcMtIXPPPhI/preview" }
-                ]
-            }
-        ];
+  <div id="season-wrapper" role="region" aria-label="Season selection region">
+    <label>Season:</label>
+  </div>
 
-        let currentEpisodeIndex = 0;
-        let currentServerIndex = 0;
+<script>
+  
+  function googleDriveEmbedURL(fileId) {
+    return `https://drive.google.com/file/d/${fileId}/preview`;
+  }
 
-        function updateSkipButtons() {
-            const prevButton = document.getElementById('prevButton');
-            const nextButton = document.getElementById('nextButton');
-            prevButton.disabled = currentEpisodeIndex === 0;
-            nextButton.disabled = currentEpisodeIndex === episodes.length - 1;
+  
+  const episodeData = {
+    1: {
+      1: {
+        name: "That's How Love Starts, Ya Know!",
+        sub: googleDriveEmbedURL("1_FXmtc5Tkston7yNTcFQoGg0Ub_crEHN"),
+        dub: googleDriveEmbedURL(""),
+      },
+      2: {
+        name: "That's a Space Alien, Ain't It?!",
+        sub: googleDriveEmbedURL("1R8ww-sde1K6AFaa69NCNOZumsQfjzyw5"),
+        dub: googleDriveEmbedURL(""),
+      },
+      3: {
+        name: "It's a Granny vs. Granny Clash!",
+        sub: googleDriveEmbedURL("1ik_Myb8vJ3tBEeM0oJzDNnSCZ2U9V_m2"),
+        dub: googleDriveEmbedURL(""),
+      },
+      4: {
+        name: "Kicking Turbo Granny's Ass",
+        sub: googleDriveEmbedURL("1F-JGrHwNcfxI39LGpEAUVlaAewjCQqAt"),
+        dub: googleDriveEmbedURL(""),
+      },
+      5: {
+        name: "Like, Where Are Your Balls?!",
+        sub: googleDriveEmbedURL("1fD4wVJ61shi9pkjjh_JC-Vb4jS21O8Tq"),
+        dub: googleDriveEmbedURL(""),
+      },
+      6: {
+        name: "A Dangerous Woman Arrives",
+        sub: googleDriveEmbedURL("15H1DGGgg6Qu4-lUgDHL1GDQ0IQwrosbf"),
+        dub: googleDriveEmbedURL(""),
+      },
+      7: {
+        name: "To a Kinder World",
+        sub: googleDriveEmbedURL("1AZSM2FeUxIlUUYxLts8T8ev8sqqAqOn5"),
+        dub: googleDriveEmbedURL(""),
+      },
+      8: {
+        name: "I've Got This Funny Feeling",
+        sub: googleDriveEmbedURL("1GkkCj6KmFrObayOie6BHZOLgJtygyo25"),
+        dub: googleDriveEmbedURL(""),
+      },
+      9: {
+        name: "Merge! Serpo Dover Demon Nessie!",
+        sub: googleDriveEmbedURL("1buyo14ZqO06sOwKsUrH7PAt6sHXRRfx0"),
+        dub: googleDriveEmbedURL(""),
+      },
+      10: {
+        name: "Have You Ever Seen a Cattle Mutilation?",
+        sub: googleDriveEmbedURL("1ylZquHws_zSr5I6jpb4i9ZWfzASh2Ff6"),
+        dub: googleDriveEmbedURL(""),
+      },
+      11: {
+        name: "First Love",
+        sub: googleDriveEmbedURL("1-PGPOUWAgw36Cq6fFLuzfv8vgnARg7DY"),
+        dub: googleDriveEmbedURL(""),
+      },
+      12: {
+        name: "Let's Go to the Cursed House",
+        sub: googleDriveEmbedURL("1LZwq6G9St5hxDY5CoyG_IhcMtIXPPPhI"),
+        dub: googleDriveEmbedURL(""),
+      },
+    },
+  };
+
+  const epList = document.getElementById("episode-list");
+  const versionSelect = document.getElementById("version-select");
+  const videoContainer = document.getElementById("video-container");
+  const seasonWrapper = document.getElementById("season-wrapper");
+  const logoButton = document.getElementById("logo-button");
+
+  let selectedSeason = "1";
+  let selectedEpisode = null;
+  let watchedEpisodes = new Set();
+
+  function generateEpisodeKey(season, episode) {
+    return `${season}-${episode}`;
+  }
+
+  function loadWatched() {
+    try {
+      const stored = localStorage.getItem("watchedEpisodes");
+      if (stored) {
+        const obj = JSON.parse(stored);
+        if (typeof obj === "object" && obj !== null) {
+          watchedEpisodes = new Set(Object.keys(obj).filter((key) => obj[key] === true));
         }
+      }
+    } catch {
+      watchedEpisodes = new Set();
+    }
+  }
 
-        function skipEpisode(direction) {
-            const newIndex = currentEpisodeIndex + direction;
-            if (newIndex >= 0 && newIndex < episodes.length) {
-                currentEpisodeIndex = newIndex;
-                loadEpisode(episodes[currentEpisodeIndex]);
-                updateSkipButtons();
-            }
+  function saveWatched() {
+    const obj = {};
+    watchedEpisodes.forEach((key) => (obj[key] = true));
+    localStorage.setItem("watchedEpisodes", JSON.stringify(obj));
+  }
+
+  function isGoogleDriveUrl(url) {
+    return url.includes("drive.google.com");
+  }
+
+  /**
+   * Load the video or iframe based on url type.
+   * If the url is a Google Drive embed URL (or any iframe-able URL), embed with iframe.
+   * Otherwise, use an HTML5 video tag.
+   */
+  function loadVideo() {
+    if (!selectedEpisode) return;
+    const episodes = episodeData[selectedSeason];
+    if (!episodes) return;
+    const ep = episodes[selectedEpisode];
+    if (!ep) return;
+
+    const ver = versionSelect.value;
+    let url = ver === "sub" ? ep.sub : ep.dub;
+
+    if (!url) {
+      url = ver === "sub" ? ep.dub : ep.sub; // fallback if missing
+      if (!url) {
+        videoContainer.innerHTML = "<p>No video available for this episode/version.</p>";
+        return;
+      }
+    }
+
+    // Clear container first
+    videoContainer.innerHTML = "";
+
+    if (isGoogleDriveUrl(url) || url.includes("youtube.com") || url.includes("vimeo.com")) {
+      // Embed iframe
+      const iframe = document.createElement("iframe");
+      iframe.id = "video-iframe";
+      iframe.src = url;
+      iframe.allowFullscreen = true;
+      iframe.allow = "autoplay; encrypted-media";
+      iframe.title = "Anime Episode Player";
+      iframe.loading = "lazy";
+      videoContainer.appendChild(iframe);
+    } else {
+      // Use video element for mp4 or direct video links
+      const video = document.createElement("video");
+      video.id = "anime-player";
+      video.controls = true;
+      video.preload = "metadata";
+      video.autoplay = true;
+      video.tabIndex = 0;
+      video.style.width = "100%";
+      video.style.height = "100%";
+      video.style.borderRadius = "8px";
+      video.style.backgroundColor = "#000";
+
+      // Create source element
+      const source = document.createElement("source");
+      source.src = url;
+      source.type = "video/mp4";
+
+      video.appendChild(source);
+      videoContainer.appendChild(video);
+
+      video.focus();
+    }
+  }
+
+  function populateEpisodes() {
+    epList.innerHTML = "";
+    const episodes = episodeData[selectedSeason];
+    if (!episodes) return;
+
+    Object.keys(episodes).forEach((episodeNum) => {
+      const li = document.createElement("li");
+      li.textContent = `Episode ${episodeNum}: ${episodes[episodeNum].name}`;
+      li.dataset.episode = episodeNum;
+      li.tabIndex = 0;
+      li.setAttribute("role", "button");
+      li.setAttribute("aria-pressed", "false");
+
+      const key = generateEpisodeKey(selectedSeason, episodeNum);
+      if (watchedEpisodes.has(key)) {
+        li.classList.add("watched");
+      }
+
+      li.addEventListener("click", () => selectEpisode(episodeNum));
+      li.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          selectEpisode(episodeNum);
         }
+      });
 
-        function loadEpisode(episode) {
-            const wrapper = document.getElementById('videoWrapper');
-            const serverUrl = episode.servers[currentServerIndex].url;
-            wrapper.innerHTML = `<iframe src="${serverUrl}" allowfullscreen></iframe>`;
-            currentEpisodeIndex = episodes.indexOf(episode);
-            updateSkipButtons();
+      epList.appendChild(li);
+    });
+  }
+
+  function selectEpisode(episodeNum) {
+    if (selectedEpisode === episodeNum) return;
+    if (selectedEpisode !== null) {
+      const oldElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+      if (oldElem) {
+        oldElem.classList.remove("selected");
+        oldElem.setAttribute("aria-pressed", "false");
+      }
+    }
+    selectedEpisode = episodeNum;
+    const newElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+    if (newElem) {
+      newElem.classList.add("selected");
+      newElem.setAttribute("aria-pressed", "true");
+      newElem.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
+    loadVideo();
+  }
+
+  versionSelect.addEventListener("change", () => {
+    loadVideo();
+  });
+
+  async function markWatched() {
+    // Mark episode watched on video ending, only for mp4 (video element)
+    const video = videoContainer.querySelector("video");
+    if (!video) return;
+
+    video.addEventListener("ended", () => {
+      if (selectedEpisode === null) return;
+      const key = generateEpisodeKey(selectedSeason, selectedEpisode);
+      if (!watchedEpisodes.has(key)) {
+        watchedEpisodes.add(key);
+        saveWatched();
+        const li = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+        if (li) li.classList.add("watched");
+      }
+    });
+  }
+
+  logoButton.addEventListener("click", () => {
+    window.location.href = "https://syfer-eng.github.io/Shows/Anime.html";
+  });
+
+  function populateSeasons() {
+    const oldBtns = seasonWrapper.querySelectorAll("button.season-btn");
+    oldBtns.forEach((btn) => btn.remove());
+
+    Object.keys(episodeData).forEach((season) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "season-btn";
+      btn.textContent = `Season ${season}`;
+      btn.setAttribute("aria-pressed", "false");
+      btn.tabIndex = 0;
+
+      btn.addEventListener("click", () => selectSeason(season));
+
+      seasonWrapper.appendChild(btn);
+    });
+    updateSeasonButtons();
+  }
+
+  function selectSeason(season) {
+    if (selectedSeason === season) return;
+    selectedSeason = season;
+    selectedEpisode = null;
+    populateEpisodes();
+    updateSeasonButtons();
+    const episodes = episodeData[selectedSeason];
+    if (episodes) {
+      const firstEp = Object.keys(episodes)[0];
+      if (firstEp) selectEpisode(firstEp);
+    }
+  }
+
+  function updateSeasonButtons() {
+    const buttons = seasonWrapper.querySelectorAll("button.season-btn");
+    buttons.forEach((btn) => {
+      if (btn.textContent === `Season ${selectedSeason}`) {
+        btn.classList.add("selected");
+        btn.setAttribute("aria-pressed", "true");
+        btn.setAttribute("disabled", "disabled");
+      } else {
+        btn.classList.remove("selected");
+        btn.setAttribute("aria-pressed", "false");
+        btn.removeAttribute("disabled");
+      }
+    });
+  }
+
+  function loadWatched() {
+    try {
+      const stored = localStorage.getItem("watchedEpisodes");
+      if (stored) {
+        const obj = JSON.parse(stored);
+        if (typeof obj === "object" && obj !== null) {
+          watchedEpisodes = new Set(Object.keys(obj).filter((key) => obj[key] === true));
         }
+      }
+    } catch {
+      watchedEpisodes = new Set();
+    }
+  }
 
-        function createEpisodePicker() {
-            const picker = document.getElementById('episodePicker');
-            episodes.forEach((episode) => {
-                const item = document.createElement('div');
-                item.className = 'episode-item';
-                item.onclick = () => {
-                    loadEpisode(episode);
-                    toggleMenu();
-                };
-                item.innerHTML = `
-                    <div class="episode-title">${episode.title}</div>
-                    <div class="episode-description">${episode.info}</div>
-                `;
-                picker.appendChild(item);
-            });
-            loadEpisode(episodes[0]);
-            updateSkipButtons();
-        }
+  // Initialization
+  loadWatched();
+  populateSeasons();
+  populateEpisodes();
+  const firstEpisode = Object.keys(episodeData[selectedSeason])[0];
+  if (firstEpisode) selectEpisode(firstEpisode);
 
-        function toggleMenu() {
-            const menu = document.getElementById('episodeMenu');
-            menu.classList.toggle('open');
-        }
+  // Watch video changes and mark watched for video tag
+  const observer = new MutationObserver(() => {
+    markWatched();
+  });
+  observer.observe(document.getElementById("video-container"), { childList: true });
 
-        function changeServer() {
-            currentServerIndex = document.getElementById('serverDropdown').value;
-            loadEpisode(episodes[currentEpisodeIndex]);
-        }
+</script>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            createEpisodePicker();
-        });
-    </script>
 </body>
 </html>
