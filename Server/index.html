@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minecraft Server Address Formatter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f2f2f2;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px #ccc;
+    }
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.75rem;
+      font-size: 1.1rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .output {
+      margin-top: 1rem;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #333;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Minecraft Server Address Formatter</h1>
+    <label for="ip">Minecraft Server IP or Domain</label>
+    <input type="text" id="ip" placeholder="e.g. play.example.com or 123.456.78.9" value="192.168.1.43" required />
+
+    <label for="port">Port (leave empty for default 25565)</label>
+    <input type="number" id="port" placeholder="25565" min="1" max="65535" value="25565" />
+
+    <button id="format-btn">Format Address</button>
+
+    <div class="output" id="output"></div>
+  </div>
+
+  <script>
+    document.getElementById('format-btn').addEventListener('click', () => {
+      const ip = document.getElementById('ip').value.trim();
+      let port = document.getElementById('port').value.trim();
+
+      if (!ip) {
+        alert("Please enter a Minecraft server IP or domain.");
+        return;
+      }
+
+      if (port === '') {
+        port = '25565'; // default minecraft port
+      } else {
+        port = Number(port);
+        if (isNaN(port) || port < 1 || port > 65535) {
+          alert("Please enter a valid port number between 1 and 65535.");
+          return;
+        }
+      }
+
+      let address;
+      if (port === 25565) {
+        address = ip;
+      } else {
+        address = ip + ':' + port;
+      }
+
+      document.getElementById('output').textContent = "Minecraft Server Address: " + address;
+    });
+  </script>
+</body>
+</html>
