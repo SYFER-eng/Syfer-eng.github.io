@@ -62,8 +62,7 @@
       border: none;
       padding: 0;
       cursor: pointer;
-      /* Smaller size that keeps aspect ratio but smaller than original 612x408 */
-      width: 120px; /* smaller width */
+      width: 120px;
       height: auto;
       border-radius: 12px;
       transition: filter 0.3s ease, box-shadow 0.3s ease;
@@ -73,9 +72,10 @@
     #sidebar button#logo-button img {
       display: block;
       width: 100%;
-      height: auto; /* maintain aspect ratio */
+      height: auto;
       border-radius: 12px;
-      filter: grayscale(100%) brightness(100%) contrast(120%);
+      /* Remove grayscale to show color logo */
+      filter: none;
       transition: filter 0.3s ease;
       user-select: none;
       pointer-events: none;
@@ -149,7 +149,7 @@
       color: #000;
       border-left-color: var(--highlight-hover);
       text-shadow: none;
-      opacity: 1 !important; /* override watched opacity on hover */
+      opacity: 1 !important;
     }
 
     #episode-list li.selected {
@@ -158,7 +158,7 @@
       border-left-color: var(--highlight-selected);
       font-weight: 700;
       text-shadow: none;
-      opacity: 1 !important; /* override watched opacity */
+      opacity: 1 !important;
     }
 
     #episode-list li.selected:hover {
@@ -189,6 +189,12 @@
       box-shadow: inset 0 0 50px #000000cc;
       position: relative;
       overflow-x: hidden;
+      /* Make room at bottom for new season selector */
+      padding-bottom: 100px;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
     }
 
     h1 {
@@ -200,13 +206,11 @@
       user-select: none;
       text-align: center;
       width: 100%;
-      max-width: 960px;
       text-shadow: 0 0 3px #fff, 0 0 7px #fff;
     }
 
     #anime-player {
       width: 100%;
-      max-width: 960px;
       border-radius: var(--border-radius);
       box-shadow:
         0 0 30px #fff,
@@ -216,6 +220,7 @@
       user-select: none;
       filter: grayscale(0%);
       transition: filter 0.3s ease;
+      max-height: 540px;
     }
 
     #anime-player:focus {
@@ -226,25 +231,25 @@
     #version-wrapper {
       margin-top: 16px;
       width: 100%;
-      max-width: 960px;
-      display: flex;
-      justify-content: flex-start;
       background: #111111;
       padding: 14px 20px;
       border-radius: var(--border-radius);
       box-shadow: 0 4px 20px rgba(255 255 255 / 0.05);
       user-select: none;
+      display: flex;
+      justify-content: flex-start;
       gap: 12px;
+      align-items: center;
     }
 
     #version-wrapper label {
       font-weight: 600;
       font-size: 1rem;
       color: var(--text-muted);
-      align-self: center;
       text-transform: uppercase;
       letter-spacing: 0.07em;
       margin-right: 10px;
+      user-select: none;
     }
 
     #version-select {
@@ -297,6 +302,73 @@
       border: 2px solid #111;
     }
 
+    /* Season selector styling */
+    #season-wrapper {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111111;
+      border-radius: var(--border-radius);
+      padding: 12px 20px;
+      box-shadow: 0 4px 20px rgba(255 255 255 / 0.05);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+      z-index: 1000;
+      max-width: 960px;
+      width: calc(100% - 40px);
+      box-sizing: border-box;
+    }
+
+    #season-wrapper label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-right: 10px;
+      user-select: none;
+    }
+
+    #season-select {
+      background-color: #222;
+      border: none;
+      border-radius: var(--border-radius);
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 9px 14px;
+      cursor: pointer;
+      outline-offset: 3px;
+      box-shadow: inset 0 0 8px #000;
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #fff 50%),
+        linear-gradient(135deg, #fff 50%, transparent 50%);
+      background-position:
+        calc(100% - 20px) calc(1.2em + 2px),
+        calc(100% - 15px) calc(1.2em + 2px);
+      background-size: 5px 5px;
+      background-repeat: no-repeat;
+      min-width: 140px;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    #season-select:focus {
+      background-color: #333;
+      box-shadow: 0 0 12px #fff, inset 0 0 8px #000;
+      outline: none;
+      color: #fff;
+    }
+
+    #season-select option {
+      background-color: #222;
+      color: var(--text-primary);
+      font-weight: 400;
+    }
+
     /* Responsive */
     @media (max-width: 900px) {
       body {
@@ -316,7 +388,7 @@
 
       #sidebar button#logo-button {
         margin: 0 15px 0 0;
-        width: 120px; /* keep consistent smaller size */
+        width: 120px;
       }
 
       #sidebar h2 {
@@ -376,13 +448,34 @@
 
       main {
         width: 100%;
-        padding: 20px 15px 30px;
+        padding: 20px 15px 100px;
+        box-sizing: border-box;
       }
 
       #version-wrapper {
         max-width: 100%;
         justify-content: center;
       }
+
+      #season-wrapper {
+        width: calc(100% - 30px);
+        left: 15px;
+        transform: none;
+        bottom: 15px;
+      }
+    }
+
+    /* Accessibility helper */
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
     }
   </style>
 </head>
@@ -411,28 +504,64 @@
     </div>
   </main>
 
+  <div id="season-wrapper" role="region" aria-label="Season selection region">
+    <label for="season-select">Season:</label>
+    <select id="season-select" aria-label="Select season">
+      <option value="1">Season 1</option>
+      <option value="2">Season 2</option>
+      <option value="3">Season 3</option>
+    </select>
+  </div>
+
   <script>
-    const episodes = {
-      1: {
-        sub: 'https://drive.google.com/file/d/1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe/preview',
-        dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    // Episodes data separated by season
+    const allEpisodes = {
+      1: {  // Season 1
+        1: {
+          sub: 'https://drive.google.com/file/d/1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe/preview',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        },
+        2: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+        },
+        3: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+        },
+        4: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+        },
+        5: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+        },
       },
-      2: {
-        sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-        dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+      2: { // Season 2  episodes (reusing older URLs for demo purposes)
+        1: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        },
+        2: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+        },
+        3: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+        }
       },
-      3: {
-        sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-        dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-      },
-      4: {
-        sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-        dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-      },
-      5: {
-        sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-        dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-      },
+      3: { // Season 3  episodes (dummy placeholders)
+        1: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+        },
+        2: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+        }
+      }
     };
 
     const epList = document.getElementById('episode-list');
@@ -441,18 +570,21 @@
     const videoSource = document.createElement('source');
     videoPlayer.appendChild(videoSource);
     const logoButton = document.getElementById('logo-button');
+    const seasonSelect = document.getElementById('season-select');
 
+    let selectedSeason = "1";
     let selectedEpisode = null;
     let watchedEpisodes = new Set();
 
     // Load watched episodes from localStorage (persist between sessions)
+    // Structure stored: {"season-episode": true}
     function loadWatched() {
       try {
         const stored = localStorage.getItem('watchedEpisodes');
         if (stored) {
-          const arr = JSON.parse(stored);
-          if (Array.isArray(arr)) {
-            watchedEpisodes = new Set(arr);
+          const obj = JSON.parse(stored);
+          if (typeof obj === 'object' && obj !== null) {
+            watchedEpisodes = new Set(Object.keys(obj).filter(key => obj[key] === true));
           }
         }
       } catch {
@@ -462,11 +594,20 @@
 
     // Save watched episodes to localStorage
     function saveWatched() {
-      localStorage.setItem('watchedEpisodes', JSON.stringify([...watchedEpisodes]));
+      const obj = {};
+      watchedEpisodes.forEach(key => obj[key] = true);
+      localStorage.setItem('watchedEpisodes', JSON.stringify(obj));
+    }
+
+    function generateEpisodeKey(season, episode) {
+      return season + "-" + episode;
     }
 
     function populateEpisodes() {
       epList.innerHTML = '';
+      const episodes = allEpisodes[selectedSeason];
+      if (!episodes) return;
+
       Object.keys(episodes).forEach(epNum => {
         const li = document.createElement('li');
         li.textContent = `Episode ${epNum}`;
@@ -474,7 +615,8 @@
         li.tabIndex = 0;
         li.setAttribute('role', 'button');
         li.setAttribute('aria-pressed', 'false');
-        if (watchedEpisodes.has(epNum)) {
+        const key = generateEpisodeKey(selectedSeason, epNum);
+        if (watchedEpisodes.has(key)) {
           li.classList.add('watched');
         }
         li.addEventListener('click', () => selectEpisode(epNum));
@@ -512,6 +654,8 @@
     function loadVideo() {
       if (selectedEpisode === null) return;
       const ver = versionSelect.value;
+      const episodes = allEpisodes[selectedSeason];
+      if (!episodes) return;
       const src = episodes[selectedEpisode] && episodes[selectedEpisode][ver] ? episodes[selectedEpisode][ver] : '';
 
       if (src) {
@@ -527,12 +671,15 @@
     }
 
     videoPlayer.addEventListener('ended', () => {
-      if (selectedEpisode !== null && !watchedEpisodes.has(selectedEpisode)) {
-        watchedEpisodes.add(selectedEpisode);
-        saveWatched();
-        const li = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
-        if (li) {
-          li.classList.add('watched');
+      if (selectedEpisode !== null) {
+        const key = generateEpisodeKey(selectedSeason, selectedEpisode);
+        if (!watchedEpisodes.has(key)) {
+          watchedEpisodes.add(key);
+          saveWatched();
+          const li = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+          if (li) {
+            li.classList.add('watched');
+          }
         }
       }
     });
@@ -546,25 +693,30 @@
       window.location.href = 'https://Syfer-eng.github.io';
     });
 
+    seasonSelect.addEventListener('change', (e) => {
+      selectedSeason = e.target.value;
+      selectedEpisode = null;
+      populateEpisodes();
+      // Auto-select first episode of new season if exists
+      const episodes = allEpisodes[selectedSeason];
+      if (episodes) {
+        const firstEp = Object.keys(episodes)[0];
+        if (firstEp) {
+          selectEpisode(firstEp);
+        }
+      }
+    });
+
     // Initialize
     loadWatched();
     populateEpisodes();
-    selectEpisode('1');
+    // Select first episode on page load
+    const firstEpisode = Object.keys(allEpisodes[selectedSeason])[0];
+    if (firstEpisode) {
+      selectEpisode(firstEpisode);
+    }
     versionSelect.value = 'sub';
   </script>
 
-  <style>
-    .sr-only {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      padding: 0 !important;
-      margin: -1px !important;
-      overflow: hidden !important;
-      clip: rect(0, 0, 0, 0) !important;
-      white-space: nowrap !important;
-      border: 0 !important;
-    }
-  </style>
 </body>
 </html>
