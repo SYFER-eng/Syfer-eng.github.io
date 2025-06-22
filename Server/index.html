@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Generate Custom Website Address</title>
+  <title>Deterministic IP to Custom Website Address</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,6 +24,22 @@
     h1 {
       margin-bottom: 1.5rem;
       color: #333;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #555;
+      text-align: left;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
     }
     button {
       width: 100%;
@@ -52,32 +68,75 @@
 </head>
 <body>
   <div class="container">
-    <h1>Generate Custom Website Address</h1>
+    <h1>Convert Minecraft IP to Unique Website URL</h1>
+    <label for="ipInput">Enter Minecraft Server IP</label>
+    <input type="text" id="ipInput" placeholder="e.g. 192.168.1.43" value="192.168.1.43" />
 
-    <button id="generateBtn">Generate Address</button>
+    <button id="generateBtn">Generate URL</button>
 
     <div class="output" id="result"></div>
   </div>
 
   <script>
-    // Generates a random 10-character string using letters, digits, and #
-    function generateAddon(length = 10) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#';
-      let result = '';
-      for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    function hashString(str) {
+      let hash = 5381;
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) + hash) + str.charCodeAt(i);
+        hash = hash & 0xFFFFFFFF;
       }
-      return result;
+      return hash >>> 0;
+    }
+
+    function xorshift(seed) {
+      let x = seed;
+      return function() {
+        x ^= x << 13;
+        x ^= x >>> 17;
+        x ^= x << 5;
+        return x >>> 0;
+      };
+    }
+
+    function generateAddonFromIP(ip, len = 10) {
+      const seed = hashString(ip);
+      const rand = xorshift(seed);
+      let addon = '';
+      for (let i = 0; i < len; i++) {
+        const r = rand();
+        addon += CHARS[r % CHARS.length];
+      }
+      return addon;
+    }
+
+    function isValidIPv4(ip) {
+      const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
+      if (!ipv4Regex.test(ip)) return false;
+      const parts = ip.split('.');
+      return parts.every(part => {
+        const n = Number(part);
+        return n >= 0 && n <= 255;
+      });
     }
 
     document.getElementById('generateBtn').addEventListener('click', () => {
-      // Your website base URL
+      const ip = document.getElementById('ipInput').value.trim();
+      if (!ip) {
+        alert('Please enter a Minecraft server IP.');
+        return;
+      }
+      if (!isValidIPv4(ip)) {
+        alert('Please enter a valid IPv4 address (x.x.x.x with each 0-255).');
+        return;
+      }
+
       const baseURL = 'https://syfer-eng.github.io/Server/';
+      const addon = generateAddonFromIP(ip, 10);
+      // Append addon as URL path segment (no colon, no special chars)
+      const customURL = baseURL + addon;
 
-      const addon = generateAddon(10);
-      const customAddress = `${baseURL}:${addon}`;
-
-      document.getElementById('result').textContent = customAddress;
+      document.getElementById('result').textContent = customURL;
     });
   </script>
 </body>
