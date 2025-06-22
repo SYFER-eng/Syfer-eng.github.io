@@ -1,13 +1,11 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Anime Episode Selector - Black & White with Watched Episodes</title>
+  <title>Anime Templet</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-    /* Root and base */
     :root {
       --primary-color: #ffffff;
       --primary-dark: #d0d0d0;
@@ -24,6 +22,10 @@
       --watched-opacity: 0.6;
       --watched-color: #888888;
       --watched-icon-color: #95d600;
+      --season-btn-bg: #222;
+      --season-btn-bg-hover: #333;
+      --season-btn-selected-bg: #fff;
+      --season-btn-selected-color: #000;
     }
 
     * {
@@ -51,7 +53,6 @@
       user-select: none;
     }
 
-    /* Logo button container adjusted to scale down image */
     #sidebar button#logo-button {
       display: block;
       margin-bottom: 25px;
@@ -68,13 +69,12 @@
       transition: filter 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* Image constrained and scaled */
     #sidebar button#logo-button img {
       display: block;
       width: 100%;
       height: auto;
       border-radius: 12px;
-      /* Remove grayscale to show color logo */
+
       filter: none;
       transition: filter 0.3s ease;
       user-select: none;
@@ -128,7 +128,6 @@
       position: relative;
     }
 
-    /* Watched styling: dim text and add check icon */
     #episode-list li.watched {
       opacity: var(--watched-opacity);
       color: var(--watched-color);
@@ -189,7 +188,7 @@
       box-shadow: inset 0 0 50px #000000cc;
       position: relative;
       overflow-x: hidden;
-      /* Make room at bottom for new season selector */
+      
       padding-bottom: 100px;
       box-sizing: border-box;
       width: 100%;
@@ -289,7 +288,6 @@
       font-weight: 400;
     }
 
-    /* Scrollbar styling for episode list */
     #episode-list::-webkit-scrollbar {
       width: 8px;
     }
@@ -302,7 +300,6 @@
       border: 2px solid #111;
     }
 
-    /* Season selector styling */
     #season-wrapper {
       position: fixed;
       bottom: 15px;
@@ -330,46 +327,41 @@
       letter-spacing: 0.07em;
       margin-right: 10px;
       user-select: none;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
-    #season-select {
-      background-color: #222;
+    #season-wrapper button.season-btn {
+      background-color: var(--season-btn-bg);
       border: none;
       border-radius: var(--border-radius);
       color: var(--text-primary);
       font-size: 1rem;
-      font-weight: 500;
-      padding: 9px 14px;
+      font-weight: 600;
+      padding: 9px 16px;
       cursor: pointer;
       outline-offset: 3px;
       box-shadow: inset 0 0 8px #000;
-      appearance: none;
-      background-image:
-        linear-gradient(45deg, transparent 50%, #fff 50%),
-        linear-gradient(135deg, #fff 50%, transparent 50%);
-      background-position:
-        calc(100% - 20px) calc(1.2em + 2px),
-        calc(100% - 15px) calc(1.2em + 2px);
-      background-size: 5px 5px;
-      background-repeat: no-repeat;
-      min-width: 140px;
-      transition: background-color 0.3s, box-shadow 0.3s;
+      transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+      user-select: none;
+      white-space: nowrap;
+      line-height: 1.2;
     }
-
-    #season-select:focus {
-      background-color: #333;
-      box-shadow: 0 0 12px #fff, inset 0 0 8px #000;
+    #season-wrapper button.season-btn:hover,
+    #season-wrapper button.season-btn:focus-visible {
+      background-color: var(--season-btn-bg-hover);
       outline: none;
       color: #fff;
+      box-shadow: 0 0 5px var(--primary-color), inset 0 0 12px #000;
     }
 
-    #season-select option {
-      background-color: #222;
-      color: var(--text-primary);
-      font-weight: 400;
+    #season-wrapper button.season-btn.selected {
+      background-color: var(--season-btn-selected-bg);
+      color: var(--season-btn-selected-color);
+      box-shadow: none;
+      cursor: default;
     }
 
-    /* Responsive */
     @media (max-width: 900px) {
       body {
         flex-direction: column;
@@ -462,10 +454,18 @@
         left: 15px;
         transform: none;
         bottom: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      #season-wrapper label {
+        flex-basis: 100%;
+        margin-bottom: 4px;
+        text-align: center;
       }
     }
 
-    /* Accessibility helper */
     .sr-only {
       position: absolute !important;
       width: 1px !important;
@@ -487,7 +487,6 @@
     </button>
     <h2>Episodes</h2>
     <ul id="episode-list" tabindex="0" aria-label="Anime episodes list">
-      <!-- Episodes dynamically inserted here -->
     </ul>
   </aside>
 
@@ -505,18 +504,14 @@
   </main>
 
   <div id="season-wrapper" role="region" aria-label="Season selection region">
-    <label for="season-select">Season:</label>
-    <select id="season-select" aria-label="Select season">
-      <option value="1">Season 1</option>
-      <option value="2">Season 2</option>
-      <option value="3">Season 3</option>
-    </select>
+    <label>Season:</label>
+
   </div>
 
   <script>
-    // Episodes data separated by season
+
     const allEpisodes = {
-      1: {  // Season 1
+      1: {  // Seasons
         1: {
           sub: 'https://drive.google.com/file/d/1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe/preview',
           dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
@@ -538,7 +533,7 @@
           dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
         },
       },
-      2: { // Season 2  episodes (reusing older URLs for demo purposes)
+      2: { // Season 2
         1: {
           sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
           dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
@@ -552,7 +547,7 @@
           dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
         }
       },
-      3: { // Season 3  episodes (dummy placeholders)
+      3: { // Season 3
         1: {
           sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
           dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
@@ -569,15 +564,14 @@
     const videoPlayer = document.getElementById('anime-player');
     const videoSource = document.createElement('source');
     videoPlayer.appendChild(videoSource);
+
     const logoButton = document.getElementById('logo-button');
-    const seasonSelect = document.getElementById('season-select');
+    const seasonWrapper = document.getElementById('season-wrapper');
 
     let selectedSeason = "1";
     let selectedEpisode = null;
     let watchedEpisodes = new Set();
 
-    // Load watched episodes from localStorage (persist between sessions)
-    // Structure stored: {"season-episode": true}
     function loadWatched() {
       try {
         const stored = localStorage.getItem('watchedEpisodes');
@@ -592,7 +586,6 @@
       }
     }
 
-    // Save watched episodes to localStorage
     function saveWatched() {
       const obj = {};
       watchedEpisodes.forEach(key => obj[key] = true);
@@ -632,7 +625,7 @@
 
     function selectEpisode(epNum) {
       if (selectedEpisode === epNum) return;
-      // Remove old selection
+
       if (selectedEpisode !== null) {
         const oldSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
         if (oldSelectedElem) {
@@ -640,7 +633,7 @@
           oldSelectedElem.setAttribute('aria-pressed', 'false');
         }
       }
-      // Set new selection
+
       selectedEpisode = epNum;
       const newSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
       if (newSelectedElem) {
@@ -690,14 +683,36 @@
     });
 
     logoButton.addEventListener('click', () => {
-      window.location.href = 'https://Syfer-eng.github.io';
+      window.location.href = 'https://syfer-eng.github.io/Shows/Anime.html';
     });
 
-    seasonSelect.addEventListener('change', (e) => {
-      selectedSeason = e.target.value;
+    function populateSeasons() {
+      const olds = seasonWrapper.querySelectorAll('button.season-btn');
+      olds.forEach(btn => btn.remove());
+
+      Object.keys(allEpisodes).forEach(seasonNum => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'season-btn';
+        btn.textContent = `Season ${seasonNum}`;
+        btn.setAttribute('aria-pressed', 'false');
+        btn.tabIndex = 0;
+
+        btn.addEventListener('click', () => selectSeason(seasonNum));
+
+        seasonWrapper.appendChild(btn);
+      });
+      updateSeasonButtons();
+    }
+
+    function selectSeason(seasonNum) {
+      if (selectedSeason === seasonNum) return;
+
+      selectedSeason = seasonNum;
       selectedEpisode = null;
       populateEpisodes();
-      // Auto-select first episode of new season if exists
+      updateSeasonButtons();
+
       const episodes = allEpisodes[selectedSeason];
       if (episodes) {
         const firstEp = Object.keys(episodes)[0];
@@ -705,12 +720,26 @@
           selectEpisode(firstEp);
         }
       }
-    });
+    }
 
-    // Initialize
+    function updateSeasonButtons() {
+      const buttons = seasonWrapper.querySelectorAll('button.season-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent === `Season ${selectedSeason}`) {
+          btn.classList.add('selected');
+          btn.setAttribute('aria-pressed', 'true');
+          btn.setAttribute('disabled', 'disabled');
+        } else {
+          btn.classList.remove('selected');
+          btn.setAttribute('aria-pressed', 'false');
+          btn.removeAttribute('disabled');
+        }
+      });
+    }
+
     loadWatched();
+    populateSeasons();
     populateEpisodes();
-    // Select first episode on page load
     const firstEpisode = Object.keys(allEpisodes[selectedSeason])[0];
     if (firstEpisode) {
       selectEpisode(firstEpisode);
