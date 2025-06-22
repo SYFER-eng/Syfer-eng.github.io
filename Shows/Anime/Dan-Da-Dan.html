@@ -613,61 +613,58 @@
    * If the url is a Google Drive embed URL (or any iframe-able URL), embed with iframe.
    * Otherwise, use an HTML5 video tag.
    */
-  function loadVideo() {
-    if (!selectedEpisode) return;
-    const episodes = episodeData[selectedSeason];
-    if (!episodes) return;
-    const ep = episodes[selectedEpisode];
-    if (!ep) return;
+function loadVideo() {
+  if (!selectedEpisode) return;
+  const episodes = episodeData[selectedSeason];
+  if (!episodes) return;
+  const ep = episodes[selectedEpisode];
+  if (!ep) return;
 
-    const ver = versionSelect.value;
-    let url = ver === "sub" ? ep.sub : ep.dub;
+  const ver = versionSelect.value;
+  let url = ver === "sub" ? ep.sub : ep.dub;
 
-    if (!url) {
-      url = ver === "sub" ? ep.dub : ep.sub; // fallback if missing
-      if (!url) {
-        videoContainer.innerHTML = "<p>No video available for this episode/version.</p>";
-        return;
-      }
-    }
-
-    // Clear container first
-    videoContainer.innerHTML = "";
-
-    if (isGoogleDriveUrl(url) || url.includes("youtube.com") || url.includes("vimeo.com")) {
-      // Embed iframe
-      const iframe = document.createElement("iframe");
-      iframe.id = "video-iframe";
-      iframe.src = url;
-      iframe.allowFullscreen = true;
-      iframe.allow = "autoplay; encrypted-media";
-      iframe.title = "Anime Episode Player";
-      iframe.loading = "lazy";
-      videoContainer.appendChild(iframe);
-    } else {
-      // Use video element for mp4 or direct video links
-      const video = document.createElement("video");
-      video.id = "anime-player";
-      video.controls = true;
-      video.preload = "metadata";
-      video.autoplay = true;
-      video.tabIndex = 0;
-      video.style.width = "100%";
-      video.style.height = "100%";
-      video.style.borderRadius = "8px";
-      video.style.backgroundColor = "#000";
-
-      // Create source element
-      const source = document.createElement("source");
-      source.src = url;
-      source.type = "video/mp4";
-
-      video.appendChild(source);
-      videoContainer.appendChild(video);
-
-      video.focus();
-    }
+  // If url is empty string or just blank, set to fallback embed URL
+  if (!url || url.trim() === "") {
+    url = "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html";
   }
+
+  // Clear container first
+  videoContainer.innerHTML = "";
+
+  if (isGoogleDriveUrl(url) || url.includes("youtube.com") || url.includes("vimeo.com")) {
+    // Embed iframe
+    const iframe = document.createElement("iframe");
+    iframe.id = "video-iframe";
+    iframe.src = url;
+    iframe.allowFullscreen = true;
+    iframe.allow = "autoplay; encrypted-media";
+    iframe.title = "Anime Episode Player";
+    iframe.loading = "lazy";
+    videoContainer.appendChild(iframe);
+  } else {
+    // Use video element for mp4 or direct video links
+    const video = document.createElement("video");
+    video.id = "anime-player";
+    video.controls = true;
+    video.preload = "metadata";
+    video.autoplay = true;
+    video.tabIndex = 0;
+    video.style.width = "100%";
+    video.style.height = "100%";
+    video.style.borderRadius = "8px";
+    video.style.backgroundColor = "#000";
+
+    // Create source element
+    const source = document.createElement("source");
+    source.src = url;
+    source.type = "video/mp4";
+
+    video.appendChild(source);
+    videoContainer.appendChild(video);
+
+    video.focus();
+  }
+}
 
   function populateEpisodes() {
     epList.innerHTML = "";
