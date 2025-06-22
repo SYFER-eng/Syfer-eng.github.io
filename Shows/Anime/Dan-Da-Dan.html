@@ -237,6 +237,7 @@
       padding: 14px 20px;
       border-radius: var(--border-radius);
       box-shadow: 0 4px 20px rgba(255 255 255 / 0.05);
+      color: var(--text-muted);
       user-select: none;
       display: flex;
       justify-content: flex-start;
@@ -252,55 +253,31 @@
       letter-spacing: 0.07em;
       margin-right: 10px;
       user-select: none;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     #version-select {
+      appearance: none;
       background-color: #222;
       border: none;
       border-radius: var(--border-radius);
       color: var(--text-primary);
       font-size: 1rem;
-      font-weight: 500;
-      padding: 9px 14px;
+      font-weight: 600;
+      padding: 9px 16px;
       cursor: pointer;
       outline-offset: 3px;
       box-shadow: inset 0 0 8px #000;
-      appearance: none;
-      background-image:
-        linear-gradient(45deg, transparent 50%, #fff 50%),
-        linear-gradient(135deg, #fff 50%, transparent 50%);
-      background-position:
-        calc(100% - 20px) calc(1.2em + 2px),
-        calc(100% - 15px) calc(1.2em + 2px);
-      background-size: 5px 5px;
-      background-repeat: no-repeat;
-      min-width: 100px;
-      transition: background-color 0.3s, box-shadow 0.3s;
+      transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
     }
 
-    #version-select:focus {
+    #version-select:hover,
+    #version-select:focus-visible {
       background-color: #333;
-      box-shadow: 0 0 12px #fff, inset 0 0 8px #000;
       outline: none;
       color: #fff;
-    }
-
-    #version-select option {
-      background-color: #222;
-      color: var(--text-primary);
-      font-weight: 400;
-    }
-
-    #episode-list::-webkit-scrollbar {
-      width: 8px;
-    }
-    #episode-list::-webkit-scrollbar-track {
-      background: #111;
-    }
-    #episode-list::-webkit-scrollbar-thumb {
-      background-color: #bbb;
-      border-radius: 10px;
-      border: 2px solid #111;
+      box-shadow: 0 0 5px var(--primary-color), inset 0 0 12px #000;
     }
 
     #season-wrapper {
@@ -446,27 +423,6 @@
         padding: 20px 15px 100px;
         box-sizing: border-box;
       }
-
-      #version-wrapper {
-        max-width: 100%;
-        justify-content: center;
-      }
-
-      #season-wrapper {
-        width: calc(100% - 30px);
-        left: 15px;
-        transform: none;
-        bottom: 15px;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      #season-wrapper label {
-        flex-basis: 100%;
-        margin-bottom: 4px;
-        text-align: center;
-      }
     }
   </style>
 </head>
@@ -477,14 +433,15 @@
       <img src="https://raw.githubusercontent.com/Skeleton-Archive/cs2-offsets/refs/heads/main/cat.png" alt="Logo" />
     </button>
     <h2>Episodes</h2>
-    <ul id="episode-list" tabindex="0" aria-label="Anime episodes list"></ul>
+    <ul id="episode-list" tabindex="0" aria-label="Entries list"></ul>
   </aside>
 
   <main role="main">
-    <h1>Episodes</h1>
-    <div id="video-container" aria-label="Video player container">
-      <iframe id="video-iframe" allowfullscreen allow="autoplay" title="Anime Episode Player"></iframe>
+    <h1></h1>
+    <div id="video-container" aria-label="Embedded content container">
+      <!-- iframe or video or embed will be here -->
     </div>
+
     <div id="version-wrapper" role="region" aria-label="Select version sub or dub">
       <label for="version-select">Version:</label>
       <select id="version-select" aria-label="Select version">
@@ -499,73 +456,67 @@
   </div>
 
 <script>
-  
-  function googleDriveEmbedURL(fileId) {
-    return `https://drive.google.com/file/d/${fileId}/preview`;
-  }
-
-  
   const episodeData = {
     1: {
       1: {
         name: "That's How Love Starts, Ya Know!",
-        sub: googleDriveEmbedURL("1_FXmtc5Tkston7yNTcFQoGg0Ub_crEHN"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1_FXmtc5Tkston7yNTcFQoGg0Ub_crEHN/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       2: {
         name: "That's a Space Alien, Ain't It?!",
-        sub: googleDriveEmbedURL("1R8ww-sde1K6AFaa69NCNOZumsQfjzyw5"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1R8ww-sde1K6AFaa69NCNOZumsQfjzyw5/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       3: {
         name: "It's a Granny vs. Granny Clash!",
-        sub: googleDriveEmbedURL("1ik_Myb8vJ3tBEeM0oJzDNnSCZ2U9V_m2"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1ik_Myb8vJ3tBEeM0oJzDNnSCZ2U9V_m2/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       4: {
         name: "Kicking Turbo Granny's Ass",
-        sub: googleDriveEmbedURL("1F-JGrHwNcfxI39LGpEAUVlaAewjCQqAt"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1F-JGrHwNcfxI39LGpEAUVlaAewjCQqAt/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       5: {
         name: "Like, Where Are Your Balls?!",
-        sub: googleDriveEmbedURL("1fD4wVJ61shi9pkjjh_JC-Vb4jS21O8Tq"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1fD4wVJ61shi9pkjjh_JC-Vb4jS21O8Tq/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       6: {
         name: "A Dangerous Woman Arrives",
-        sub: googleDriveEmbedURL("15H1DGGgg6Qu4-lUgDHL1GDQ0IQwrosbf"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/15H1DGGgg6Qu4-lUgDHL1GDQ0IQwrosbf/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       7: {
         name: "To a Kinder World",
-        sub: googleDriveEmbedURL("1AZSM2FeUxIlUUYxLts8T8ev8sqqAqOn5"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1AZSM2FeUxIlUUYxLts8T8ev8sqqAqOn5/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       8: {
         name: "I've Got This Funny Feeling",
-        sub: googleDriveEmbedURL("1GkkCj6KmFrObayOie6BHZOLgJtygyo25"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1GkkCj6KmFrObayOie6BHZOLgJtygyo25/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       9: {
         name: "Merge! Serpo Dover Demon Nessie!",
-        sub: googleDriveEmbedURL("1buyo14ZqO06sOwKsUrH7PAt6sHXRRfx0"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1buyo14ZqO06sOwKsUrH7PAt6sHXRRfx0/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       10: {
         name: "Have You Ever Seen a Cattle Mutilation?",
-        sub: googleDriveEmbedURL("1ylZquHws_zSr5I6jpb4i9ZWfzASh2Ff6"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1ylZquHws_zSr5I6jpb4i9ZWfzASh2Ff6/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       11: {
         name: "First Love",
-        sub: googleDriveEmbedURL("1-PGPOUWAgw36Cq6fFLuzfv8vgnARg7DY"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1-PGPOUWAgw36Cq6fFLuzfv8vgnARg7DY/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
       12: {
         name: "Let's Go to the Cursed House",
-        sub: googleDriveEmbedURL("1LZwq6G9St5hxDY5CoyG_IhcMtIXPPPhI"),
-        dub: googleDriveEmbedURL(""),
+        sub: "https://drive.google.com/file/d/1LZwq6G9St5hxDY5CoyG_IhcMtIXPPPhI/preview",
+        dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
       },
     },
   };
@@ -575,6 +526,7 @@
   const videoContainer = document.getElementById("video-container");
   const seasonWrapper = document.getElementById("season-wrapper");
   const logoButton = document.getElementById("logo-button");
+  const versionWrapper = document.getElementById("version-wrapper");
 
   let selectedSeason = "1";
   let selectedEpisode = null;
@@ -608,68 +560,49 @@
     return url.includes("drive.google.com");
   }
 
-  /**
-   * Load the video or iframe based on url type.
-   * If the url is a Google Drive embed URL (or any iframe-able URL), embed with iframe.
-   * Otherwise, use an HTML5 video tag.
-   */
-function loadVideo() {
-  if (!selectedEpisode) return;
-  const episodes = episodeData[selectedSeason];
-  if (!episodes) return;
-  const ep = episodes[selectedEpisode];
-  if (!ep) return;
+  function embedURL(url) {
+    if (!url) return;
 
-  const ver = versionSelect.value;
-  let url = ver === "sub" ? ep.sub : ep.dub;
+    videoContainer.innerHTML = "";
 
-  // If url is empty string or just blank, set to fallback embed URL
-  if (!url || url.trim() === "") {
-    url = "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html";
-  }
-
-  // Clear container first
-  videoContainer.innerHTML = "";
-
-  if (isGoogleDriveUrl(url) || url.includes("youtube.com") || url.includes("vimeo.com")) {
-    // Embed iframe
     const iframe = document.createElement("iframe");
     iframe.id = "video-iframe";
     iframe.src = url;
     iframe.allowFullscreen = true;
-    iframe.allow = "autoplay; encrypted-media";
-    iframe.title = "Anime Episode Player";
+    iframe.allow = "autoplay; encrypted-media; fullscreen";
+    iframe.title = "Embedded Content Player";
     iframe.loading = "lazy";
+    iframe.style.border = "none";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+
     videoContainer.appendChild(iframe);
-  } else {
-    // Use video element for mp4 or direct video links
-    const video = document.createElement("video");
-    video.id = "anime-player";
-    video.controls = true;
-    video.preload = "metadata";
-    video.autoplay = true;
-    video.tabIndex = 0;
-    video.style.width = "100%";
-    video.style.height = "100%";
-    video.style.borderRadius = "8px";
-    video.style.backgroundColor = "#000";
-
-    // Create source element
-    const source = document.createElement("source");
-    source.src = url;
-    source.type = "video/mp4";
-
-    video.appendChild(source);
-    videoContainer.appendChild(video);
-
-    video.focus();
   }
-}
+
+  function loadVideo() {
+    if (!selectedEpisode) return;
+    const episodes = episodeData[selectedSeason];
+    if (!episodes) return;
+    const ep = episodes[selectedEpisode];
+    if (!ep) return;
+
+    const ver = versionSelect.value;
+    let url = ver === "sub" ? ep.sub : ep.dub;
+
+    // Provide fallback if no URL or empty string
+    if (!url || url.trim() === "") {
+      url = "https://drive.google.com/file/d/14f-dQQEEeJdMnY3mtdEvBTwaYcE6Ipro/preview";
+    }
+
+    embedURL(url);
+  }
 
   function populateEpisodes() {
     epList.innerHTML = "";
     const episodes = episodeData[selectedSeason];
     if (!episodes) return;
+
+    versionWrapper.style.display = "flex";
 
     Object.keys(episodes).forEach((episodeNum) => {
       const li = document.createElement("li");
@@ -684,7 +617,9 @@ function loadVideo() {
         li.classList.add("watched");
       }
 
-      li.addEventListener("click", () => selectEpisode(episodeNum));
+      li.addEventListener("click", () => {
+        selectEpisode(episodeNum);
+      });
       li.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
@@ -719,23 +654,6 @@ function loadVideo() {
     loadVideo();
   });
 
-  async function markWatched() {
-    // Mark episode watched on video ending, only for mp4 (video element)
-    const video = videoContainer.querySelector("video");
-    if (!video) return;
-
-    video.addEventListener("ended", () => {
-      if (selectedEpisode === null) return;
-      const key = generateEpisodeKey(selectedSeason, selectedEpisode);
-      if (!watchedEpisodes.has(key)) {
-        watchedEpisodes.add(key);
-        saveWatched();
-        const li = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
-        if (li) li.classList.add("watched");
-      }
-    });
-  }
-
   logoButton.addEventListener("click", () => {
     window.location.href = "https://syfer-eng.github.io/Shows/Anime.html";
   });
@@ -751,9 +669,7 @@ function loadVideo() {
       btn.textContent = `Season ${season}`;
       btn.setAttribute("aria-pressed", "false");
       btn.tabIndex = 0;
-
       btn.addEventListener("click", () => selectSeason(season));
-
       seasonWrapper.appendChild(btn);
     });
     updateSeasonButtons();
@@ -787,33 +703,15 @@ function loadVideo() {
     });
   }
 
-  function loadWatched() {
-    try {
-      const stored = localStorage.getItem("watchedEpisodes");
-      if (stored) {
-        const obj = JSON.parse(stored);
-        if (typeof obj === "object" && obj !== null) {
-          watchedEpisodes = new Set(Object.keys(obj).filter((key) => obj[key] === true));
-        }
-      }
-    } catch {
-      watchedEpisodes = new Set();
-    }
-  }
-
-  // Initialization
   loadWatched();
   populateSeasons();
   populateEpisodes();
-  const firstEpisode = Object.keys(episodeData[selectedSeason])[0];
-  if (firstEpisode) selectEpisode(firstEpisode);
 
-  // Watch video changes and mark watched for video tag
-  const observer = new MutationObserver(() => {
-    markWatched();
-  });
-  observer.observe(document.getElementById("video-container"), { childList: true });
-
+  if (!selectedEpisode) {
+    const firstEpisode = Object.keys(episodeData[selectedSeason])[0];
+    if (firstEpisode) selectEpisode(firstEpisode);
+  }
+  
 </script>
 
 </body>
