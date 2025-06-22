@@ -1,9 +1,8 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Anime Template with Episode Names and Reliable Video Links</title>
+  <title>Anime Template</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -208,8 +207,9 @@
       text-shadow: 0 0 3px #fff, 0 0 7px #fff;
     }
 
-    #anime-player {
+    #video-container {
       width: 100%;
+      max-height: 540px;
       border-radius: var(--border-radius);
       box-shadow:
         0 0 30px #fff,
@@ -219,12 +219,15 @@
       user-select: none;
       filter: grayscale(0%);
       transition: filter 0.3s ease;
-      max-height: 540px;
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
     }
 
-    #anime-player:focus {
-      box-shadow: 0 0 40px #fff, inset 0 0 70px #ffffffcc;
-      outline: none;
+    #video-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
 
     #version-wrapper {
@@ -465,18 +468,6 @@
         text-align: center;
       }
     }
-
-    .sr-only {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      padding: 0 !important;
-      margin: -1px !important;
-      overflow: hidden !important;
-      clip: rect(0, 0, 0, 0) !important;
-      white-space: nowrap !important;
-      border: 0 !important;
-    }
   </style>
 </head>
 <body>
@@ -491,7 +482,9 @@
 
   <main role="main">
     <h1>Episodes</h1>
-    <video id="anime-player" controls preload="metadata" tabindex="0" aria-label="Anime video player"></video>
+    <div id="video-container" aria-label="Video player container">
+      <iframe id="video-iframe" allowfullscreen allow="autoplay" title="Anime Episode Player"></iframe>
+    </div>
     <div id="version-wrapper" role="region" aria-label="Select version sub or dub">
       <label for="version-select">Version:</label>
       <select id="version-select" aria-label="Select version">
@@ -506,20 +499,24 @@
   </div>
 
 <script>
-  // IMPORTANT: Google Drive preview links cannot be used directly in <video> tag.
-  // We will _ignore_ any Google Drive URLs and only use the Dub URL if that happens.
-  // For demonstration, all sub-dub URLs are normal direct mp4 links,
-  // or we fallback to Dub URL if sub URL is invalid.
+  // Episode data contains direct embeddable links (Google Drive links replaced with embed URLs)
+  // All links are iframes or direct mp4; mp4 are loaded into a video tag fallback (iframe for Google Drive embedded player)
+  // We only use iframes here since original code asks for embedded video links.
+  
+  // Helper: convert a Google Drive file id to an embed iframe link
+  function googleDriveEmbedURL(fileId) {
+    return `https://drive.google.com/file/d/${fileId}/preview`;
+  }
 
-  // Episode data as object with season => episodes,
-  // each episode has name, subUrl, dubUrl
-  // If subUrl looks like Google Drive preview, we will ignore it because it's unusable.
-
+  // Episode data with embedded URLs (iframe playable URLs)
+  // IDs extracted from your original Google Drive link
+  // Dub uses direct mp4 links loaded via video player (will embed using <video> fallback)
+  
   const episodeData = {
     1: {
       1: {
         name: "A Tiny Happenstance",
-        sub: "https://drive.google.com/file/d/1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe/preview",
+        sub: googleDriveEmbedURL("1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe"),
         dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
       },
       2: {
@@ -576,18 +573,13 @@
 
   const epList = document.getElementById("episode-list");
   const versionSelect = document.getElementById("version-select");
-  const videoPlayer = document.getElementById("anime-player");
-  const logoButton = document.getElementById("logo-button");
+  const videoContainer = document.getElementById("video-container");
   const seasonWrapper = document.getElementById("season-wrapper");
+  const logoButton = document.getElementById("logo-button");
 
   let selectedSeason = "1";
   let selectedEpisode = null;
   let watchedEpisodes = new Set();
-
-  // Helper to detect if url is Google Drive preview (not usable direct URL)
-  function isGoogleDrivePreview(url) {
-    return url && url.includes("drive.google.com/file/") && url.includes("/preview");
-  }
 
   function generateEpisodeKey(season, episode) {
     return `${season}-${episode}`;
@@ -613,30 +605,94 @@
     localStorage.setItem("watchedEpisodes", JSON.stringify(obj));
   }
 
+  function isGoogleDriveUrl(url) {
+    return url.includes("drive.google.com");
+  }
+
+  /**
+   * Load the video or iframe based on url type.
+   * If the url is a Google Drive embed URL (or any iframe-able URL), embed with iframe.
+   * Otherwise, use an HTML5 video tag.
+   */
+  function loadVideo() {
+    if (!selectedEpisode) return;
+    const episodes = episodeData[selectedSeason];
+    if (!episodes) return;
+    const ep = episodes[selectedEpisode];
+    if (!ep) return;
+
+    const ver = versionSelect.value;
+    let url = ver === "sub" ? ep.sub : ep.dub;
+
+    if (!url) {
+      url = ver === "sub" ? ep.dub : ep.sub; // fallback if missing
+      if (!url) {
+        videoContainer.innerHTML = "<p>No video available for this episode/version.</p>";
+        return;
+      }
+    }
+
+    // Clear container first
+    videoContainer.innerHTML = "";
+
+    if (isGoogleDriveUrl(url) || url.includes("youtube.com") || url.includes("vimeo.com")) {
+      // Embed iframe
+      const iframe = document.createElement("iframe");
+      iframe.id = "video-iframe";
+      iframe.src = url;
+      iframe.allowFullscreen = true;
+      iframe.allow = "autoplay; encrypted-media";
+      iframe.title = "Anime Episode Player";
+      iframe.loading = "lazy";
+      videoContainer.appendChild(iframe);
+    } else {
+      // Use video element for mp4 or direct video links
+      const video = document.createElement("video");
+      video.id = "anime-player";
+      video.controls = true;
+      video.preload = "metadata";
+      video.autoplay = true;
+      video.tabIndex = 0;
+      video.style.width = "100%";
+      video.style.height = "100%";
+      video.style.borderRadius = "8px";
+      video.style.backgroundColor = "#000";
+
+      // Create source element
+      const source = document.createElement("source");
+      source.src = url;
+      source.type = "video/mp4";
+
+      video.appendChild(source);
+      videoContainer.appendChild(video);
+
+      video.focus();
+    }
+  }
+
   function populateEpisodes() {
     epList.innerHTML = "";
     const episodes = episodeData[selectedSeason];
     if (!episodes) return;
 
-    Object.keys(episodes).forEach((epNum) => {
+    Object.keys(episodes).forEach((episodeNum) => {
       const li = document.createElement("li");
-      const episode = episodes[epNum];
-      li.textContent = `Episode ${epNum}: ${episode.name}`;
-      li.dataset.episode = epNum;
+      li.textContent = `Episode ${episodeNum}: ${episodes[episodeNum].name}`;
+      li.dataset.episode = episodeNum;
       li.tabIndex = 0;
       li.setAttribute("role", "button");
       li.setAttribute("aria-pressed", "false");
 
-      const key = generateEpisodeKey(selectedSeason, epNum);
+      const key = generateEpisodeKey(selectedSeason, episodeNum);
       if (watchedEpisodes.has(key)) {
         li.classList.add("watched");
       }
 
-      li.addEventListener("click", () => selectEpisode(epNum));
+      li.addEventListener("click", () => selectEpisode(episodeNum));
       li.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          selectEpisode(epNum);
+          selectEpisode(episodeNum);
         }
       });
 
@@ -644,110 +700,79 @@
     });
   }
 
-  function selectEpisode(epNum) {
-    if (selectedEpisode === epNum) return;
-
+  function selectEpisode(episodeNum) {
+    if (selectedEpisode === episodeNum) return;
     if (selectedEpisode !== null) {
-      const oldSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
-      if (oldSelectedElem) {
-        oldSelectedElem.classList.remove("selected");
-        oldSelectedElem.setAttribute("aria-pressed", "false");
+      const oldElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+      if (oldElem) {
+        oldElem.classList.remove("selected");
+        oldElem.setAttribute("aria-pressed", "false");
       }
     }
-
-    selectedEpisode = epNum;
-    const newSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
-    if (newSelectedElem) {
-      newSelectedElem.classList.add("selected");
-      newSelectedElem.setAttribute("aria-pressed", "true");
-      newSelectedElem.scrollIntoView({ block: "nearest", inline: "nearest" });
+    selectedEpisode = episodeNum;
+    const newElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+    if (newElem) {
+      newElem.classList.add("selected");
+      newElem.setAttribute("aria-pressed", "true");
+      newElem.scrollIntoView({ block: "nearest", inline: "nearest" });
     }
     loadVideo();
   }
 
-  function loadVideo() {
-    if (selectedEpisode === null) return;
-    const ver = versionSelect.value;
-    const episodes = episodeData[selectedSeason];
-    if (!episodes) return;
-    const episode = episodes[selectedEpisode];
+  versionSelect.addEventListener("change", () => {
+    loadVideo();
+  });
 
-    let src = ver === "sub" ? episode.sub : episode.dub;
+  async function markWatched() {
+    // Mark episode watched on video ending, only for mp4 (video element)
+    const video = videoContainer.querySelector("video");
+    if (!video) return;
 
-    // If sub URL is Google Drive preview, ignore and fallback to dub URL
-    if (ver === "sub" && isGoogleDrivePreview(src)) {
-      src = episode.dub;
-    }
-
-    if (!src) {
-      videoPlayer.removeAttribute("src");
-      videoPlayer.load();
-      return;
-    }
-
-    if (videoPlayer.src !== src) {
-      videoPlayer.src = src;
-      videoPlayer.load();
-      videoPlayer.play().catch(() => {});
-    }
-  }
-
-  videoPlayer.addEventListener("ended", () => {
-    if (selectedEpisode !== null) {
+    video.addEventListener("ended", () => {
+      if (selectedEpisode === null) return;
       const key = generateEpisodeKey(selectedSeason, selectedEpisode);
       if (!watchedEpisodes.has(key)) {
         watchedEpisodes.add(key);
         saveWatched();
         const li = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
-        if (li) {
-          li.classList.add("watched");
-        }
+        if (li) li.classList.add("watched");
       }
-    }
-  });
-
-  versionSelect.addEventListener("change", () => {
-    loadVideo();
-    videoPlayer.focus();
-  });
+    });
+  }
 
   logoButton.addEventListener("click", () => {
     window.location.href = "https://syfer-eng.github.io/Shows/Anime.html";
   });
 
   function populateSeasons() {
-    const olds = seasonWrapper.querySelectorAll("button.season-btn");
-    olds.forEach((btn) => btn.remove());
+    const oldBtns = seasonWrapper.querySelectorAll("button.season-btn");
+    oldBtns.forEach((btn) => btn.remove());
 
-    Object.keys(episodeData).forEach((seasonNum) => {
+    Object.keys(episodeData).forEach((season) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "season-btn";
-      btn.textContent = `Season ${seasonNum}`;
+      btn.textContent = `Season ${season}`;
       btn.setAttribute("aria-pressed", "false");
       btn.tabIndex = 0;
 
-      btn.addEventListener("click", () => selectSeason(seasonNum));
+      btn.addEventListener("click", () => selectSeason(season));
 
       seasonWrapper.appendChild(btn);
     });
     updateSeasonButtons();
   }
 
-  function selectSeason(seasonNum) {
-    if (selectedSeason === seasonNum) return;
-
-    selectedSeason = seasonNum;
+  function selectSeason(season) {
+    if (selectedSeason === season) return;
+    selectedSeason = season;
     selectedEpisode = null;
     populateEpisodes();
     updateSeasonButtons();
-
     const episodes = episodeData[selectedSeason];
     if (episodes) {
       const firstEp = Object.keys(episodes)[0];
-      if (firstEp) {
-        selectEpisode(firstEp);
-      }
+      if (firstEp) selectEpisode(firstEp);
     }
   }
 
@@ -766,14 +791,33 @@
     });
   }
 
+  function loadWatched() {
+    try {
+      const stored = localStorage.getItem("watchedEpisodes");
+      if (stored) {
+        const obj = JSON.parse(stored);
+        if (typeof obj === "object" && obj !== null) {
+          watchedEpisodes = new Set(Object.keys(obj).filter((key) => obj[key] === true));
+        }
+      }
+    } catch {
+      watchedEpisodes = new Set();
+    }
+  }
+
+  // Initialization
   loadWatched();
   populateSeasons();
   populateEpisodes();
   const firstEpisode = Object.keys(episodeData[selectedSeason])[0];
-  if (firstEpisode) {
-    selectEpisode(firstEpisode);
-  }
-  versionSelect.value = "sub";
+  if (firstEpisode) selectEpisode(firstEpisode);
+
+  // Watch video changes and mark watched for video tag
+  const observer = new MutationObserver(() => {
+    markWatched();
+  });
+  observer.observe(document.getElementById("video-container"), { childList: true });
+
 </script>
 
 </body>
