@@ -2,18 +2,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Scott Pilgrim takes off</title>
+  <title>Scott Pilgrim takes off - Slightly Taller Episodes</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
     :root {
       --primary-color: #ffffff;
-      --primary-dark: #d0d0d0;
       --bg-dark: #000000;
       --bg-darker: #121212;
       --text-primary: #ffffff;
       --text-muted: #bbbbbb;
-      --shadow-dark: rgba(255, 255, 255, 0.05);
       --border-radius: 8px;
       --transition-speed: 0.3s;
       --highlight-hover: #dddddd;
@@ -26,6 +24,16 @@
       --season-btn-bg-hover: #333;
       --season-btn-selected-bg: #fff;
       --season-btn-selected-color: #000;
+      --scrollbar-bg: #222;
+      --scrollbar-thumb: #555;
+      --scrollbar-thumb-hover: #888;
+      --search-bg: #222;
+      --search-color: #eee;
+      --search-placeholder: #777;
+      --card-bg: #1e1e1e;
+      --card-border: #333;
+      --card-shadow: rgba(255,255,255,0.05);
+      --card-hover-bg: #2d2d2d;
     }
 
     * {
@@ -40,22 +48,43 @@
       display: flex;
       min-height: 100vh;
       overflow: hidden;
+      user-select: none;
+      line-height: 1.3;
     }
 
+    /* Sidebar set wider, fixed width */
     #sidebar {
-      width: 280px;
+      width: 440px;
       background: var(--bg-darker);
-      box-shadow: 3px 0 12px var(--shadow-dark);
+      box-shadow: 3px 0 18px rgba(255 255 255 / 0.05);
       display: flex;
       flex-direction: column;
-      padding: 20px 20px 20px;
+      padding: 24px 24px 24px 24px;
       overflow-y: auto;
-      user-select: none;
+      position: relative;
+      border-radius: 0 24px 24px 0;
+      user-select: text;
+    }
+
+    #sidebar::-webkit-scrollbar {
+      width: 10px;
+    }
+    #sidebar::-webkit-scrollbar-track {
+      background: var(--bg-darker);
+    }
+    #sidebar::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+      border: 2px solid var(--bg-darker);
+      transition: background-color 0.3s;
+    }
+    #sidebar::-webkit-scrollbar-thumb:hover {
+      background-color: var(--scrollbar-thumb-hover);
     }
 
     #sidebar button#logo-button {
       display: block;
-      margin-bottom: 25px;
+      margin-bottom: 24px;
       user-select: none;
       flex-shrink: 0;
       outline-offset: 3px;
@@ -63,17 +92,17 @@
       border: none;
       padding: 0;
       cursor: pointer;
-      width: 120px;
-      height: auto;
-      border-radius: 12px;
+      width: 140px;
+      border-radius: 24px;
       transition: filter 0.3s ease, box-shadow 0.3s ease;
+      align-self: center;
     }
 
     #sidebar button#logo-button img {
       display: block;
       width: 100%;
       height: auto;
-      border-radius: 12px;
+      border-radius: 24px;
       filter: none;
       transition: filter 0.3s ease;
       user-select: none;
@@ -83,133 +112,242 @@
     #sidebar button#logo-button:hover,
     #sidebar button#logo-button:focus {
       filter: none;
-      box-shadow: 0 0 8px var(--primary-color);
+      box-shadow: 0 0 10px var(--primary-color);
       outline: none;
     }
 
     #sidebar h2 {
-      font-weight: 600;
-      font-size: 1.8rem;
+      font-weight: 700;
+      font-size: 2.2rem;
       color: var(--primary-color);
-      margin: 0 0 15px;
-      letter-spacing: 1px;
+      margin: 0 0 20px;
+      letter-spacing: 1.5px;
       user-select: none;
+      text-align: center;
+      text-shadow: 0 0 4px var(--primary-color);
     }
 
-    #episode-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      max-height: calc(100vh - 140px);
-      overflow-y: auto;
+    #episode-search-wrapper {
+      margin-bottom: 20px;
+      position: sticky;
+      top: 0;
+      background: var(--bg-darker);
+      padding-bottom: 14px;
+      z-index: 10;
+      border-bottom: 1.5px solid #444;
+    }
+
+    #episode-search {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 1.1rem;
       border-radius: var(--border-radius);
-      box-shadow: inset 0 0 8px #ffffff11;
-      border: 1px solid #444;
-      background: #111111;
+      border: none;
+      background: var(--search-bg);
+      color: var(--search-color);
+      box-shadow: inset 0 0 10px #000;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      outline-offset: 3px;
+    }
+
+    #episode-search::placeholder {
+      color: var(--search-placeholder);
+    }
+
+    #episode-search:focus {
+      background-color: #333;
+      box-shadow: 0 0 8px var(--primary-color), inset 0 0 15px #000;
+      outline: none;
+      color: #fff;
+    }
+
+    /* Episodes displayed vertically as list of cards */
+    #episode-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      max-height: calc(100vh - 230px);
+      padding-bottom: 15px;
+      scroll-behavior: smooth;
+    }
+    #episode-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    #episode-list::-webkit-scrollbar-track {
+      background: var(--bg-darker);
+      border-radius: var(--border-radius);
+    }
+    #episode-list::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb);
+      border-radius: var(--border-radius);
+      border: 2px solid var(--bg-darker);
+      transition: background-color 0.3s;
+    }
+    #episode-list::-webkit-scrollbar-thumb:hover {
+      background-color: var(--scrollbar-thumb-hover);
     }
 
     #episode-list li {
-      padding: 14px 20px;
-      border-left: 4px solid transparent;
-      color: var(--text-primary);
-      font-weight: 500;
-      font-size: 1rem;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 0 10px var(--card-shadow);
+      padding: 20px 28px; /* increased padding vertically & horizontally */
       cursor: pointer;
-      transition: 
-        background-color var(--transition-speed),
+      border: 2px solid transparent;
+      transition:
         border-color var(--transition-speed),
+        background-color var(--transition-speed),
         color var(--transition-speed);
       user-select: none;
-      display: flex;
-      align-items: center;
-      white-space: nowrap;
-      text-shadow: 0 0 4px #000;
+      min-width: 100%;
       position: relative;
+      font-weight: 600;
+      font-size: 1.15rem; /* slightly larger font */
+      line-height: 1.3;
+      color: var(--text-primary);
+      white-space: normal;
+      outline-offset: 4px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      min-height: 72px; /* taller than before */
+      display: flex;
+      align-items: center; /* vertical center text */
     }
 
-    #episode-list li.watched {
-      opacity: var(--watched-opacity);
+    #episode-list li.disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
       color: var(--watched-color);
-    }
-    #episode-list li.watched::after {
-      content: "✓";
-      position: absolute;
-      right: 14px;
-      font-weight: 700;
-      color: var(--watched-icon-color);
-      font-size: 1.1rem;
-      user-select: none;
-      text-shadow: none;
+      pointer-events: none;
+      font-style: italic;
     }
 
-    #episode-list li:not(.selected):hover {
-      background-color: var(--highlight-hover);
-      color: #000;
-      border-left-color: var(--highlight-hover);
-      text-shadow: none;
-      opacity: 1 !important;
+    #episode-list li:hover:not(.disabled),
+    #episode-list li:focus-visible:not(.disabled) {
+      background-color: var(--card-hover-bg);
+      border-color: var(--highlight-hover);
+      color: #fff;
+      outline: none;
+      z-index: 2;
     }
 
     #episode-list li.selected {
+      border-color: var(--highlight-selected);
       background-color: var(--highlight-selected);
       color: #000;
-      border-left-color: var(--highlight-selected);
+      box-shadow:
+        0 0 12px var(--highlight-selected),
+        inset 0 0 12px var(--highlight-selected);
+      z-index: 5;
       font-weight: 700;
-      text-shadow: none;
-      opacity: 1 !important;
     }
 
-    #episode-list li.selected:hover {
-      background-color: var(--highlight-selected-hover);
-      border-left-color: var(--highlight-selected-hover);
-      color: #222;
+    /* Watched checkmark on right side */
+    .watched-marker {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--watched-icon-color);
+      font-weight: 700;
+      font-size: 1.4rem;
+      user-select: none;
+      text-shadow: 0 0 5px #95d600cc;
+      pointer-events: none;
+      line-height: 1;
+      user-select: none;
+    }
+
+    /* Season selector horizontally along top of sidebar */
+    #season-wrapper {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    #season-wrapper label {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      user-select: none;
+      align-self: center;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    #season-wrapper button.season-btn {
+      background-color: var(--season-btn-bg);
+      border-radius: 32px;
+      border: none;
+      padding: 10px 24px;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      color: var(--text-primary);
       cursor: pointer;
-      opacity: 1 !important;
+      box-shadow: inset 0 0 10px #000;
+      transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+      user-select: none;
+      white-space: nowrap;
+      text-transform: none;
+      min-width: 110px;
+      outline-offset: 3px;
+      box-sizing: border-box;
     }
-
-    #episode-list li:focus-visible {
-      outline: 2px solid var(--primary-color);
-      outline-offset: 2px;
-      background-color: var(--highlight-hover);
-      color: #000;
-      text-shadow: none;
-      opacity: 1 !important;
+    #season-wrapper button.season-btn.selected {
+      background-color: var(--season-btn-selected-bg);
+      color: var(--season-btn-selected-color);
+      box-shadow: none;
+      cursor: default;
+    }
+    #season-wrapper button.season-btn:hover:not(.selected),
+    #season-wrapper button.season-btn:focus-visible:not(.selected) {
+      background-color: var(--season-btn-bg-hover);
+      outline: none;
+      color: #fff;
+      box-shadow: 0 0 7px var(--primary-color), inset 0 0 15px #000;
     }
 
     main {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 30px 30px;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 40px 40px;
       background: var(--bg-dark);
       box-shadow: inset 0 0 50px #000000cc;
       position: relative;
       overflow-x: hidden;
-      
-      padding-bottom: 100px;
-      box-sizing: border-box;
-      width: 100%;
-      max-width: 960px;
-      margin: 0 auto;
+      width: calc(100% - 440px);
+      max-width: calc(100% - 440px);
+      min-width: 540px;
+      color: var(--text-primary);
+      user-select: none;
     }
 
     h1 {
-      font-weight: 600;
-      font-size: 2.8rem;
-      margin: 0 0 25px;
-      letter-spacing: 2px;
-      color: var(--primary-color);
+      font-weight: 700;
+      font-size: 2.6rem;
+      margin: 0 0 30px;
+      letter-spacing: 2.4px;
       user-select: none;
       text-align: center;
-      width: 100%;
-      text-shadow: 0 0 3px #fff, 0 0 7px #fff;
+      color: var(--primary-color);
+      text-shadow: 0 0 8px #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      min-height: 3.8rem;
     }
 
     #video-container {
       width: 100%;
-      max-height: 540px;
+      height: 540px;
       border-radius: var(--border-radius);
       box-shadow:
         0 0 30px #fff,
@@ -220,7 +358,6 @@
       filter: grayscale(0%);
       transition: filter 0.3s ease;
       position: relative;
-      aspect-ratio: 16 / 9;
       overflow: hidden;
     }
 
@@ -231,27 +368,28 @@
     }
 
     #version-wrapper {
-      margin-top: 16px;
+      margin-top: 28px;
       width: 100%;
       background: #111111;
-      padding: 14px 20px;
+      padding: 18px 28px;
       border-radius: var(--border-radius);
-      box-shadow: 0 4px 20px rgba(255 255 255 / 0.05);
+      box-shadow: 0 5px 20px rgba(255 255 255 / 0.05);
       color: var(--text-muted);
       user-select: none;
       display: flex;
       justify-content: flex-start;
-      gap: 12px;
+      gap: 16px;
       align-items: center;
+      max-width: 600px;
     }
 
     #version-wrapper label {
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.07em;
-      margin-right: 10px;
+      margin-right: 16px;
       user-select: none;
       flex-shrink: 0;
       white-space: nowrap;
@@ -263,12 +401,12 @@
       border: none;
       border-radius: var(--border-radius);
       color: var(--text-primary);
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 9px 16px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 12px 24px;
       cursor: pointer;
       outline-offset: 3px;
-      box-shadow: inset 0 0 8px #000;
+      box-shadow: inset 0 0 10px #000;
       transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
     }
 
@@ -277,151 +415,77 @@
       background-color: #333;
       outline: none;
       color: #fff;
-      box-shadow: 0 0 5px var(--primary-color), inset 0 0 12px #000;
+      box-shadow: 0 0 7px var(--primary-color), inset 0 0 15px #000;
     }
 
-    #season-wrapper {
-      position: fixed;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #111111;
-      border-radius: var(--border-radius);
-      padding: 12px 20px;
-      box-shadow: 0 4px 20px rgba(255 255 255 / 0.05);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      user-select: none;
-      z-index: 1000;
-      max-width: 960px;
-      width: calc(100% - 40px);
-      box-sizing: border-box;
-    }
-
-    #season-wrapper label {
-      font-weight: 600;
-      font-size: 1rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-right: 10px;
-      user-select: none;
-      flex-shrink: 0;
-      white-space: nowrap;
-    }
-
-    #season-wrapper button.season-btn {
-      background-color: var(--season-btn-bg);
-      border: none;
-      border-radius: var(--border-radius);
-      color: var(--text-primary);
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 9px 16px;
-      cursor: pointer;
-      outline-offset: 3px;
-      box-shadow: inset 0 0 8px #000;
-      transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
-      user-select: none;
-      white-space: nowrap;
-      line-height: 1.2;
-    }
-    #season-wrapper button.season-btn:hover,
-    #season-wrapper button.season-btn:focus-visible {
-      background-color: var(--season-btn-bg-hover);
-      outline: none;
-      color: #fff;
-      box-shadow: 0 0 5px var(--primary-color), inset 0 0 12px #000;
-    }
-
-    #season-wrapper button.season-btn.selected {
-      background-color: var(--season-btn-selected-bg);
-      color: var(--season-btn-selected-color);
-      box-shadow: none;
-      cursor: default;
-    }
-
-    @media (max-width: 900px) {
+    /* Responsive */
+    @media (max-width: 1200px) {
       body {
         flex-direction: column;
       }
 
       #sidebar {
         width: 100%;
-        max-height: 200px;
-        flex-direction: row;
-        padding: 15px 15px 10px;
+        max-height: 450px;
+        border-radius: 0 0 24px 24px;
+        padding: 20px 20px;
         box-shadow: none;
-        overflow-x: auto;
-        overflow-y: hidden;
-        align-items: center;
-      }
-
-      #sidebar button#logo-button {
-        margin: 0 15px 0 0;
-        width: 120px;
-      }
-
-      #sidebar h2 {
-        flex: 1 0 100%;
-        font-size: 1.5rem;
-        text-align: center;
-        margin: 0 0 8px;
-      }
-
-      #episode-list {
-        max-height: none;
-        display: flex;
-        gap: 8px;
-        overflow-x: auto;
-        overflow-y: hidden;
-        border: none;
-        box-shadow: none;
-        background: transparent;
-        border-radius: 0;
-      }
-
-      #episode-list li {
-        white-space: nowrap;
-        flex: 0 0 auto;
-        border-left: none;
-        border-radius: var(--border-radius);
-        padding: 8px 14px;
-        background-color: transparent;
-        text-shadow: none;
-        color: var(--text-primary);
-        transition: color 0.3s ease, background-color 0.3s ease;
-        position: relative;
-      }
-
-      #episode-list li.watched::after {
-        right: 8px;
-        font-size: 1rem;
-      }
-
-      #episode-list li:not(.selected):hover {
-        background-color: var(--highlight-hover);
-        color: #000;
-        text-shadow: none;
-        opacity: 1 !important;
-      }
-
-      #episode-list li.selected {
-        background-color: var(--highlight-selected);
-        color: #000;
-        opacity: 1 !important;
-      }
-
-      #episode-list li.selected:hover {
-        background-color: var(--highlight-selected-hover);
-        color: #222;
       }
 
       main {
         width: 100%;
-        padding: 20px 15px 100px;
+        max-width: 100%;
+        min-width: auto;
+        padding: 20px 20px 60px;
         box-sizing: border-box;
+      }
+
+      #episode-list {
+        max-height: 280px;
+      }
+
+      #sidebar button#logo-button {
+        width: 120px;
+        margin-bottom: 14px;
+      }
+
+      #season-wrapper {
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        margin-bottom: 12px;
+      }
+
+      #season-wrapper button.season-btn {
+        min-width: 90px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      #version-wrapper {
+        margin-top: 20px;
+        padding: 12px 18px;
+        max-width: 100%;
+      }
+
+      #version-wrapper label {
+        font-size: 1rem;
+        margin-right: 10px;
+      }
+
+      #version-select {
+        font-size: 1rem;
+        padding: 9px 16px;
+      }
+
+      #video-container {
+        height: 320px;
+        border-radius: var(--border-radius);
       }
     }
   </style>
@@ -432,14 +496,26 @@
     <button id="logo-button" aria-label="Go to homepage" title="Go to homepage">
       <img src="https://raw.githubusercontent.com/Skeleton-Archive/cs2-offsets/refs/heads/main/cat.png" alt="Logo" />
     </button>
-    <h2>Episodes</h2>
-    <ul id="episode-list" tabindex="0" aria-label="Entries list"></ul>
+    <h2>Episode Selection</h2>
+    <div id="season-wrapper" role="region" aria-label="Season selection region">
+      <label>Season:</label>
+    </div>
+    <div id="episode-search-wrapper">
+      <input
+        id="episode-search"
+        type="search"
+        placeholder="Search episodes by name or number..."
+        aria-label="Search episodes"
+        autocomplete="off"
+        spellcheck="false" />
+    </div>
+    <ul id="episode-list" aria-label="Episodes list" tabindex="0"></ul>
   </aside>
 
-  <main role="main">
-    <h1></h1>
+  <main role="main" aria-live="polite" aria-atomic="true">
+    <h1 aria-live="polite" aria-atomic="true"></h1>
     <div id="video-container" aria-label="Embedded content container">
-      <!-- iframe or video or embed will be here -->
+      <!-- iframe or video embed here -->
     </div>
 
     <div id="version-wrapper" role="region" aria-label="Select version sub or dub">
@@ -450,10 +526,6 @@
       </select>
     </div>
   </main>
-
-  <div id="season-wrapper" role="region" aria-label="Season selection region">
-    <label>Season:</label>
-  </div>
 
 <script>
   const episodeData = {
@@ -507,6 +579,8 @@
   const seasonWrapper = document.getElementById("season-wrapper");
   const logoButton = document.getElementById("logo-button");
   const versionWrapper = document.getElementById("version-wrapper");
+  const episodeSearchInput = document.getElementById("episode-search");
+  const mainTitle = document.querySelector("main h1");
 
   let selectedSeason = "1";
   let selectedEpisode = null;
@@ -534,10 +608,6 @@
     const obj = {};
     watchedEpisodes.forEach((key) => (obj[key] = true));
     localStorage.setItem("watchedEpisodes", JSON.stringify(obj));
-  }
-
-  function isGoogleDriveUrl(url) {
-    return url.includes("drive.google.com");
   }
 
   function embedURL(url) {
@@ -569,24 +639,76 @@
     const ver = versionSelect.value;
     let url = ver === "sub" ? ep.sub : ep.dub;
 
-    // Provide fallback if no URL or empty string
     if (!url || url.trim() === "") {
       url = "https://drive.google.com/file/d/14f-dQQEEeJdMnY3mtdEvBTwaYcE6Ipro/preview";
     }
 
     embedURL(url);
+
+    mainTitle.textContent = `${ep.name}`;
+
+    const key = generateEpisodeKey(selectedSeason, selectedEpisode);
+    if (!watchedEpisodes.has(key)) {
+      watchedEpisodes.add(key);
+      saveWatched();
+      updateEpisodeWatchedState(selectedEpisode, true);
+    }
   }
 
-  function populateEpisodes() {
+  function updateEpisodeWatchedState(episodeNum, watched) {
+    const li = epList.querySelector(`li[data-episode="${episodeNum}"]`);
+    if (!li) return;
+    const key = generateEpisodeKey(selectedSeason, episodeNum);
+    if (watched) {
+      li.classList.add("watched");
+      if (!li.querySelector(".watched-marker")) {
+        const check = document.createElement("span");
+        check.className = "watched-marker";
+        check.setAttribute("aria-label", "Watched");
+        check.textContent = "✔";
+        li.appendChild(check);
+      }
+    } else {
+      li.classList.remove("watched");
+      const check = li.querySelector(".watched-marker");
+      if (check) check.remove();
+    }
+  }
+
+  let filteredEpisodes = null;
+
+  function populateEpisodes(filterText = "") {
     epList.innerHTML = "";
     const episodes = episodeData[selectedSeason];
     if (!episodes) return;
 
     versionWrapper.style.display = "flex";
 
-    Object.keys(episodes).forEach((episodeNum) => {
+    filteredEpisodes = Object.keys(episodes)
+      .filter((episodeNum) => {
+        if (!filterText) return true;
+        const ep = episodes[episodeNum];
+        return (
+          ep.name.toLowerCase().includes(filterText.toLowerCase()) ||
+          episodeNum.toString().includes(filterText)
+        );
+      })
+      .sort((a, b) => parseInt(a) - parseInt(b));
+
+    if (filteredEpisodes.length === 0) {
+      const noResultLi = document.createElement("li");
+      noResultLi.textContent = "No episodes match your search.";
+      noResultLi.classList.add("disabled");
+      noResultLi.tabIndex = -1;
+      noResultLi.setAttribute("aria-live", "polite");
+      epList.appendChild(noResultLi);
+      return;
+    }
+
+    filteredEpisodes.forEach((episodeNum) => {
+      const ep = episodes[episodeNum];
       const li = document.createElement("li");
-      li.textContent = `Episode ${episodeNum}: ${episodes[episodeNum].name}`;
+      li.textContent = ep.name;
       li.dataset.episode = episodeNum;
       li.tabIndex = 0;
       li.setAttribute("role", "button");
@@ -595,13 +717,27 @@
       const key = generateEpisodeKey(selectedSeason, episodeNum);
       if (watchedEpisodes.has(key)) {
         li.classList.add("watched");
+        const check = document.createElement("span");
+        check.className = "watched-marker";
+        check.setAttribute("aria-label", "Watched");
+        check.textContent = "✔";
+        li.appendChild(check);
+      }
+
+      const subValid = ep.sub && ep.sub.trim() !== "";
+      const dubValid = ep.dub && ep.dub.trim() !== "";
+      if (!subValid && !dubValid) {
+        li.classList.add("disabled");
+        li.setAttribute("aria-disabled", "true");
       }
 
       li.addEventListener("click", () => {
-        selectEpisode(episodeNum);
+        if (!li.classList.contains("disabled")) {
+          selectEpisode(episodeNum);
+        }
       });
       li.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
+        if ((e.key === "Enter" || e.key === " ") && !li.classList.contains("disabled")) {
           e.preventDefault();
           selectEpisode(episodeNum);
         }
@@ -609,10 +745,17 @@
 
       epList.appendChild(li);
     });
+
+    if (!selectedEpisode || !filteredEpisodes.includes(selectedEpisode)) {
+      selectEpisode(filteredEpisodes[0]);
+    } else {
+      selectEpisode(selectedEpisode);
+    }
   }
 
   function selectEpisode(episodeNum) {
     if (selectedEpisode === episodeNum) return;
+
     if (selectedEpisode !== null) {
       const oldElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
       if (oldElem) {
@@ -626,6 +769,7 @@
       newElem.classList.add("selected");
       newElem.setAttribute("aria-pressed", "true");
       newElem.scrollIntoView({ block: "nearest", inline: "nearest" });
+      newElem.focus();
     }
     loadVideo();
   }
@@ -642,16 +786,24 @@
     const oldBtns = seasonWrapper.querySelectorAll("button.season-btn");
     oldBtns.forEach((btn) => btn.remove());
 
-    Object.keys(episodeData).forEach((season) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "season-btn";
-      btn.textContent = `Season ${season}`;
-      btn.setAttribute("aria-pressed", "false");
-      btn.tabIndex = 0;
-      btn.addEventListener("click", () => selectSeason(season));
-      seasonWrapper.appendChild(btn);
-    });
+    Object.keys(episodeData)
+      .sort((a, b) => parseInt(a) - parseInt(b))
+      .forEach((season) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "season-btn";
+        btn.textContent = `Season ${season}`;
+        btn.setAttribute("aria-pressed", "false");
+        btn.tabIndex = 0;
+        btn.addEventListener("click", () => selectSeason(season));
+        btn.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            selectSeason(season);
+          }
+        });
+        seasonWrapper.appendChild(btn);
+      });
     updateSeasonButtons();
   }
 
@@ -659,13 +811,9 @@
     if (selectedSeason === season) return;
     selectedSeason = season;
     selectedEpisode = null;
+    episodeSearchInput.value = "";
     populateEpisodes();
     updateSeasonButtons();
-    const episodes = episodeData[selectedSeason];
-    if (episodes) {
-      const firstEp = Object.keys(episodes)[0];
-      if (firstEp) selectEpisode(firstEp);
-    }
   }
 
   function updateSeasonButtons() {
@@ -683,6 +831,37 @@
     });
   }
 
+  episodeSearchInput.addEventListener("input", () => {
+    const query = episodeSearchInput.value.trim();
+    populateEpisodes(query);
+  });
+
+  epList.addEventListener("keydown", (e) => {
+    const focusElem = document.activeElement;
+    if (focusElem && focusElem.parentElement === epList) {
+      let newIndex;
+      const episodes = Array.from(epList.querySelectorAll("li:not(.disabled)"));
+      const currentIndex = episodes.indexOf(focusElem);
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        newIndex = currentIndex + 1 < episodes.length ? currentIndex + 1 : 0;
+        episodes[newIndex].focus();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        newIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : episodes.length - 1;
+        episodes[newIndex].focus();
+      } else if(e.key === "ArrowRight") {
+        e.preventDefault();
+        newIndex = currentIndex + 1 < episodes.length ? currentIndex + 1 : 0;
+        episodes[newIndex].focus();
+      } else if(e.key === "ArrowLeft") {
+        e.preventDefault();
+        newIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : episodes.length - 1;
+        episodes[newIndex].focus();
+      }
+    }
+  });
+
   loadWatched();
   populateSeasons();
   populateEpisodes();
@@ -691,7 +870,6 @@
     const firstEpisode = Object.keys(episodeData[selectedSeason])[0];
     if (firstEpisode) selectEpisode(firstEpisode);
   }
-  
 </script>
 
 </body>
