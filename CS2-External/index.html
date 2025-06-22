@@ -1,0 +1,191 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CS2 External Syfer-eng - Home</title>
+<style>
+  *{box-sizing:border-box;}
+  body {
+    margin: 0; font-family: Arial, sans-serif;
+    background: #000;
+    color: #eee;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  header {
+    width: 100%; background: #111;
+    padding: 15px 0; font-size: 1.5rem; font-weight: 700;
+    text-align: center; letter-spacing: 1px;
+    user-select: none; border-bottom: 1px solid #222;
+  }
+  main {
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 25px; max-width: 900px; width: 92vw;
+    opacity: 0; animation: fadeInUp 0.8s ease forwards;
+    margin: 30px 0;
+  }
+  @keyframes fadeInUp {
+    from {opacity:0; transform: translateY(20px);}
+    to {opacity:1; transform: translateY(0);}
+  }
+  .cheat-card {
+    background:#111;
+    border-radius:8px;
+    padding:15px 16px 20px;
+    width: 100%;
+    max-width: 370px;
+    box-shadow: 0 0 10px #aaa6;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex; flex-direction: column; align-items: center;
+    user-select: none;
+  }
+  .cheat-card:hover {
+    transform: translateY(-8px) scale(1.04);
+    box-shadow: 0 0 20px #bbb;
+    cursor: default;
+  }
+  .cheat-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1.5px solid #ccc;
+    margin-bottom: 14px;
+    filter: grayscale(100%);
+    transition: filter 0.35s ease;
+    background: #222;
+  }
+  .cheat-card:hover .cheat-image {
+    filter: grayscale(0%);
+  }
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 14px;
+    font-weight: 700;
+    color: #eee;
+    text-align: center;
+  }
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 18px;
+    width: 100%;
+    font-size: 0.9rem;
+    line-height: 1.3;
+    color: #ccc;
+    user-select: text;
+  }
+  ul li {
+    background: #222;
+    padding: 7px 12px;
+    margin-bottom: 8px;
+    border-left: 4px solid #aaa;
+    border-radius: 4px;
+  }
+  ul li.bad {
+    border-left-color: #800;
+    opacity: 0.5;
+    text-decoration: line-through;
+    color: #777;
+    background: #1b1b1b;
+    font-style: italic;
+  }
+  .price {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ddd;
+    margin-bottom: 20px;
+    text-align: center;
+    user-select: text;
+  }
+  .price.free {
+    color: #888;
+  }
+  button, .free-download-btn {
+    background: #222;
+    border: 1.5px solid #888;
+    color: #ddd;
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 260px;
+    user-select: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+  }
+  button:hover, .free-download-btn:hover {
+    background-color: #444;
+    border-color: #ccc;
+    transform: scale(1.05);
+  }
+  button:active, .free-download-btn:active {
+    transform: scale(0.95);
+  }
+  button:focus-visible, .free-download-btn:focus-visible {
+    outline: 2px solid #aaa;
+    outline-offset: 4px;
+  }
+  .free-download-btn {
+    margin-top: 6px;
+    background: transparent;
+    border: none;
+    color: #888;
+    padding: 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    width: max-content;
+  }
+  .free-download-btn:hover {
+    color: #ccc;
+    text-decoration: underline;
+    background: transparent;
+    border: none;
+    transform: none;
+  }
+  .note {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 6px;
+    text-align: center;
+    font-style: italic;
+  }
+  @media (max-width: 960px) {
+    main {flex-direction: column; align-items: center;}
+    .cheat-card {max-width: 95vw;}
+  }
+</style>
+</head>
+<body>
+<header>CS2 External Syfer-eng</header>
+<main>
+  <!-- Paid Version -->
+  <section class="cheat-card" aria-labelledby="paid-title" role="region" tabindex="0">
+    <img src="https://raw.githubusercontent.com/Skeleton-Archive/cs2-offsets/refs/heads/main/Screenshot%202025-06-22%20114829.png" alt="Premium CS2 External Cheat screenshot" class="cheat-image" loading="lazy" />
+    <h2 id="paid-title">Premium Version</h2>
+  <ul>
+    <li>Fully undetected &amp; safe</li>
+    <li>Wallhack</li>
+    <li>Aimbot with customizable FOV &amp; smoothness</li>
+    <li>ESP options</li>
+    <li>Regular updates</li>
+    <li>lightweight client</li>
+  </ul>
+    <div class="price">$2.99</div>
+    <button id="buyNowBtn" type="button" aria-label="Buy Premium Version">Buy Now</button>
+    <button id="freeDownloadBtn" class="free-download-btn" type="button" aria-label="Download Free Version">Free Download</button>
+  </section>
+</main>
+<script>
+  document.getElementById('buyNowBtn').addEventListener('click', () => {
+    window.location.href = 'paid-version.html';
+  });
+  document.getElementById('freeDownloadBtn').addEventListener('click', () => {
+    window.location.href = 'free-version.html';
+  });
+</script>
+</body>
+</html>
