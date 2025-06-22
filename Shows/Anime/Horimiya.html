@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -74,7 +75,6 @@
       width: 100%;
       height: auto;
       border-radius: 12px;
-
       filter: none;
       transition: filter 0.3s ease;
       user-select: none;
@@ -482,24 +482,22 @@
 <body>
 
   <aside id="sidebar" role="complementary" aria-label="Episode selection sidebar">
-    <button id="logo-button" aria-label="Go to homepage">
+    <button id="logo-button" aria-label="Go to homepage" title="Go to homepage">
       <img src="https://raw.githubusercontent.com/Skeleton-Archive/cs2-offsets/refs/heads/main/cat.png" alt="Logo" />
     </button>
     <h2>Episodes</h2>
-    <ul id="episode-list" tabindex="0" aria-label="Anime episodes list">
-    </ul>
+    <ul id="episode-list" tabindex="0" aria-label="Anime episodes list"></ul>
   </aside>
 
   <main role="main">
-    <h1>Episodes: </h1>
+    <h1>Episodes</h1>
     <video id="anime-player" controls preload="metadata" tabindex="0" aria-label="Anime video player"></video>
     <div id="version-wrapper" role="region" aria-label="Select version sub or dub">
       <label for="version-select">Version:</label>
-      <select id="version-select" aria-describedby="version-desc" aria-label="Select version">
+      <select id="version-select" aria-label="Select version">
         <option value="sub">Sub</option>
         <option value="dub">Dub</option>
       </select>
-      <span id="version-desc" class="sr-only">Select version of the anime: Sub or Dub</span>
     </div>
   </main>
 
@@ -508,88 +506,39 @@
   </div>
 
   <script>
-
-    // Add episode names by season and episode number
-    const episodeNames = {
+    // Episode data combined: "Name##SubURL##DubURL"
+    const episodeData = {
       1: {
-        1: "Awakening",
-        2: "The Journey Begins",
-        3: "Crossroads",
-        4: "The Hidden Power",
-        5: "Dawn of Destiny"
+        1: "Awakening##https://drive.google.com/file/d/1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe/preview##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        2: "The Journey Begins##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        3: "Crossroads##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        4: "The Hidden Power##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        5: "Dawn of Destiny##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4"
       },
       2: {
-        1: "New Horizons",
-        2: "Shadows Rising",
-        3: "Legacy of the Ancients"
+        1: "New Horizons##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        2: "Shadows Rising##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        3: "Legacy of the Ancients##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
       },
       3: {
-        1: "Revelations",
-        2: "The Final Stand"
-      }
-    };
-
-    const allEpisodes = {
-      1: {  // Seasons
-        1: {
-          sub: 'https://drive.google.com/file/d/1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe/preview',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-        },
-        2: {
-          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-        },
-        3: {
-          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-        },
-        4: {
-          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-        },
-        5: {
-          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-        },
-      },
-      2: { // Season 2
-        1: {
-          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-        },
-        2: {
-          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-        },
-        3: {
-          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-        }
-      },
-      3: { // Season 3
-        1: {
-          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-        },
-        2: {
-          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-        }
+        1: "Revelations##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        2: "The Final Stand##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
       }
     };
 
     const epList = document.getElementById('episode-list');
     const versionSelect = document.getElementById('version-select');
     const videoPlayer = document.getElementById('anime-player');
-    const videoSource = document.createElement('source');
-    videoPlayer.appendChild(videoSource);
-
     const logoButton = document.getElementById('logo-button');
     const seasonWrapper = document.getElementById('season-wrapper');
 
     let selectedSeason = "1";
     let selectedEpisode = null;
     let watchedEpisodes = new Set();
+
+    function generateEpisodeKey(season, episode) {
+      return season + "-" + episode;
+    }
 
     function loadWatched() {
       try {
@@ -604,31 +553,35 @@
         watchedEpisodes = new Set();
       }
     }
-
     function saveWatched() {
       const obj = {};
       watchedEpisodes.forEach(key => obj[key] = true);
       localStorage.setItem('watchedEpisodes', JSON.stringify(obj));
     }
 
-    function generateEpisodeKey(season, episode) {
-      return season + "-" + episode;
+    function parseEpisodeInfo(infoString) {
+      const parts = infoString.split('##');
+      return {
+        name: parts[0],
+        sub: parts[1] || '',
+        dub: parts[2] || ''
+      };
     }
 
     function populateEpisodes() {
       epList.innerHTML = '';
-      const episodes = allEpisodes[selectedSeason];
+      const episodes = episodeData[selectedSeason];
       if (!episodes) return;
 
       Object.keys(episodes).forEach(epNum => {
         const li = document.createElement('li');
-        // Show episode number and episode name if available
-        const epName = (episodeNames[selectedSeason] && episodeNames[selectedSeason][epNum]) ? episodeNames[selectedSeason][epNum] : '';
-        li.textContent = epName ? `Episode ${epNum}: ${epName}` : `Episode ${epNum}`;
+        const episodeInfo = parseEpisodeInfo(episodes[epNum]);
+        li.textContent = `Episode ${epNum}: ${episodeInfo.name}`;
         li.dataset.episode = epNum;
         li.tabIndex = 0;
         li.setAttribute('role', 'button');
         li.setAttribute('aria-pressed', 'false');
+
         const key = generateEpisodeKey(selectedSeason, epNum);
         if (watchedEpisodes.has(key)) {
           li.classList.add('watched');
@@ -668,18 +621,19 @@
     function loadVideo() {
       if (selectedEpisode === null) return;
       const ver = versionSelect.value;
-      const episodes = allEpisodes[selectedSeason];
+      const episodes = episodeData[selectedSeason];
       if (!episodes) return;
-      const src = episodes[selectedEpisode] && episodes[selectedEpisode][ver] ? episodes[selectedEpisode][ver] : '';
+      const episodeInfo = parseEpisodeInfo(episodes[selectedEpisode]);
+      const src = ver === 'sub' ? episodeInfo.sub : episodeInfo.dub;
 
       if (src) {
-        if (videoSource.src !== src) {
-          videoSource.src = src;
+        if (videoPlayer.src !== src) {
+          videoPlayer.src = src;
           videoPlayer.load();
           videoPlayer.play().catch(() => {});
         }
       } else {
-        videoSource.src = '';
+        videoPlayer.removeAttribute('src');
         videoPlayer.load();
       }
     }
@@ -711,7 +665,7 @@
       const olds = seasonWrapper.querySelectorAll('button.season-btn');
       olds.forEach(btn => btn.remove());
 
-      Object.keys(allEpisodes).forEach(seasonNum => {
+      Object.keys(episodeData).forEach(seasonNum => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'season-btn';
@@ -734,7 +688,7 @@
       populateEpisodes();
       updateSeasonButtons();
 
-      const episodes = allEpisodes[selectedSeason];
+      const episodes = episodeData[selectedSeason];
       if (episodes) {
         const firstEp = Object.keys(episodes)[0];
         if (firstEp) {
@@ -761,12 +715,12 @@
     loadWatched();
     populateSeasons();
     populateEpisodes();
-    const firstEpisode = Object.keys(allEpisodes[selectedSeason])[0];
+    // Select the first episode by default
+    const firstEpisode = Object.keys(episodeData[selectedSeason])[0];
     if (firstEpisode) {
       selectEpisode(firstEpisode);
     }
     versionSelect.value = 'sub';
-
   </script>
 
 </body>
