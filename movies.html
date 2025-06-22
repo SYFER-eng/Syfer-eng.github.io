@@ -3,7 +3,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="https://raw.githubusercontent.com/Skeleton-Archive/cs2-offsets/refs/heads/main/cat.png" type="png" sizes="32x44" />
-  <title>Movies</title>
+  <title>Movies • Syfer-eng</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -238,22 +238,6 @@
         inset 0 0 12px var(--highlight-selected);
       z-index: 5;
       font-weight: 700;
-    }
-
-    /* Watched checkmark on right side */
-    .watched-marker {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--watched-icon-color);
-      font-weight: 700;
-      font-size: 1.4rem;
-      user-select: none;
-      text-shadow: 0 0 5px #95d600cc;
-      pointer-events: none;
-      line-height: 1;
-      user-select: none;
     }
 
     main {
@@ -634,45 +618,41 @@
       return;
     }
 
-    filteredMovies.forEach((movieNum) => {
-      const movie = movieData[movieNum];
-      const li = document.createElement("li");
-      li.textContent = movie.name;
-      li.dataset.movie = movieNum;
-      li.tabIndex = 0;
-      li.setAttribute("role", "button");
-      li.setAttribute("aria-pressed", "false");
+filteredMovies.forEach((movieNum) => {
+  const movie = movieData[movieNum];
+  const li = document.createElement("li");
+  li.textContent = movie.name;
+  li.dataset.movie = movieNum;
+  li.tabIndex = 0;
+  li.setAttribute("role", "button");
+  li.setAttribute("aria-pressed", "false");
 
-      const urlValid = movie.url && movie.url.trim() !== "";
-      if (!urlValid) {
-        li.classList.add("disabled");
-        li.setAttribute("aria-disabled", "true");
-      }
+  const urlValid = movie.url && movie.url.trim() !== "";
+  if (!urlValid) {
+    li.classList.add("disabled");
+    li.setAttribute("aria-disabled", "true");
+  }
 
-      const key = movieNum.toString();
-      if (watchedMovies.has(key)) {
-        li.classList.add("watched");
-        const check = document.createElement("span");
-        check.className = "watched-marker";
-        check.setAttribute("aria-label", "Watched");
-        check.textContent = "✔";
-        li.appendChild(check);
-      }
+  const key = movieNum.toString();
+  if (watchedMovies.has(key)) {
+    li.classList.add("watched");
+    // Removed checkmark creation here
+  }
 
-      li.addEventListener("click", () => {
-        if (!li.classList.contains("disabled")) {
-          selectMovie(movieNum);
-        }
-      });
-      li.addEventListener("keydown", (e) => {
-        if ((e.key === "Enter" || e.key === " ") && !li.classList.contains("disabled")) {
-          e.preventDefault();
-          selectMovie(movieNum);
-        }
-      });
+  li.addEventListener("click", () => {
+    if (!li.classList.contains("disabled")) {
+      selectMovie(movieNum);
+    }
+  });
+  li.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && !li.classList.contains("disabled")) {
+      e.preventDefault();
+      selectMovie(movieNum);
+    }
+  });
 
-      epList.appendChild(li);
-    });
+  epList.appendChild(li);
+});
 
     if (!selectedMovie || !filteredMovies.includes(selectedMovie.toString())) {
       selectMovie(filteredMovies[0]);
