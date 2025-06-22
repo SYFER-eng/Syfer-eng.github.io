@@ -1,723 +1,750 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Collection</title>
-    <style>
-        :root {
-            --primary: #6200ea;
-            --secondary: #b388ff;
-            --dark: #1a1a1a;
-            --light: #ffffff;
-            --card-bg: #2d2d2d;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--dark);
-            color: var(--light);
-            padding: 20px;
-        }
-
-        .home-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: linear-gradient(145deg, var(--primary), var(--secondary));
-            color: var(--light);
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(98, 0, 234, 0.3);
-        }
-
-        .home-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(98, 0, 234, 0.4);
-            background: linear-gradient(145deg, var(--secondary), var(--primary));
-        }
-
-        .home-icon {
-            font-size: 1.3rem;
-            transition: transform 0.3s ease;
-        }
-
-        .home-button:hover .home-icon {
-            transform: rotate(10deg);
-        }
-
-        .button-text {
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .search-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(179, 136, 255, 0.2);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--secondary);
-            border-radius: 25px;
-            background: var(--dark);
-            color: var(--light);
-            font-size: 1.1rem;
-        }
-
-        .categories {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .category-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 20px;
-            background: var(--primary);
-            color: var(--light);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .category-btn:hover {
-            background: var(--secondary);
-            transform: translateY(-2px);
-        }
-
-        .movies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .movie-card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .movie-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .movie-poster {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
-
-        .movie-info {
-            padding: 15px;
-        }
-
-        .movie-title {
-            color: var(--secondary);
-            margin: 0 0 10px 0;
-            font-size: 1.1rem;
-        }
-
-        .movie-meta {
-            display: flex;
-            justify-content: space-between;
-            color: #888;
-            font-size: 0.9rem;
-        }
-
-        .play-btn {
-            display: block;
-            background: var(--primary);
-            color: var(--light);
-            text-decoration: none;
-            text-align: center;
-            padding: 8px;
-            margin-top: 10px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-        }
-
-        .play-btn:hover {
-            background: var(--secondary);
-        }
-
-        @media (max-width: 768px) {
-            .movies-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-            .home-button {
-                top: 10px;
-                left: 10px;
-                padding: 10px 20px;
-                font-size: 1rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <a href="Menu.html" class="home-button">
-        <span class="home-icon">🏠︎</span>
-        <span class="button-text">Home</span>
-    </a>
-
-    <div class="search-container">
-        <input type="text" class="search-input" placeholder="Search movies...">
-        <div class="categories">
-
-        </div>
-    </div>
-
-    <div class="movies-grid">
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/R.31457f895e2411891602ebab7b2c619c?rik=bzpHPZtMFQwhTg&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Scream 1</h3>
-    <div class="movie-meta">
-        <span>1996</span>
-        <span>2h 3m</span>
-    </div>
-    <a href="Scream1.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://www.themoviedb.org/t/p/original/q1HEMtVhsW5C2VsFKIvLoPprAJN.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Scream 2</h3>
-    <div class="movie-meta">
-        <span>1997</span>
-        <span>2h 0m</span>
-    </div>
-    <a href="Scream2.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://cdn.vox-cdn.com/thumbor/-sxLtKD-q_X3178OQGyi0euwFrk=/0x0:1688x2500/1200x0/filters:focal(0x0:1688x2500):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/15961316/Payoff_1_Sht_Online_v6_Domestic_Lg.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Avengers Endgame</h3>
-    <div class="movie-meta">
-        <span>2019</span>
-        <span>3h 2m</span>
-    </div>
-    <a href="Avengers-Endgame.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/R.35626a5c6b961326df628a00972cf516?rik=0z5ARAA%2bid%2fPzQ&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Ted</h3>
-    <div class="movie-meta">
-        <span>2012</span>
-        <span>1h 46m</span>
-    </div>
-    <a href="Ted.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.gld6U5iSaG8VnSbQZB1WgQAAAA?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Its A Spongebob Christmas</h3>
-    <div class="movie-meta">
-        <span>2012</span>
-        <span>0h 19m</span>
-    </div>
-    <a href="its-a-spongebob-christmas.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/R.8dd6f3ed466c76a4203e239235f48810?rik=eEf3VGYTo7dEiQ&riu=http%3a%2f%2fwww.orbitdvd.com%2fcdn%2fshop%2ffiles%2f81-dxiMw4cL._SL1500_1200x1200.jpg%3fv%3d1687962528&ehk=zvgmdTf5CdEFkfIfRR64fuqvBjlH1pvr%2fFUMSil8SwQ%3d&risl=&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">The Truman Show</h3>
-    <div class="movie-meta">
-        <span>1998</span>
-        <span>1h 43m</span>
-    </div>
-    <a href="The-Truman-Show.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://pics.filmaffinity.com/the_wild_robot-598191664-large.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">The Wild Robot</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 42</span>
-    </div>
-    <a href="The-Wild-Robot.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.1NZdzcc6_Gjf7SqeIbsVBwHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Grown-Ups</h3>
-    <div class="movie-meta">
-        <span>2010</span>
-        <span>1h 42m</span>
-    </div>
-    <a href="Grown-Ups.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.6P7mWWlbCpxxSULPNFwakQHaK_?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Grown-Ups-2</h3>
-    <div class="movie-meta">
-        <span>2013</span>
-        <span>1h 42m</span>
-    </div>
-    <a href="Grown-Ups-2.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-        
-<div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.nQRgSGemqihdnu85wJGoAQHaJ4?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Fury</h3>
-    <div class="movie-meta">
-        <span>2014</span>
-        <span>2h 14m</span>
-    </div>
-    <a href="Fury.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://i.ibb.co/jG98tcC/POSTER-Red-One-2024-Movie-PREMIUM-POSTER-MADE-IN-USA-16x24-UNFRAMED-832b5d82-e38f-417d-bd88-53c170db.webp" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Red One</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>2h 3m</span>
-    </div>
-    <a href="Red-One.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.dHcLcnCM6fOHxKViBjpjXQAAAA?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">300</h3>
-    <div class="movie-meta">
-        <span>2006</span>
-        <span>1h 57m</span>
-    </div>
-    <a href="300.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://th.bing.com/th/id/R.4c8bc992317e155901a0870af8c239e9?rik=NKv9%2bYvlwmb4Dg&riu=http%3a%2f%2fkyleonfilm.files.wordpress.com%2f2013%2f11%2fsaving-private-ryan-poster.jpg&ehk=oSSLVUKlwTjUBWghEqM3H6wGcxY6x0gIBb5osEx9p%2fo%3d&risl=&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Saving Private Ryan</h3>
-    <div class="movie-meta">
-        <span>1998</span>
-        <span>2h 49m</span>
-    </div>
-    <a href="Saving-Private-Ryan.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://th.bing.com/th/id/R.c63649c41c109011146f064ba81b409c?rik=cl%2bBOU0h6ms6Vg&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Pacific Rim Uprising</h3>
-    <div class="movie-meta">
-        <span>2018</span>
-        <span>1h 51m</span>
-    </div>
-    <a href="Pacific-Rim-Uprising.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://cdn.sktorrent.eu/obrazky/97dd813f14311c5f4c13ebb3dfb6bc5e5832e37b.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">South park the end of obesity</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>0h 50m</span>
-    </div>
-    <a href="South-park-the-end-of-obesity.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.fM7lQirMX5i-es3JFXYQ8AAAAA?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">The Garfield Movie</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 41m</span>
-    </div>
-    <a href="The-Garfield-Movie.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://images.justwatch.com/poster/9618423/s718/transformers-the-last-knight.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Transformers The Last Knight</h3>
-    <div class="movie-meta">
-        <span>2017</span>
-        <span>3h 2m</span>
-    </div>
-    <a href="Transformers-The-Last-Knight.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/R.c6ab8cc09ffcd485084cccf2600c0554?rik=hi%2b6LImWYfl4Iw&riu=http%3a%2f%2fwww.impawards.com%2f2024%2fposters%2fif_ver5.jpg&ehk=KxhNPWgJ3A%2b6SOS2KeuQzOkSzsCHrdmY4pd7uBRxYwM%3d&risl=&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">IF</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 44m</span>
-    </div>
-    <a href="IF.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://images.static-bluray.com/movies/uvcovers/59828_large.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Night of the Killer Bears</h3>
-    <div class="movie-meta">
-        <span>2022</span>
-        <span>1h 35m</span>
-    </div>
-    <a href="Night-of-the-Killer-Bears.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.GvmDL01GbJvqmMeGfjMGPQHaKW?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">A Silent Voice</h3>
-    <div class="movie-meta">
-        <span>2016</span>
-        <span>2h 10m</span>
-    </div>
-    <a href="a-silent-voice.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.4hfC8HaZjJVfnk3hoshUaQHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Guardians Of The Galaxy Vol. 2</h3>
-    <div class="movie-meta">
-        <span>2017</span>
-        <span>2h 17m</span>
-    </div>
-    <a href="Guardians-Of-The-Galaxy-Vol.-2.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://www.themoviedb.org/t/p/original/5WClpSPw5v7daTErjmdMeK8T44x.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Pacific Rim</h3>
-    <div class="movie-meta">
-        <span>2013</span>
-        <span>2h 11m</span>
-    </div>
-    <a href="Pacific-Rim.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.1Tl-xjby_On2P7BYnYPgZAHaKc?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">A-X-L</h3>
-    <div class="movie-meta">
-        <span>2018</span>
-        <span>1h 39m</span>
-    </div>
-    <a href="A-X-L.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.YE9kRIE03AKrnhU7p2lw-wHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Bad Boys Ride or Die</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 55m</span>
-    </div>
-    <a href="Bad-Boys-Ride-or-Die.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.952fmNHUBnAA02AgNOtteQHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">I, Robot</h3>
-    <div class="movie-meta">
-        <span>2004</span>
-        <span>1h 55m</span>
-    </div>
-    <a href="I,-Robot.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://f.woowoowoowoo.net/resize/250x400/ff/fe/fffe4b4ac129cca7bf7c01b16bd1a7cd/fffe4b4ac129cca7bf7c01b16bd1a7cd.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">The Simpsons: O C'mon All Ye Faithful</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>0h 45m</span>
-    </div>
-    <a href="The-Simpsons-O-Cmon-All-Ye-Faithful.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.4OSLSEbgIKppoIJ3keUCwAHaLH?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Terrifier</h3>
-    <div class="movie-meta">
-        <span>2016</span>
-        <span>1h 25m</span>
-    </div>
-    <a href="Terrifier.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://static.displate.com/857x1200/displate/2022-11-14/c51baf707470bd662d4d9c65e416dd94_3e0411f2d66c5c2637a5b9cb90581b91.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Terrifier 2</h3>
-    <div class="movie-meta">
-        <span>2022</span>
-        <span>2h 18m</span>
-    </div>
-    <a href="Terrifier2.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://www.nextgame.es/wp-content/uploads/2023/11/Terrifier-3-1.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Terrifier 3</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>2h 0m</span>
-    </div>
-    <a href="Terrifier3.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://mlpnk72yciwc.i.optimole.com/cqhiHLc.IIZS~2ef73/w:auto/h:auto/q:75/https://bleedingcool.com/wp-content/uploads/2023/08/blue_beetle_ver11_xlg.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Blue Beetle</h3>
-    <div class="movie-meta">
-        <span>2023</span>
-        <span>2h 7m</span>
-    </div>
-    <a href="Blue-Beetle.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://www.themoviedb.org/t/p/original/98zsG0FX7z6R4i5q0HONLM21dpt.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Scooby Doo</h3>
-    <div class="movie-meta">
-        <span>2002</span>
-        <span>1h 26m</span>
-    </div>
-    <a href="Scooby-doo.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.n4eA7mMsubqL_vdB33lGFgHaK8?rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">Y2K</h3>
-    <div class="movie-meta">
-        <span>2024</span>
-        <span>1h 31m</span>
-    </div>
-    <a href="Y2K.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/R.b4e9bc8dd7146f060083710ce6f4b7f6?rik=o6KbV5xgbDBz7g&pid=ImgRaw&r=0" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">I wanna eat your pancreas</h3>
-    <div class="movie-meta">
-        <span>2018</span>
-        <span>1h 49m</span>
-    </div>
-    <a href="i-wanna-eat-your-pancreas.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://static.rogerebert.com/uploads/movie/movie_poster/just-friends-2005/large_n7gZuqiRSjgIkyqDIiLZ20qRgoi.jpg" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">just friends</h3>
-    <div class="movie-meta">
-        <span>2018</span>
-        <span>1h 36m</span>
-    </div>
-    <a href="just friends.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-                        <div class="movie-card">
-<img src="https://th.bing.com/th/id/OIP.fj2vTWv55d39Ot9puEkUNAHaLH?w=2000&h=3000&rs=1&pid=ImgDetMain" alt="Movie Title" class="movie-poster">
-<div class="movie-info">
-    <h3 class="movie-title">bolt</h3>
-    <div class="movie-meta">
-        <span>2008</span>
-        <span>1h 36m</span>
-    </div>
-    <a href="bolt.html" class="play-btn">Watch Now</a>
-</div>
-</div>
-
-
-        <!-- Add more movie cards as needed -->
-    </div>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        /* Style for the banner */
-        #bottom-banner {
-            position: fixed;
-            bottom: -70px; /* Initially off-screen, adjusted for smaller height */
-            left: 0;
-            width: 100%;
-            background-color: black; /* Black background */
-            color: #7A4BCF; /* Purple text */
-            text-align: center;
-            padding: 4px 0; /* Reduced padding to make the banner smaller */
-            font-size: 16px; /* Smaller text size */
-            z-index: 9999;
-            transform: translateY(100%);
-            transition: transform 0.5s ease, bottom 0.5s ease, opacity 0.5s ease, color 0.3s ease, background-color 0.3s ease;
-            cursor: pointer;
-            opacity: 0;
-        }
-
-        /* Banner hover effect */
-        #bottom-banner:hover {
-            color: #9B59B6; /* Lighter purple text on hover */
-            background-color: #333; /* Dark gray (lighter black) background on hover */
-        }
-
-        /* Banner animation */
-        #bottom-banner.show {
-            bottom: 0;
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="https://raw.githubusercontent.com/Skeleton-Archive/cs2-offsets/refs/heads/main/cat.png" type="png" sizes="32x44" />
+  <title>Movies</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    :root {
+      --primary-color: #ffffff;
+      --bg-dark: #000000;
+      --bg-darker: #121212;
+      --text-primary: #ffffff;
+      --text-muted: #bbbbbb;
+      --border-radius: 8px;
+      --transition-speed: 0.3s;
+      --highlight-hover: #dddddd;
+      --highlight-selected: #ffffff;
+      --highlight-selected-hover: #aaaaaa;
+      --watched-opacity: 0.6;
+      --watched-color: #888888;
+      --watched-icon-color: #95d600;
+      --scrollbar-bg: #222;
+      --scrollbar-thumb: #555;
+      --scrollbar-thumb-hover: #888;
+      --search-bg: #222;
+      --search-color: #eee;
+      --search-placeholder: #777;
+      --card-bg: #1e1e1e;
+      --card-border: #333;
+      --card-shadow: rgba(255,255,255,0.05);
+      --card-hover-bg: #2d2d2d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-dark);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+      overflow: hidden;
+      user-select: none;
+      line-height: 1.3;
+    }
+
+    /* Sidebar set wider, fixed width */
+    #sidebar {
+      width: 440px;
+      background: var(--bg-darker);
+      box-shadow: 3px 0 18px rgba(255 255 255 / 0.05);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 24px 24px 24px;
+      overflow-y: auto;
+      position: relative;
+      border-radius: 0 24px 24px 0;
+      user-select: text;
+    }
+
+    #sidebar::-webkit-scrollbar {
+      width: 10px;
+    }
+    #sidebar::-webkit-scrollbar-track {
+      background: var(--bg-darker);
+    }
+    #sidebar::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+      border: 2px solid var(--bg-darker);
+      transition: background-color 0.3s;
+    }
+    #sidebar::-webkit-scrollbar-thumb:hover {
+      background-color: var(--scrollbar-thumb-hover);
+    }
+
+    #sidebar button#logo-button {
+      display: block;
+      margin-bottom: 24px;
+      user-select: none;
+      flex-shrink: 0;
+      outline-offset: 3px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      width: 140px;
+      border-radius: 24px;
+      transition: filter 0.3s ease, box-shadow 0.3s ease;
+      align-self: center;
+    }
+
+    #sidebar button#logo-button img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 24px;
+      filter: none;
+      transition: filter 0.3s ease;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    #sidebar button#logo-button:hover,
+    #sidebar button#logo-button:focus {
+      filter: none;
+      box-shadow: 0 0 10px var(--primary-color);
+      outline: none;
+    }
+
+    #sidebar h2 {
+      font-weight: 700;
+      font-size: 2.2rem;
+      color: var(--primary-color);
+      margin: 0 0 20px;
+      letter-spacing: 1.5px;
+      user-select: none;
+      text-align: center;
+      text-shadow: 0 0 4px var(--primary-color);
+    }
+
+    #episode-search-wrapper {
+      margin-bottom: 20px;
+      position: sticky;
+      top: 0;
+      background: var(--bg-darker);
+      padding-bottom: 14px;
+      z-index: 10;
+      border-bottom: 1.5px solid #444;
+    }
+
+    #episode-search {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 1.1rem;
+      border-radius: var(--border-radius);
+      border: none;
+      background: var(--search-bg);
+      color: var(--search-color);
+      box-shadow: inset 0 0 10px #000;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      outline-offset: 3px;
+    }
+
+    #episode-search::placeholder {
+      color: var(--search-placeholder);
+    }
+
+    #episode-search:focus {
+      background-color: #333;
+      box-shadow: 0 0 8px var(--primary-color), inset 0 0 15px #000;
+      outline: none;
+      color: #fff;
+    }
+
+    /* Episodes displayed vertically as list of cards */
+    #episode-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      max-height: calc(100vh - 160px);
+      padding-bottom: 15px;
+      scroll-behavior: smooth;
+    }
+    #episode-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    #episode-list::-webkit-scrollbar-track {
+      background: var(--bg-darker);
+      border-radius: var(--border-radius);
+    }
+    #episode-list::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb);
+      border-radius: var(--border-radius);
+      border: 2px solid var(--bg-darker);
+      transition: background-color 0.3s;
+    }
+    #episode-list::-webkit-scrollbar-thumb:hover {
+      background-color: var(--scrollbar-thumb-hover);
+    }
+
+    #episode-list li {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 0 10px var(--card-shadow);
+      padding: 20px 28px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition:
+        border-color var(--transition-speed),
+        background-color var(--transition-speed),
+        color var(--transition-speed);
+      user-select: none;
+      min-width: 100%;
+      position: relative;
+      font-weight: 600;
+      font-size: 1.15rem;
+      line-height: 1.3;
+      color: var(--text-primary);
+      white-space: normal;
+      outline-offset: 4px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+    }
+
+    #episode-list li.disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+      color: var(--watched-color);
+      pointer-events: none;
+      font-style: italic;
+    }
+
+    #episode-list li:hover:not(.disabled),
+    #episode-list li:focus-visible:not(.disabled) {
+      background-color: var(--card-hover-bg);
+      border-color: var(--highlight-hover);
+      color: #fff;
+      outline: none;
+      z-index: 2;
+    }
+
+    #episode-list li.selected {
+      border-color: var(--highlight-selected);
+      background-color: var(--highlight-selected);
+      color: #000;
+      box-shadow:
+        0 0 12px var(--highlight-selected),
+        inset 0 0 12px var(--highlight-selected);
+      z-index: 5;
+      font-weight: 700;
+    }
+
+    /* Watched checkmark on right side */
+    .watched-marker {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--watched-icon-color);
+      font-weight: 700;
+      font-size: 1.4rem;
+      user-select: none;
+      text-shadow: 0 0 5px #95d600cc;
+      pointer-events: none;
+      line-height: 1;
+      user-select: none;
+    }
+
+    main {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 40px 40px;
+      background: var(--bg-dark);
+      box-shadow: inset 0 0 50px #000000cc;
+      position: relative;
+      overflow-x: hidden;
+      width: calc(100% - 440px);
+      max-width: calc(100% - 440px);
+      min-width: 540px;
+      color: var(--text-primary);
+      user-select: none;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 2.6rem;
+      margin: 0 0 30px;
+      letter-spacing: 2.4px;
+      user-select: none;
+      text-align: center;
+      color: var(--primary-color);
+      text-shadow: 0 0 8px #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      min-height: 3.8rem;
+    }
+
+    #video-container {
+      width: 100%;
+      height: 540px;
+      border-radius: var(--border-radius);
+      box-shadow:
+        0 0 30px #fff,
+        inset 0 0 60px #ffffffcc;
+      background-color: #000;
+      outline: none;
+      user-select: none;
+      filter: grayscale(0%);
+      transition: filter 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #video-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      body {
+        flex-direction: column;
+      }
+
+      #sidebar {
+        width: 100%;
+        max-height: 450px;
+        border-radius: 0 0 24px 24px;
+        padding: 20px 20px;
+        box-shadow: none;
+      }
+
+      main {
+        width: 100%;
+        max-width: 100%;
+        min-width: auto;
+        padding: 20px 20px 60px;
+        box-sizing: border-box;
+      }
+
+      #episode-list {
+        max-height: 280px;
+      }
+
+      #sidebar button#logo-button {
+        width: 120px;
+        margin-bottom: 14px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      #video-container {
+        height: 320px;
+        border-radius: var(--border-radius);
+      }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Banner content -->
-    <div id="bottom-banner" onclick="window.location.href='coming-soon.html'">
-        <i class="fas fa-film"></i> <strong>Developer: Syfer-eng</strong> ‎ ‎ ‎ More Movies Coming Soon.
+  <aside id="sidebar" role="complementary" aria-label="Movie selection sidebar">
+    <button id="logo-button" aria-label="Go to homepage" title="Go to homepage">
+      <img src="https://raw.githubusercontent.com/Skeleton-Archive/cs2-offsets/refs/heads/main/cat.png" alt="Logo" />
+    </button>
+    <h2>Movies</h2>
+    <div id="episode-search-wrapper">
+      <input
+        id="episode-search"
+        type="search"
+        placeholder="Search movies by name..."
+        aria-label="Search movies"
+        autocomplete="off"
+        spellcheck="false" />
     </div>
+    <ul id="episode-list" aria-label="Movies list" tabindex="0"></ul>
+  </aside>
 
-    <script>
-        // JavaScript to trigger the banner when scrolled to the bottom
-        window.onscroll = function() {
-            var banner = document.getElementById("bottom-banner");
-            var scrollPosition = window.innerHeight + window.scrollY;
-            var documentHeight = document.documentElement.scrollHeight;
+  <main role="main" aria-live="polite" aria-atomic="true">
+    <h1 aria-live="polite" aria-atomic="true"></h1>
+    <div id="video-container" aria-label="Embedded content container">
+      <!-- iframe or video embed here -->
+    </div>
+  </main>
 
-            // If we are at the bottom of the page, show the banner
-            if (scrollPosition >= documentHeight) {
-                banner.classList.add("show");
-            } else {
-                banner.classList.remove("show");
-            }
-        };
-    </script>
+<script>
+  // Movie data with single URL only (no sub/dub, no seasons)
+  const movieData = {
+    1: {
+      name: "300",
+      url: "https://mega.nz/embed/Hn4C1AQb#tHpmC3N4VJEp6AjnmBrLBFHvjH-ENKJs3D4Vi_AKr70",
+    },
+    2: {
+      name: "A-X-L",
+      url: "https://mega.nz/embed/5ycmHaxL#e7UJnkKbWjuOTm3ojmxMagZLozIivPHNjn0aujqQFDg",
+    },
+    3: {
+      name: "Avengers Endgame",
+      url: "https://mega.nz/embed/WUAlTDqI#mYJACTFnWrM64f6P83qFfdJGw8mbmxN8Q2xYfrpN8qs",
+    },
+    4: {
+      name: "Bad Boys Ride or Die",
+      url: "https://mega.nz/embed/prlRDCTT#BEtHYmiEVhmTUmEVEtfoCklW7XWJQAFVEGKks2_ZWqM",
+    },
+    1: {
+      name: "Blue Beetle",
+      url: "https://mega.nz/embed/RvFETRRb#H4qUUs4KIAunPO0aw6tcaHSHXt4rg2ocg-NwVzyiHsU",
+    },
+    5: {
+      name: "Fury",
+      url: "https://mega.nz/embed/yQww1ToK#aZgYLL7JlDE9ptpKUb3Xqg2CGY_B4A-3jANfHQ-zsIY",
+    },
+    6: {
+      name: "Grown Ups 2",
+      url: "https://mega.nz/embed/rNc11TZD#67M4ZL4ZAwgIVXw1QKtwtdSQ26kSpGTr4F4RNERP830",
+    },
+    7: {
+      name: "Grown Ups",
+      url: "https://mega.nz/embed/PEsiwBKS#_xd7sB6UBVFJaaTehDjJjSGo2tadEoHqAf3i8bEx9bQ",
+    },
+    8: {
+      name: "Guardians Of The Galaxy Vol. 2",
+      url: "https://mega.nz/embed/Hn4C1AQb#tHpmC3N4VJEp6AjnmBrLBFHvjH-ENKJs3D4Vi_AKr70",
+    },
+    9: {
+      name: "I, Robot",
+      url: "https://mega.nz/embed/miAFFTqb#8ZthL-OT9coHju3R8Y-S8sOwvIS8_ZnQaree91CICug",
+    },
+    10: {
+      name: "IF",
+      url: "https://mega.nz/embed/6Bg01CYT#vOlE5SKA9L66Hn05K8yv6CHfRWRjR87ekrKHajbkv7s",
+    },
+    11: {
+      name: "Night of the Killer Bears",
+      url: "https://mega.nz/embed/iZ5VUbxJ#xh0vvzlIZyXUBrugsqYC6RPWm7XINeFzV1_6PphZFIw",
+    },
+    12: {
+      name: "Pacific Rim Uprising",
+      url: "https://drive.google.com/file/d/1aTTPEnc2mTt7IC_Oex_lCLsqSKgMpcmK/preview",
+    },
+    13: {
+      name: "Pacific Rim",
+      url: "https://drive.google.com/file/d/1BBeoAzaD2QAtiEn3k9EhL__3Ju9A6vH0/preview",
+    },
+    14: {
+      name: "Red One",
+      url: "https://mega.nz/embed/bZgGyBTC#xCsHeeVOs-Xkzni9Sj1tWx0dD7lgcoWW_-Tdyzw4I_w",
+    },
+    15: {
+      name: "Saving Private Ryan",
+      url: "https://mega.nz/embed/ruZlXArJ#O7moB4Ke4tZipJqDCNQUAhIpmcDRY3KpBYufQD7Iios",
+    },
+    16: {
+      name: "Scooby doo",
+      url: "https://mega.nz/embed/FAxTyaCJ#qxPLo8dcOGdhPPcw-VMtZdhwXzUtYI_k_tbM0LS284U",
+    },
+    17: {
+      name: "Scream 1",
+      url: "https://mega.nz/embed/oycVha7C#Q2oY-LI8nUjv98VbQPxTaY0CyCIOoGQjlUwOphyfQOU",
+    },
+    18: {
+      name: "Scream 2",
+      url: "https://mega.nz/embed/qcd3BJDT#9ozh8ec0-kZ7eAe0XDHDoailFBAacr1PnzItyCat75A",
+    },
+    19: {
+      name: "South park the end of obesity",
+      url: "https://mega.nz/embed/7YImVQwT#aQGg-Qi_u_YildOQOwgE0zkHEz6Xf6H7uUkZPDY2Of4",
+    },
+    20: {
+      name: "Ted",
+      url: "https://mega.nz/embed/zMpxXRaB#jr7-r-4LU2KEN1CWI4ruZBxRguuGgIgnzJpjjOPFBSw",
+    },
+    21: {
+      name: "Terrifier",
+      url: "https://mega.nz/embed/svMFUbrT#23UEEJLmT7urLgxcsQx7eAYZZyeVLmbvSUNPx-USQAc",
+    },
+    22: {
+      name: "Terrifier 2",
+      url: "https://mega.nz/embed/DEVmRaBL#E7pUyHhzqGNxzI5hNEx6Knn6prRjEOBx-060_TD3Qd8",
+    },
+    23: {
+      name: "Terrifier 3",
+      url: "https://mega.nz/embed/TFlHXC4T#j884g4havf2tr8RbMZ2nUweg-RsAeBPIYrpwkqCXH3Q",
+    },
+    24: {
+      name: "The Garfield Movie",
+      url: "https://mega.nz/embed/ONAgiDgS#Br1PsZ_jOtEdVhVFqrpjrVk6WijUqM0YxrGb9TvuqEM",
+    },
+    25: {
+      name: "The Simpsons O-Cmon All Ye Faithful",
+      url: "https://drive.google.com/file/d/13Q_VyV3ki3KoK05vOGd57eI1faNt-wRB/preview",
+    },
+    26: {
+      name: "The Truman Show",
+      url: "https://mega.nz/embed/p5phgKKZ#6w3-h1UtU_lmoUEgUxX7Wc7Fc17PglZFZ30PDze8UYs",
+    },
+    27: {
+      name: "The Wild Robot",
+      url: "https://mega.nz/embed/dwgAWCzT#EF73hJruAbU30CpudycALN44IKX2hDjwe4omCClCZHU",
+    },
+    28: {
+      name: "Transformers The Last Knight",
+      url: "https://mega.nz/embed/7Q5z2bBT#1gQUpqKErACP-AVOkfDJ_UBrypIbYv3OoFNeAmQQsyg",
+    },
+    29: {
+      name: "Y2K",
+      url: "https://drive.google.com/file/d/1Uc4HJW3sVYNBRkqXjhSJYqSdyOMoU-ug/preview",
+    },
+    30: {
+      name: "A Silent Voice",
+      url: "https://drive.google.com/file/d/173Fvd2ubE9FRJcTAEqt3ruO_e2tfhEK-/preview",
+    },
+    31: {
+      name: "Bolt",
+      url: "https://drive.google.com/file/d/1HWvZG0D5keLWYFzuXqw4jXPTw2Mmw2ES/preview",
+    },
+    32: {
+      name: "i wanna eat your pancreas",
+      url: "https://drive.google.com/file/d/1joB-F1BS8IuTatp_SeJR7Qy-vWP6kwXT/preview",
+    },
+    33: {
+      name: "just friends",
+      url: "https://drive.google.com/file/d/1fv1lEHQdstZr8dX3JzlnRPzCsXV_GPS1/preview",
+    },
+  };
 
-</body>
-</html>
+  const epList = document.getElementById("episode-list");
+  const videoContainer = document.getElementById("video-container");
+  const episodeSearchInput = document.getElementById("episode-search");
+  const mainTitle = document.querySelector("main h1");
+  const logoButton = document.getElementById("logo-button");
 
+  let selectedMovie = null;
+  let watchedMovies = new Set();
 
-    <script>
-        const searchInput = document.querySelector('.search-input');
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const movieCards = document.querySelectorAll('.movie-card');
-            
-            movieCards.forEach(card => {
-                const title = card.querySelector('.movie-title').textContent.toLowerCase();
-                card.style.display = title.includes(searchTerm) ? 'block' : 'none';
-            });
-        });
+  function loadWatched() {
+    try {
+      const stored = localStorage.getItem("watchedMovies");
+      if (stored) {
+        const obj = JSON.parse(stored);
+        if (typeof obj === "object" && obj !== null) {
+          watchedMovies = new Set(Object.keys(obj).filter((key) => obj[key] === true));
+        }
+      }
+    } catch {
+      watchedMovies = new Set();
+    }
+  }
 
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                categoryButtons.forEach(btn => btn.style.background = 'var(--primary)');
-                button.style.background = 'var(--secondary)';
+  function saveWatched() {
+    const obj = {};
+    watchedMovies.forEach((key) => (obj[key] = true));
+    localStorage.setItem("watchedMovies", JSON.stringify(obj));
+  }
 
-            });
-        });
-    </script>
+  function embedURL(url) {
+    if (!url) return;
+
+    videoContainer.innerHTML = "";
+
+    const iframe = document.createElement("iframe");
+    iframe.id = "video-iframe";
+    iframe.src = url;
+    iframe.allowFullscreen = true;
+    iframe.allow = "autoplay; encrypted-media; fullscreen";
+    iframe.title = "Embedded Movie Player";
+    iframe.loading = "lazy";
+    iframe.style.border = "none";
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+
+    videoContainer.appendChild(iframe);
+  }
+
+  function loadVideo() {
+    if (!selectedMovie) return;
+
+    const movie = movieData[selectedMovie];
+    if (!movie) return;
+
+    let url = movie.url;
+    if (!url || url.trim() === "") {
+      url = "https://drive.google.com/file/d/14f-dQQEEeJdMnY3mtdEvBTwaYcE6Ipro/preview";
+    }
+
+    embedURL(url);
+
+    mainTitle.textContent = movie.name;
+
+    if (!watchedMovies.has(selectedMovie.toString())) {
+      watchedMovies.add(selectedMovie.toString());
+      saveWatched();
+      updateMovieWatchedState(selectedMovie, true);
+    }
+  }
+
+  function updateMovieWatchedState(movieNum, watched) {
+    const li = epList.querySelector(`li[data-movie="${movieNum}"]`);
+    if (!li) return;
+    if (watched) {
+      li.classList.add("watched");
+      if (!li.querySelector(".watched-marker")) {
+        const check = document.createElement("span");
+        check.className = "watched-marker";
+        check.setAttribute("aria-label", "Watched");
+        check.textContent = "✔";
+        li.appendChild(check);
+      }
+    } else {
+      li.classList.remove("watched");
+      const check = li.querySelector(".watched-marker");
+      if (check) check.remove();
+    }
+  }
+
+  let filteredMovies = null;
+
+  function populateMovies(filterText = "") {
+    epList.innerHTML = "";
+
+    filteredMovies = Object.keys(movieData)
+      .filter((movieNum) => {
+        if (!filterText) return true;
+        const movie = movieData[movieNum];
+        return movie.name.toLowerCase().includes(filterText.toLowerCase());
+      })
+      .sort((a, b) => parseInt(a) - parseInt(b));
+
+    if (filteredMovies.length === 0) {
+      const noResultLi = document.createElement("li");
+      noResultLi.textContent = "No movies match your search.";
+      noResultLi.classList.add("disabled");
+      noResultLi.tabIndex = -1;
+      noResultLi.setAttribute("aria-live", "polite");
+      epList.appendChild(noResultLi);
+      return;
+    }
+
+    filteredMovies.forEach((movieNum) => {
+      const movie = movieData[movieNum];
+      const li = document.createElement("li");
+      li.textContent = movie.name;
+      li.dataset.movie = movieNum;
+      li.tabIndex = 0;
+      li.setAttribute("role", "button");
+      li.setAttribute("aria-pressed", "false");
+
+      const urlValid = movie.url && movie.url.trim() !== "";
+      if (!urlValid) {
+        li.classList.add("disabled");
+        li.setAttribute("aria-disabled", "true");
+      }
+
+      const key = movieNum.toString();
+      if (watchedMovies.has(key)) {
+        li.classList.add("watched");
+        const check = document.createElement("span");
+        check.className = "watched-marker";
+        check.setAttribute("aria-label", "Watched");
+        check.textContent = "✔";
+        li.appendChild(check);
+      }
+
+      li.addEventListener("click", () => {
+        if (!li.classList.contains("disabled")) {
+          selectMovie(movieNum);
+        }
+      });
+      li.addEventListener("keydown", (e) => {
+        if ((e.key === "Enter" || e.key === " ") && !li.classList.contains("disabled")) {
+          e.preventDefault();
+          selectMovie(movieNum);
+        }
+      });
+
+      epList.appendChild(li);
+    });
+
+    if (!selectedMovie || !filteredMovies.includes(selectedMovie.toString())) {
+      selectMovie(filteredMovies[0]);
+    } else {
+      selectMovie(selectedMovie);
+    }
+  }
+
+  function selectMovie(movieNum) {
+    if (selectedMovie === movieNum) return;
+
+    if (selectedMovie !== null) {
+      const oldElem = epList.querySelector(`li[data-movie="${selectedMovie}"]`);
+      if (oldElem) {
+        oldElem.classList.remove("selected");
+        oldElem.setAttribute("aria-pressed", "false");
+      }
+    }
+    selectedMovie = movieNum;
+    const newElem = epList.querySelector(`li[data-movie="${selectedMovie}"]`);
+    if (newElem) {
+      newElem.classList.add("selected");
+      newElem.setAttribute("aria-pressed", "true");
+      newElem.scrollIntoView({ block: "nearest", inline: "nearest" });
+      newElem.focus();
+    }
+    loadVideo();
+  }
+
+  episodeSearchInput.addEventListener("input", () => {
+    const query = episodeSearchInput.value.trim();
+    populateMovies(query);
+  });
+
+  epList.addEventListener("keydown", (e) => {
+    const focusElem = document.activeElement;
+    if (focusElem && focusElem.parentElement === epList) {
+      let newIndex;
+      const movies = Array.from(epList.querySelectorAll("li:not(.disabled)"));
+      const currentIndex = movies.indexOf(focusElem);
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        newIndex = currentIndex + 1 < movies.length ? currentIndex + 1 : 0;
+        movies[newIndex].focus();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        newIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : movies.length - 1;
+        movies[newIndex].focus();
+      } else if(e.key === "ArrowRight") {
+        e.preventDefault();
+        newIndex = currentIndex + 1 < movies.length ? currentIndex + 1 : 0;
+        movies[newIndex].focus();
+      } else if(e.key === "ArrowLeft") {
+        e.preventDefault();
+        newIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : movies.length - 1;
+        movies[newIndex].focus();
+      }
+    }
+  });
+
+  logoButton.addEventListener("click", () => {
+    window.location.href = "https://syfer-eng.github.io/Shows/Anime.html";
+  });
+
+  loadWatched();
+  populateMovies();
+
+  if (!selectedMovie) {
+    const firstMovie = Object.keys(movieData)[0];
+    if (firstMovie) selectMovie(firstMovie);
+  }
+</script>
+
 </body>
 </html>
