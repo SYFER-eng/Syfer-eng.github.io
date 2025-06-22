@@ -1,0 +1,773 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anime Templet</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    :root {
+      --primary-color: #ffffff;
+      --primary-dark: #d0d0d0;
+      --bg-dark: #000000;
+      --bg-darker: #121212;
+      --text-primary: #ffffff;
+      --text-muted: #bbbbbb;
+      --shadow-dark: rgba(255, 255, 255, 0.05);
+      --border-radius: 8px;
+      --transition-speed: 0.3s;
+      --highlight-hover: #dddddd;
+      --highlight-selected: #ffffff;
+      --highlight-selected-hover: #aaaaaa;
+      --watched-opacity: 0.6;
+      --watched-color: #888888;
+      --watched-icon-color: #95d600;
+      --season-btn-bg: #222;
+      --season-btn-bg-hover: #333;
+      --season-btn-selected-bg: #fff;
+      --season-btn-selected-color: #000;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-dark);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    #sidebar {
+      width: 280px;
+      background: var(--bg-darker);
+      box-shadow: 3px 0 12px var(--shadow-dark);
+      display: flex;
+      flex-direction: column;
+      padding: 20px 20px 20px;
+      overflow-y: auto;
+      user-select: none;
+    }
+
+    #sidebar button#logo-button {
+      display: block;
+      margin-bottom: 25px;
+      user-select: none;
+      flex-shrink: 0;
+      outline-offset: 3px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      width: 120px;
+      height: auto;
+      border-radius: 12px;
+      transition: filter 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #sidebar button#logo-button img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+
+      filter: none;
+      transition: filter 0.3s ease;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    #sidebar button#logo-button:hover,
+    #sidebar button#logo-button:focus {
+      filter: none;
+      box-shadow: 0 0 8px var(--primary-color);
+      outline: none;
+    }
+
+    #sidebar h2 {
+      font-weight: 600;
+      font-size: 1.8rem;
+      color: var(--primary-color);
+      margin: 0 0 15px;
+      letter-spacing: 1px;
+      user-select: none;
+    }
+
+    #episode-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: calc(100vh - 140px);
+      overflow-y: auto;
+      border-radius: var(--border-radius);
+      box-shadow: inset 0 0 8px #ffffff11;
+      border: 1px solid #444;
+      background: #111111;
+    }
+
+    #episode-list li {
+      padding: 14px 20px;
+      border-left: 4px solid transparent;
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 
+        background-color var(--transition-speed),
+        border-color var(--transition-speed),
+        color var(--transition-speed);
+      user-select: none;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      text-shadow: 0 0 4px #000;
+      position: relative;
+    }
+
+    #episode-list li.watched {
+      opacity: var(--watched-opacity);
+      color: var(--watched-color);
+    }
+    #episode-list li.watched::after {
+      content: "✓";
+      position: absolute;
+      right: 14px;
+      font-weight: 700;
+      color: var(--watched-icon-color);
+      font-size: 1.1rem;
+      user-select: none;
+      text-shadow: none;
+    }
+
+    #episode-list li:not(.selected):hover {
+      background-color: var(--highlight-hover);
+      color: #000;
+      border-left-color: var(--highlight-hover);
+      text-shadow: none;
+      opacity: 1 !important;
+    }
+
+    #episode-list li.selected {
+      background-color: var(--highlight-selected);
+      color: #000;
+      border-left-color: var(--highlight-selected);
+      font-weight: 700;
+      text-shadow: none;
+      opacity: 1 !important;
+    }
+
+    #episode-list li.selected:hover {
+      background-color: var(--highlight-selected-hover);
+      border-left-color: var(--highlight-selected-hover);
+      color: #222;
+      cursor: pointer;
+      opacity: 1 !important;
+    }
+
+    #episode-list li:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+      background-color: var(--highlight-hover);
+      color: #000;
+      text-shadow: none;
+      opacity: 1 !important;
+    }
+
+    main {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 30px;
+      background: var(--bg-dark);
+      box-shadow: inset 0 0 50px #000000cc;
+      position: relative;
+      overflow-x: hidden;
+      
+      padding-bottom: 100px;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-weight: 600;
+      font-size: 2.8rem;
+      margin: 0 0 25px;
+      letter-spacing: 2px;
+      color: var(--primary-color);
+      user-select: none;
+      text-align: center;
+      width: 100%;
+      text-shadow: 0 0 3px #fff, 0 0 7px #fff;
+    }
+
+    #anime-player {
+      width: 100%;
+      border-radius: var(--border-radius);
+      box-shadow:
+        0 0 30px #fff,
+        inset 0 0 60px #ffffffcc;
+      background-color: #000;
+      outline: none;
+      user-select: none;
+      filter: grayscale(0%);
+      transition: filter 0.3s ease;
+      max-height: 540px;
+    }
+
+    #anime-player:focus {
+      box-shadow: 0 0 40px #fff, inset 0 0 70px #ffffffcc;
+      outline: none;
+    }
+
+    #version-wrapper {
+      margin-top: 16px;
+      width: 100%;
+      background: #111111;
+      padding: 14px 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 20px rgba(255 255 255 / 0.05);
+      user-select: none;
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      align-items: center;
+    }
+
+    #version-wrapper label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-right: 10px;
+      user-select: none;
+    }
+
+    #version-select {
+      background-color: #222;
+      border: none;
+      border-radius: var(--border-radius);
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 9px 14px;
+      cursor: pointer;
+      outline-offset: 3px;
+      box-shadow: inset 0 0 8px #000;
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #fff 50%),
+        linear-gradient(135deg, #fff 50%, transparent 50%);
+      background-position:
+        calc(100% - 20px) calc(1.2em + 2px),
+        calc(100% - 15px) calc(1.2em + 2px);
+      background-size: 5px 5px;
+      background-repeat: no-repeat;
+      min-width: 100px;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    #version-select:focus {
+      background-color: #333;
+      box-shadow: 0 0 12px #fff, inset 0 0 8px #000;
+      outline: none;
+      color: #fff;
+    }
+
+    #version-select option {
+      background-color: #222;
+      color: var(--text-primary);
+      font-weight: 400;
+    }
+
+    #episode-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    #episode-list::-webkit-scrollbar-track {
+      background: #111;
+    }
+    #episode-list::-webkit-scrollbar-thumb {
+      background-color: #bbb;
+      border-radius: 10px;
+      border: 2px solid #111;
+    }
+
+    #season-wrapper {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111111;
+      border-radius: var(--border-radius);
+      padding: 12px 20px;
+      box-shadow: 0 4px 20px rgba(255 255 255 / 0.05);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+      z-index: 1000;
+      max-width: 960px;
+      width: calc(100% - 40px);
+      box-sizing: border-box;
+    }
+
+    #season-wrapper label {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-right: 10px;
+      user-select: none;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    #season-wrapper button.season-btn {
+      background-color: var(--season-btn-bg);
+      border: none;
+      border-radius: var(--border-radius);
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 9px 16px;
+      cursor: pointer;
+      outline-offset: 3px;
+      box-shadow: inset 0 0 8px #000;
+      transition: background-color 0.3s, box-shadow 0.3s, color 0.3s;
+      user-select: none;
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+    #season-wrapper button.season-btn:hover,
+    #season-wrapper button.season-btn:focus-visible {
+      background-color: var(--season-btn-bg-hover);
+      outline: none;
+      color: #fff;
+      box-shadow: 0 0 5px var(--primary-color), inset 0 0 12px #000;
+    }
+
+    #season-wrapper button.season-btn.selected {
+      background-color: var(--season-btn-selected-bg);
+      color: var(--season-btn-selected-color);
+      box-shadow: none;
+      cursor: default;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+      }
+
+      #sidebar {
+        width: 100%;
+        max-height: 200px;
+        flex-direction: row;
+        padding: 15px 15px 10px;
+        box-shadow: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        align-items: center;
+      }
+
+      #sidebar button#logo-button {
+        margin: 0 15px 0 0;
+        width: 120px;
+      }
+
+      #sidebar h2 {
+        flex: 1 0 100%;
+        font-size: 1.5rem;
+        text-align: center;
+        margin: 0 0 8px;
+      }
+
+      #episode-list {
+        max-height: none;
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        border-radius: 0;
+      }
+
+      #episode-list li {
+        white-space: nowrap;
+        flex: 0 0 auto;
+        border-left: none;
+        border-radius: var(--border-radius);
+        padding: 8px 14px;
+        background-color: transparent;
+        text-shadow: none;
+        color: var(--text-primary);
+        transition: color 0.3s ease, background-color 0.3s ease;
+        position: relative;
+      }
+
+      #episode-list li.watched::after {
+        right: 8px;
+        font-size: 1rem;
+      }
+
+      #episode-list li:not(.selected):hover {
+        background-color: var(--highlight-hover);
+        color: #000;
+        text-shadow: none;
+        opacity: 1 !important;
+      }
+
+      #episode-list li.selected {
+        background-color: var(--highlight-selected);
+        color: #000;
+        opacity: 1 !important;
+      }
+
+      #episode-list li.selected:hover {
+        background-color: var(--highlight-selected-hover);
+        color: #222;
+      }
+
+      main {
+        width: 100%;
+        padding: 20px 15px 100px;
+        box-sizing: border-box;
+      }
+
+      #version-wrapper {
+        max-width: 100%;
+        justify-content: center;
+      }
+
+      #season-wrapper {
+        width: calc(100% - 30px);
+        left: 15px;
+        transform: none;
+        bottom: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      #season-wrapper label {
+        flex-basis: 100%;
+        margin-bottom: 4px;
+        text-align: center;
+      }
+    }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <aside id="sidebar" role="complementary" aria-label="Episode selection sidebar">
+    <button id="logo-button" aria-label="Go to homepage">
+      <img src="https://raw.githubusercontent.com/Skeleton-Archive/cs2-offsets/refs/heads/main/cat.png" alt="Logo" />
+    </button>
+    <h2>Episodes</h2>
+    <ul id="episode-list" tabindex="0" aria-label="Anime episodes list">
+    </ul>
+  </aside>
+
+  <main role="main">
+    <h1>Episodes: </h1>
+    <video id="anime-player" controls preload="metadata" tabindex="0" aria-label="Anime video player"></video>
+    <div id="version-wrapper" role="region" aria-label="Select version sub or dub">
+      <label for="version-select">Version:</label>
+      <select id="version-select" aria-describedby="version-desc" aria-label="Select version">
+        <option value="sub">Sub</option>
+        <option value="dub">Dub</option>
+      </select>
+      <span id="version-desc" class="sr-only">Select version of the anime: Sub or Dub</span>
+    </div>
+  </main>
+
+  <div id="season-wrapper" role="region" aria-label="Season selection region">
+    <label>Season:</label>
+  </div>
+
+  <script>
+
+    // Add episode names by season and episode number
+    const episodeNames = {
+      1: {
+        1: "Awakening",
+        2: "The Journey Begins",
+        3: "Crossroads",
+        4: "The Hidden Power",
+        5: "Dawn of Destiny"
+      },
+      2: {
+        1: "New Horizons",
+        2: "Shadows Rising",
+        3: "Legacy of the Ancients"
+      },
+      3: {
+        1: "Revelations",
+        2: "The Final Stand"
+      }
+    };
+
+    const allEpisodes = {
+      1: {  // Seasons
+        1: {
+          sub: 'https://drive.google.com/file/d/1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe/preview',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        },
+        2: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+        },
+        3: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+        },
+        4: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+        },
+        5: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+        },
+      },
+      2: { // Season 2
+        1: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+        },
+        2: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+        },
+        3: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+        }
+      },
+      3: { // Season 3
+        1: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+        },
+        2: {
+          sub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+          dub: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+        }
+      }
+    };
+
+    const epList = document.getElementById('episode-list');
+    const versionSelect = document.getElementById('version-select');
+    const videoPlayer = document.getElementById('anime-player');
+    const videoSource = document.createElement('source');
+    videoPlayer.appendChild(videoSource);
+
+    const logoButton = document.getElementById('logo-button');
+    const seasonWrapper = document.getElementById('season-wrapper');
+
+    let selectedSeason = "1";
+    let selectedEpisode = null;
+    let watchedEpisodes = new Set();
+
+    function loadWatched() {
+      try {
+        const stored = localStorage.getItem('watchedEpisodes');
+        if (stored) {
+          const obj = JSON.parse(stored);
+          if (typeof obj === 'object' && obj !== null) {
+            watchedEpisodes = new Set(Object.keys(obj).filter(key => obj[key] === true));
+          }
+        }
+      } catch {
+        watchedEpisodes = new Set();
+      }
+    }
+
+    function saveWatched() {
+      const obj = {};
+      watchedEpisodes.forEach(key => obj[key] = true);
+      localStorage.setItem('watchedEpisodes', JSON.stringify(obj));
+    }
+
+    function generateEpisodeKey(season, episode) {
+      return season + "-" + episode;
+    }
+
+    function populateEpisodes() {
+      epList.innerHTML = '';
+      const episodes = allEpisodes[selectedSeason];
+      if (!episodes) return;
+
+      Object.keys(episodes).forEach(epNum => {
+        const li = document.createElement('li');
+        // Show episode number and episode name if available
+        const epName = (episodeNames[selectedSeason] && episodeNames[selectedSeason][epNum]) ? episodeNames[selectedSeason][epNum] : '';
+        li.textContent = epName ? `Episode ${epNum}: ${epName}` : `Episode ${epNum}`;
+        li.dataset.episode = epNum;
+        li.tabIndex = 0;
+        li.setAttribute('role', 'button');
+        li.setAttribute('aria-pressed', 'false');
+        const key = generateEpisodeKey(selectedSeason, epNum);
+        if (watchedEpisodes.has(key)) {
+          li.classList.add('watched');
+        }
+        li.addEventListener('click', () => selectEpisode(epNum));
+        li.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectEpisode(epNum);
+          }
+        });
+        epList.appendChild(li);
+      });
+    }
+
+    function selectEpisode(epNum) {
+      if (selectedEpisode === epNum) return;
+
+      if (selectedEpisode !== null) {
+        const oldSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+        if (oldSelectedElem) {
+          oldSelectedElem.classList.remove('selected');
+          oldSelectedElem.setAttribute('aria-pressed', 'false');
+        }
+      }
+
+      selectedEpisode = epNum;
+      const newSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+      if (newSelectedElem) {
+        newSelectedElem.classList.add('selected');
+        newSelectedElem.setAttribute('aria-pressed', 'true');
+        newSelectedElem.scrollIntoView({block: 'nearest', inline: 'nearest'});
+      }
+      loadVideo();
+    }
+
+    function loadVideo() {
+      if (selectedEpisode === null) return;
+      const ver = versionSelect.value;
+      const episodes = allEpisodes[selectedSeason];
+      if (!episodes) return;
+      const src = episodes[selectedEpisode] && episodes[selectedEpisode][ver] ? episodes[selectedEpisode][ver] : '';
+
+      if (src) {
+        if (videoSource.src !== src) {
+          videoSource.src = src;
+          videoPlayer.load();
+          videoPlayer.play().catch(() => {});
+        }
+      } else {
+        videoSource.src = '';
+        videoPlayer.load();
+      }
+    }
+
+    videoPlayer.addEventListener('ended', () => {
+      if (selectedEpisode !== null) {
+        const key = generateEpisodeKey(selectedSeason, selectedEpisode);
+        if (!watchedEpisodes.has(key)) {
+          watchedEpisodes.add(key);
+          saveWatched();
+          const li = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+          if (li) {
+            li.classList.add('watched');
+          }
+        }
+      }
+    });
+
+    versionSelect.addEventListener('change', () => {
+      loadVideo();
+      videoPlayer.focus();
+    });
+
+    logoButton.addEventListener('click', () => {
+      window.location.href = 'https://syfer-eng.github.io/Shows/Anime.html';
+    });
+
+    function populateSeasons() {
+      const olds = seasonWrapper.querySelectorAll('button.season-btn');
+      olds.forEach(btn => btn.remove());
+
+      Object.keys(allEpisodes).forEach(seasonNum => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'season-btn';
+        btn.textContent = `Season ${seasonNum}`;
+        btn.setAttribute('aria-pressed', 'false');
+        btn.tabIndex = 0;
+
+        btn.addEventListener('click', () => selectSeason(seasonNum));
+
+        seasonWrapper.appendChild(btn);
+      });
+      updateSeasonButtons();
+    }
+
+    function selectSeason(seasonNum) {
+      if (selectedSeason === seasonNum) return;
+
+      selectedSeason = seasonNum;
+      selectedEpisode = null;
+      populateEpisodes();
+      updateSeasonButtons();
+
+      const episodes = allEpisodes[selectedSeason];
+      if (episodes) {
+        const firstEp = Object.keys(episodes)[0];
+        if (firstEp) {
+          selectEpisode(firstEp);
+        }
+      }
+    }
+
+    function updateSeasonButtons() {
+      const buttons = seasonWrapper.querySelectorAll('button.season-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent === `Season ${selectedSeason}`) {
+          btn.classList.add('selected');
+          btn.setAttribute('aria-pressed', 'true');
+          btn.setAttribute('disabled', 'disabled');
+        } else {
+          btn.classList.remove('selected');
+          btn.setAttribute('aria-pressed', 'false');
+          btn.removeAttribute('disabled');
+        }
+      });
+    }
+
+    loadWatched();
+    populateSeasons();
+    populateEpisodes();
+    const firstEpisode = Object.keys(allEpisodes[selectedSeason])[0];
+    if (firstEpisode) {
+      selectEpisode(firstEpisode);
+    }
+    versionSelect.value = 'sub';
+
+  </script>
+
+</body>
+</html>
