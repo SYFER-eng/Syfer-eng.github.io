@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Anime Templet</title>
+  <title>Anime Template</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -505,223 +505,276 @@
     <label>Season:</label>
   </div>
 
-  <script>
-    // Episode data combined: "Name##SubURL##DubURL"
-    const episodeData = {
+<script>
+  // IMPORTANT: Google Drive preview links cannot be used directly in <video> tag.
+  // We will _ignore_ any Google Drive URLs and only use the Dub URL if that happens.
+  // For demonstration, all sub-dub URLs are normal direct mp4 links,
+  // or we fallback to Dub URL if sub URL is invalid.
+
+  // Episode data as object with season => episodes,
+  // each episode has name, subUrl, dubUrl
+  // If subUrl looks like Google Drive preview, we will ignore it because it's unusable.
+
+  const episodeData = {
+    1: {
       1: {
-        1: "Awakening##https://drive.google.com/file/d/1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe/preview##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-        2: "The Journey Begins##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-        3: "Crossroads##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-        4: "The Hidden Power##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-        5: "Dawn of Destiny##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4"
+        name: "A Tiny Happenstance",
+        sub: "https://drive.google.com/file/d/1uKMD1g66oaGwPNYneuk3nL3RLE25A5pe/preview",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
       },
       2: {
-        1: "New Horizons##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-        2: "Shadows Rising##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-        3: "Legacy of the Ancients##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
+        name: "The Journey Begins",
+        sub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
       },
       3: {
-        1: "Revelations##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-        2: "The Final Stand##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4##https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-      }
-    };
+        name: "Crossroads",
+        sub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      },
+      4: {
+        name: "The Hidden Power",
+        sub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+      },
+      5: {
+        name: "Dawn of Destiny",
+        sub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+      },
+    },
+    2: {
+      1: {
+        name: "New Horizons",
+        sub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+      },
+      2: {
+        name: "Shadows Rising",
+        sub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      },
+      3: {
+        name: "Legacy of the Ancients",
+        sub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      },
+    },
+    3: {
+      1: {
+        name: "Revelations",
+        sub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+      },
+      2: {
+        name: "The Final Stand",
+        sub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        dub: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      },
+    },
+  };
 
-    const epList = document.getElementById('episode-list');
-    const versionSelect = document.getElementById('version-select');
-    const videoPlayer = document.getElementById('anime-player');
-    const logoButton = document.getElementById('logo-button');
-    const seasonWrapper = document.getElementById('season-wrapper');
+  const epList = document.getElementById("episode-list");
+  const versionSelect = document.getElementById("version-select");
+  const videoPlayer = document.getElementById("anime-player");
+  const logoButton = document.getElementById("logo-button");
+  const seasonWrapper = document.getElementById("season-wrapper");
 
-    let selectedSeason = "1";
-    let selectedEpisode = null;
-    let watchedEpisodes = new Set();
+  let selectedSeason = "1";
+  let selectedEpisode = null;
+  let watchedEpisodes = new Set();
 
-    function generateEpisodeKey(season, episode) {
-      return season + "-" + episode;
-    }
+  // Helper to detect if url is Google Drive preview (not usable direct URL)
+  function isGoogleDrivePreview(url) {
+    return url && url.includes("drive.google.com/file/") && url.includes("/preview");
+  }
 
-    function loadWatched() {
-      try {
-        const stored = localStorage.getItem('watchedEpisodes');
-        if (stored) {
-          const obj = JSON.parse(stored);
-          if (typeof obj === 'object' && obj !== null) {
-            watchedEpisodes = new Set(Object.keys(obj).filter(key => obj[key] === true));
-          }
-        }
-      } catch {
-        watchedEpisodes = new Set();
-      }
-    }
-    function saveWatched() {
-      const obj = {};
-      watchedEpisodes.forEach(key => obj[key] = true);
-      localStorage.setItem('watchedEpisodes', JSON.stringify(obj));
-    }
+  function generateEpisodeKey(season, episode) {
+    return `${season}-${episode}`;
+  }
 
-    function parseEpisodeInfo(infoString) {
-      const parts = infoString.split('##');
-      return {
-        name: parts[0],
-        sub: parts[1] || '',
-        dub: parts[2] || ''
-      };
-    }
-
-    function populateEpisodes() {
-      epList.innerHTML = '';
-      const episodes = episodeData[selectedSeason];
-      if (!episodes) return;
-
-      Object.keys(episodes).forEach(epNum => {
-        const li = document.createElement('li');
-        const episodeInfo = parseEpisodeInfo(episodes[epNum]);
-        li.textContent = `Episode ${epNum}: ${episodeInfo.name}`;
-        li.dataset.episode = epNum;
-        li.tabIndex = 0;
-        li.setAttribute('role', 'button');
-        li.setAttribute('aria-pressed', 'false');
-
-        const key = generateEpisodeKey(selectedSeason, epNum);
-        if (watchedEpisodes.has(key)) {
-          li.classList.add('watched');
-        }
-        li.addEventListener('click', () => selectEpisode(epNum));
-        li.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            selectEpisode(epNum);
-          }
-        });
-        epList.appendChild(li);
-      });
-    }
-
-    function selectEpisode(epNum) {
-      if (selectedEpisode === epNum) return;
-
-      if (selectedEpisode !== null) {
-        const oldSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
-        if (oldSelectedElem) {
-          oldSelectedElem.classList.remove('selected');
-          oldSelectedElem.setAttribute('aria-pressed', 'false');
+  function loadWatched() {
+    try {
+      const stored = localStorage.getItem("watchedEpisodes");
+      if (stored) {
+        const obj = JSON.parse(stored);
+        if (typeof obj === "object" && obj !== null) {
+          watchedEpisodes = new Set(Object.keys(obj).filter((key) => obj[key] === true));
         }
       }
-
-      selectedEpisode = epNum;
-      const newSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
-      if (newSelectedElem) {
-        newSelectedElem.classList.add('selected');
-        newSelectedElem.setAttribute('aria-pressed', 'true');
-        newSelectedElem.scrollIntoView({block: 'nearest', inline: 'nearest'});
-      }
-      loadVideo();
+    } catch {
+      watchedEpisodes = new Set();
     }
+  }
 
-    function loadVideo() {
-      if (selectedEpisode === null) return;
-      const ver = versionSelect.value;
-      const episodes = episodeData[selectedSeason];
-      if (!episodes) return;
-      const episodeInfo = parseEpisodeInfo(episodes[selectedEpisode]);
-      const src = ver === 'sub' ? episodeInfo.sub : episodeInfo.dub;
+  function saveWatched() {
+    const obj = {};
+    watchedEpisodes.forEach((key) => (obj[key] = true));
+    localStorage.setItem("watchedEpisodes", JSON.stringify(obj));
+  }
 
-      if (src) {
-        if (videoPlayer.src !== src) {
-          videoPlayer.src = src;
-          videoPlayer.load();
-          videoPlayer.play().catch(() => {});
-        }
-      } else {
-        videoPlayer.removeAttribute('src');
-        videoPlayer.load();
+  function populateEpisodes() {
+    epList.innerHTML = "";
+    const episodes = episodeData[selectedSeason];
+    if (!episodes) return;
+
+    Object.keys(episodes).forEach((epNum) => {
+      const li = document.createElement("li");
+      const episode = episodes[epNum];
+      li.textContent = `Episode ${epNum}: ${episode.name}`;
+      li.dataset.episode = epNum;
+      li.tabIndex = 0;
+      li.setAttribute("role", "button");
+      li.setAttribute("aria-pressed", "false");
+
+      const key = generateEpisodeKey(selectedSeason, epNum);
+      if (watchedEpisodes.has(key)) {
+        li.classList.add("watched");
       }
-    }
 
-    videoPlayer.addEventListener('ended', () => {
-      if (selectedEpisode !== null) {
-        const key = generateEpisodeKey(selectedSeason, selectedEpisode);
-        if (!watchedEpisodes.has(key)) {
-          watchedEpisodes.add(key);
-          saveWatched();
-          const li = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
-          if (li) {
-            li.classList.add('watched');
-          }
-        }
-      }
-    });
-
-    versionSelect.addEventListener('change', () => {
-      loadVideo();
-      videoPlayer.focus();
-    });
-
-    logoButton.addEventListener('click', () => {
-      window.location.href = 'https://syfer-eng.github.io/Shows/Anime.html';
-    });
-
-    function populateSeasons() {
-      const olds = seasonWrapper.querySelectorAll('button.season-btn');
-      olds.forEach(btn => btn.remove());
-
-      Object.keys(episodeData).forEach(seasonNum => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'season-btn';
-        btn.textContent = `Season ${seasonNum}`;
-        btn.setAttribute('aria-pressed', 'false');
-        btn.tabIndex = 0;
-
-        btn.addEventListener('click', () => selectSeason(seasonNum));
-
-        seasonWrapper.appendChild(btn);
-      });
-      updateSeasonButtons();
-    }
-
-    function selectSeason(seasonNum) {
-      if (selectedSeason === seasonNum) return;
-
-      selectedSeason = seasonNum;
-      selectedEpisode = null;
-      populateEpisodes();
-      updateSeasonButtons();
-
-      const episodes = episodeData[selectedSeason];
-      if (episodes) {
-        const firstEp = Object.keys(episodes)[0];
-        if (firstEp) {
-          selectEpisode(firstEp);
-        }
-      }
-    }
-
-    function updateSeasonButtons() {
-      const buttons = seasonWrapper.querySelectorAll('button.season-btn');
-      buttons.forEach(btn => {
-        if (btn.textContent === `Season ${selectedSeason}`) {
-          btn.classList.add('selected');
-          btn.setAttribute('aria-pressed', 'true');
-          btn.setAttribute('disabled', 'disabled');
-        } else {
-          btn.classList.remove('selected');
-          btn.setAttribute('aria-pressed', 'false');
-          btn.removeAttribute('disabled');
+      li.addEventListener("click", () => selectEpisode(epNum));
+      li.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          selectEpisode(epNum);
         }
       });
+
+      epList.appendChild(li);
+    });
+  }
+
+  function selectEpisode(epNum) {
+    if (selectedEpisode === epNum) return;
+
+    if (selectedEpisode !== null) {
+      const oldSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+      if (oldSelectedElem) {
+        oldSelectedElem.classList.remove("selected");
+        oldSelectedElem.setAttribute("aria-pressed", "false");
+      }
     }
 
-    loadWatched();
-    populateSeasons();
+    selectedEpisode = epNum;
+    const newSelectedElem = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+    if (newSelectedElem) {
+      newSelectedElem.classList.add("selected");
+      newSelectedElem.setAttribute("aria-pressed", "true");
+      newSelectedElem.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
+    loadVideo();
+  }
+
+  function loadVideo() {
+    if (selectedEpisode === null) return;
+    const ver = versionSelect.value;
+    const episodes = episodeData[selectedSeason];
+    if (!episodes) return;
+    const episode = episodes[selectedEpisode];
+
+    let src = ver === "sub" ? episode.sub : episode.dub;
+
+    // If sub URL is Google Drive preview, ignore and fallback to dub URL
+    if (ver === "sub" && isGoogleDrivePreview(src)) {
+      src = episode.dub;
+    }
+
+    if (!src) {
+      videoPlayer.removeAttribute("src");
+      videoPlayer.load();
+      return;
+    }
+
+    if (videoPlayer.src !== src) {
+      videoPlayer.src = src;
+      videoPlayer.load();
+      videoPlayer.play().catch(() => {});
+    }
+  }
+
+  videoPlayer.addEventListener("ended", () => {
+    if (selectedEpisode !== null) {
+      const key = generateEpisodeKey(selectedSeason, selectedEpisode);
+      if (!watchedEpisodes.has(key)) {
+        watchedEpisodes.add(key);
+        saveWatched();
+        const li = epList.querySelector(`li[data-episode="${selectedEpisode}"]`);
+        if (li) {
+          li.classList.add("watched");
+        }
+      }
+    }
+  });
+
+  versionSelect.addEventListener("change", () => {
+    loadVideo();
+    videoPlayer.focus();
+  });
+
+  logoButton.addEventListener("click", () => {
+    window.location.href = "https://syfer-eng.github.io/Shows/Anime.html";
+  });
+
+  function populateSeasons() {
+    const olds = seasonWrapper.querySelectorAll("button.season-btn");
+    olds.forEach((btn) => btn.remove());
+
+    Object.keys(episodeData).forEach((seasonNum) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "season-btn";
+      btn.textContent = `Season ${seasonNum}`;
+      btn.setAttribute("aria-pressed", "false");
+      btn.tabIndex = 0;
+
+      btn.addEventListener("click", () => selectSeason(seasonNum));
+
+      seasonWrapper.appendChild(btn);
+    });
+    updateSeasonButtons();
+  }
+
+  function selectSeason(seasonNum) {
+    if (selectedSeason === seasonNum) return;
+
+    selectedSeason = seasonNum;
+    selectedEpisode = null;
     populateEpisodes();
-    // Select the first episode by default
-    const firstEpisode = Object.keys(episodeData[selectedSeason])[0];
-    if (firstEpisode) {
-      selectEpisode(firstEpisode);
+    updateSeasonButtons();
+
+    const episodes = episodeData[selectedSeason];
+    if (episodes) {
+      const firstEp = Object.keys(episodes)[0];
+      if (firstEp) {
+        selectEpisode(firstEp);
+      }
     }
-    versionSelect.value = 'sub';
-  </script>
+  }
+
+  function updateSeasonButtons() {
+    const buttons = seasonWrapper.querySelectorAll("button.season-btn");
+    buttons.forEach((btn) => {
+      if (btn.textContent === `Season ${selectedSeason}`) {
+        btn.classList.add("selected");
+        btn.setAttribute("aria-pressed", "true");
+        btn.setAttribute("disabled", "disabled");
+      } else {
+        btn.classList.remove("selected");
+        btn.setAttribute("aria-pressed", "false");
+        btn.removeAttribute("disabled");
+      }
+    });
+  }
+
+  loadWatched();
+  populateSeasons();
+  populateEpisodes();
+  const firstEpisode = Object.keys(episodeData[selectedSeason])[0];
+  if (firstEpisode) {
+    selectEpisode(firstEpisode);
+  }
+  versionSelect.value = "sub";
+</script>
 
 </body>
 </html>
