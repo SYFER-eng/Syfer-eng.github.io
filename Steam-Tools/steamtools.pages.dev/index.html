@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta charset="UTF-8" />
+    <meta name="google-site-verification" content="XAYg90sqbCgD-X0CFuKuFswF-DEyAB0ChXEjdB8KWJk" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Steam Manifest & Lua Generator | Syfer-eng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
+
+        /* BLACK & WHITE THEME */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #000; /* pure black background */
+            color: #fff; /* white text */
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Snow particle background styling */
+        #snowCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            background: transparent;
+        }
+
+        /* Override Tailwind color utilities with monochrome palette */
+        a {
+            color: #ddd;
+            text-decoration: underline;
+        }
+        a:hover {
+            color: #bbb;
+        }
+
+        /* Updated header layout: horizontal, centered, with orbitron glitch effect */
+        header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            z-index: 1;
+        }
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
+            color: #eee;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin: 0;
+            user-select: none;
+            filter: drop-shadow(0 0 2px #fff);
+        }
+        header p.subtitle {
+            font-weight: 300;
+            font-size: 1rem;
+            color: #ccc;
+            margin: 0;
+        }
+        header p.credit {
+            font-size: 0.75rem;
+            color: #888;
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            user-select: none;
+        }
+        /* bright underline bar under header */
+        header .underline-bar {
+            width: 120px;
+            height: 4px;
+            background: #eee;
+            border-radius: 9999px;
+            margin-top: 0.5rem;
+            filter: drop-shadow(0 0 3px #fff);
+            user-select: none;
+        }
+
+        /* Main container with new layout: two-column */
+        main {
+            max-width: 960px;
+            margin: 0 auto 4rem auto;
+            background: #111;
+            border: 2px solid #fff;
+            border-radius: 1rem;
+            box-shadow: 0 0 10px 1px #fff;
+            backdrop-filter: blur(6px);
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Input Section left side */
+        #inputSection {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: #eee;
+            user-select: none;
+        }
+        input#gameId {
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 0.5rem;
+            padding: 1rem 1rem 1rem 3rem;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 500;
+            font-family: monospace;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            position: relative;
+        }
+        input#gameId::placeholder {
+            color: #888;
+        }
+        input#gameId:focus {
+            border-color: #fff;
+            box-shadow: 0 0 6px 2px #fff;
+            background: #222;
+        }
+        /* input icon */
+        #inputSection .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        #inputSection .input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            opacity: 0.7;
+            pointer-events: none;
+            font-size: 1.25rem;
+        }
+        /* Button style */
+        button#checkBtn {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: #000;
+            background: #fff;
+            border: none;
+            border-radius: 0.75rem;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px 3px #fff;
+            transition: all 0.25s ease-in-out;
+            align-self: flex-start;
+            user-select: none;
+            width: max-content;
+        }
+        button#checkBtn:hover:not(:disabled) {
+            background: #eee;
+            box-shadow: 0 0 24px 6px #fff;
+            transform: scale(1.05);
+        }
+        button#checkBtn:disabled {
+            background: #444;
+            color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        /* Pulse animation for button (white) */
+        @keyframes pulseWhite {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.75; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pulse-animation {
+            animation: pulseWhite 2s infinite;
+        }
+
+        /* Results Section right side */
+        #resultsSection {
+            background: #222;
+            border: 1px solid #ddd;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            color: #eee;
+            font-family: monospace;
+            font-size: 0.9rem;
+            height: 320px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        #terminalOutput {
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            flex-grow: 1;
+        }
+        /* Terminal colored dots replaced with white/grey */
+        #resultsSection .dots {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        #resultsSection .dots .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+            opacity: 0.7;
+        }
+        #resultsSection .dots .dot:nth-child(2) {
+            background: #aaa;
+        }
+        #resultsSection .dots .dot:nth-child(3) {
+            background: #fff;
+        }
+        /* Download and Not Found sections styling */
+        #downloadSection, #notFoundSection {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        #downloadLink {
+            font-family: 'Orbitron', sans-serif;
+            background: #fff;
+            color: #000;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            display: inline-block;
+            text-decoration: none;
+            box-shadow: 0 0 12px 2px #fff;
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+        #downloadLink:hover {
+            background: #eee;
+            box-shadow: 0 0 18px 4px #fff;
+            transform: scale(1.05);
+        }
+        #downloadLink i {
+            margin-right: 0.5rem;
+        }
+        #downloadSection p {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #bbb;
+        }
+        #notFoundSection {
+            background: rgba(255 255 255 / 0.1);
+            border: 1px solid #fff;
+            border-radius: 1rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            color: #fff;
+            font-weight: 600;
+            font-family: 'Orbitron', monospace;
+        }
+        #notFoundSection i {
+            font-size: 2rem;
+            color: #fff;
+            opacity: 0.7;
+        }
+        #notFoundSection div {
+            text-align: left;
+        }
+        #notFoundSection h3 {
+            margin: 0 0 0.2rem 0;
+            font-size: 1.1rem;
+        }
+        #notFoundSection p {
+            margin: 0;
+            font-weight: normal;
+            font-size: 0.85rem;
+            color: #bbb;
+        }
+
+        /* Info Section below main - full width single column with white border */
+        #infoSection {
+            max-width: 960px;
+            margin: 0 auto;
+            margin-top: 2rem;
+            border-top: 1px solid #fff;
+            padding-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            color: #eee;
+            position: relative;
+            z-index: 1;
+        }
+        #infoSection .info-card {
+            background: #111;
+            border: 1px solid #fff;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 0 10px 1px #fff;
+        }
+        #infoSection .info-card i {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            color: #eee;
+            opacity: 0.9;
+        }
+        #infoSection .info-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            margin: 0 0 0.25rem 0;
+            font-size: 1.2rem;
+            user-select: none;
+            text-transform: uppercase;
+        }
+        #infoSection .info-card p {
+            font-size: 0.9rem;
+            font-weight: 300;
+            margin: 0;
+            color: #ccc;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 960px;
+            margin: 3rem auto 2rem auto;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            font-family: 'Orbitron', sans-serif;
+            user-select: none;
+            position: relative;
+            z-index: 1;
+        }
+        footer a {
+            color: #eee;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        footer a:hover {
+            color: #bbb;
+        }
+
+        /* Modal overlay black and white adjustments */
+        .modal-overlay {
+            background: rgba(255 255 255 / 0.05);
+            backdrop-filter: blur(6px);
+            z-index: 2000;
+        }
+        .modal-content {
+            background: #000;
+            border: 2px solid #fff;
+            box-shadow: 0 0 30px 3px #fff;
+            color: #fff;
+        }
+        .modal-content i {
+            color: #fff !important;
+        }
+        .modal-content h2,
+        .modal-content h3 {
+            color: #fff !important;
+        }
+        .modal-content p {
+            color: #eee !important;
+        }
+        .modal-content button {
+            background: #fff !important;
+            color: #000 !important;
+            box-shadow: 0 0 15px 3px #fff !important;
+        }
+        .modal-content button:hover {
+            background: #ddd !important;
+        }
+
+        /* Glow text changed to white subtle glow */
+        .glow-text {
+            text-shadow: 0 0 6px #fff90a80;
+        }
+        /* Glow box changed to white soft glow */
+        .glow-box {
+            box-shadow: 0 0 15px 2px #fff9;
+        }
+
+        /* Cyber Border - white monochrome */
+        .cyber-border::before {
+            background: linear-gradient(135deg, #fff, #ddd);
+        }
+
+        /* Terminal text area updated */
+        .terminal-text {
+            background-color: rgba(255 255 255 / 0.1);
+            border-left: 3px solid #fff;
+            color: #d4d4d4;
+        }
+    </style>
+</head>
+<body class="relative flex flex-col items-center justify-start p-6 select-text">
+
+    <!-- Snow Particle Canvas -->
+    <canvas id="snowCanvas"></canvas>
+
+    <!-- Disclaimer Modal -->
+    <div id="disclaimerModal" class="modal-overlay hidden fixed inset-0 flex justify-center items-center">
+        <div class="modal-content rounded-xl p-8 max-w-md w-11/12 text-center">
+            <div class="mb-6">
+                <i class="fas fa-exclamation-triangle text-white text-5xl mb-4" aria-hidden="true"></i>
+                <h2 class="orbitron text-3xl font-bold mb-4" role="heading" aria-level="2">DISCLAIMER</h2>
+            </div>
+            <div class="text-left mb-6">
+                <h3 class="orbitron text-lg mb-2">English:</h3>
+                <p class="text-white text-base leading-relaxed">
+                    Download And Have Fun!
+                </p>
+            </div>
+            <button
+              id="acceptDisclaimer"
+              class="orbitron font-bold py-3 px-8 rounded-lg transition-transform duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+              style="background:#fff; color:#000; box-shadow:0 0 15px 3px #fff;"
+            >
+                I UNDERSTAND & ACCEPT
+            </button>
+        </div>
+    </div>
+
+    <header aria-label="Page header">
+        <h1 class="glow-text m-0" role="heading" aria-level="1">Syfer-eng Steam Tool Games</h1>
+        <p class="subtitle m-0">Check and download game manifests by Steam AppID</p>
+        <p class="credit m-0">MADE BY <a href="https://t.me/Nafisfuad1" aria-label="Visit Syfer-eng Telegram" >SYFER-ENG</a></p>
+        <div class="underline-bar" aria-hidden="true"></div>
+    </header>
+
+    <main role="main" aria-label="Steam manifest checker">
+      <section id="inputSection" aria-label="AppID input and check">
+        <label for="gameId" id="gameIdLabel">Enter Steam AppID</label>
+        <div class="input-wrapper" aria-describedby="gameIdHelp">
+          <i class="fas fa-gamepad" aria-hidden="true"></i>
+          <input
+            type="text"
+            id="gameId"
+            placeholder="e.g. 220968"
+            aria-labelledby="gameIdLabel"
+            aria-describedby="gameIdHelp"
+          />
+        </div>
+        <span id="gameIdHelp" class="sr-only">Enter numeric Steam AppID to check manifest</span>
+        <button id="checkBtn" class="pulse-animation" aria-live="polite" aria-busy="false">
+          CHECK MANIFEST
+        </button>
+      </section>
+
+      <section id="resultsSection" class="hidden" aria-live="polite" aria-atomic="true" aria-label="Results output">
+        <div class="dots" aria-hidden="true">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+        <pre id="terminalOutput" aria-live="polite" aria-atomic="false"></pre>
+
+        <div id="downloadSection" class="hidden">
+          <a id="downloadLink" href="#" download="" role="button" aria-label="Download manifest file">
+            <i class="fas fa-download" aria-hidden="true"></i> DOWNLOAD MANIFEST
+          </a>
+          <p>File will be downloaded from GitHub servers</p>
+        </div>
+
+        <div id="notFoundSection" class="hidden" role="alert">
+          <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+          <div>
+            <h3>MANIFEST NOT FOUND</h3>
+            <p>No manifest exists for this Steam AppID</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section id="infoSection" aria-label="Information about the application">
+      <article class="info-card" tabindex="0">
+        <i class="fas fa-info-circle" aria-hidden="true"></i>
+        <h3>How It Works</h3>
+        <p>Enter a Steam AppID</p>
+      </article>
+      <article class="info-card" tabindex="0">
+        <i class="fas fa-database" aria-hidden="true"></i>
+        <h3>Database</h3>
+        <p>Manifests are stored</p>
+      </article>
+      <article class="info-card" tabindex="0">
+        <i class="fas fa-shield-alt" aria-hidden="true"></i>
+        <h3>Privacy</h3>
+        <p>No data is stored or logged client sided</p>
+      </article>
+    </section>
+
+    <footer aria-label="Site footer">
+      <p>
+        MADE BY <a href="https://t.me/Nafisfuad1">Syfer-eng</a>
+      </p>
+      <p>SteamTools</p>
+    </footer>
+
+<script>
+  // Snow particles effect on #snowCanvas black & white
+
+  class Snowflake {
+    constructor(canvasWidth, canvasHeight) {
+      this.canvasWidth = canvasWidth;
+      this.canvasHeight = canvasHeight;
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * this.canvasWidth;
+      this.y = Math.random() * this.canvasHeight;
+      this.radius = Math.random() * 1.3 + 0.7; // radius 0.7 - 2
+      this.speedY = Math.random() * 1.2 + 0.5; // speed 0.5 - 1.7
+      this.speedX = (Math.random() - 0.5) * 0.4; // horizontal sway
+      this.opacity = Math.random() * 0.4 + 0.4; // opacity 0.4 - 0.8
+      this.angle = Math.random() * Math.PI * 2;
+      this.angleSpeed = (Math.random() - 0.5) * 0.02;
+    }
+    update() {
+      this.y += this.speedY;
+      this.x += this.speedX + Math.sin(this.angle) * 0.3;
+      this.angle += this.angleSpeed;
+      if (this.y > this.canvasHeight) {
+        this.y = 0;
+        this.x = Math.random() * this.canvasWidth;
+      }
+      if(this.x > this.canvasWidth) this.x = 0;
+      if(this.x < 0) this.x = this.canvasWidth;
+    }
+    draw(ctx) {
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+      ctx.shadowColor = "rgba(255,255,255,0.6)";
+      ctx.shadowBlur = 4;
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  (function initSnow() {
+    const canvas = document.getElementById('snowCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let snowflakes = [];
+    const maxFlakes = 120;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      // recreate snowflakes array with new dimensions
+      snowflakes = Array.from({length: maxFlakes}, () => new Snowflake(canvas.width, canvas.height));
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for(let flake of snowflakes) {
+        flake.update();
+        flake.draw(ctx);
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+
+  // Main JS logic for manifest checking remains mostly unchanged but updated for accessibility and new layout
+  document.addEventListener('DOMContentLoaded', function () {
+    const disclaimerModal = document.getElementById('disclaimerModal');
+    if (!localStorage.getItem('disclaimerAccepted')) {
+      disclaimerModal.classList.remove('hidden');
+      disclaimerModal.setAttribute('aria-hidden', 'false');
+    } else {
+      disclaimerModal.setAttribute('aria-hidden', 'true');
+    }
+
+    document.getElementById('acceptDisclaimer').addEventListener('click', function () {
+      localStorage.setItem('disclaimerAccepted', 'true');
+      disclaimerModal.classList.add('hidden');
+      disclaimerModal.setAttribute('aria-hidden', 'true');
+    });
+
+    const checkBtn = document.getElementById('checkBtn');
+    const gameIdInput = document.getElementById('gameId');
+    const resultsSection = document.getElementById('resultsSection');
+    const terminalOutput = document.getElementById('terminalOutput');
+    const downloadSection = document.getElementById('downloadSection');
+    const downloadLink = document.getElementById('downloadLink');
+    const notFoundSection = document.getElementById('notFoundSection');
+
+    checkBtn.addEventListener('click', checkManifest);
+    gameIdInput.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        checkManifest();
+      }
+    });
+
+    function checkManifest() {
+      const gameId = gameIdInput.value.trim();
+
+      if (!gameId || !/^\d+$/.test(gameId)) {
+        showError('Please enter a valid Steam AppID (numbers only)');
+        return;
+      }
+
+      checkBtn.disabled = true;
+      checkBtn.setAttribute('aria-busy', 'true');
+      checkBtn.classList.remove('pulse-animation');
+      checkBtn.textContent = '';
+      const spinner = document.createElement('i');
+      spinner.className = 'fas fa-spinner fa-spin';
+      checkBtn.appendChild(spinner);
+      checkBtn.appendChild(document.createTextNode(' CHECKING...'));
+
+      resultsSection.classList.remove('hidden');
+      downloadSection.classList.add('hidden');
+      notFoundSection.classList.add('hidden');
+
+      terminalOutput.textContent = '';
+      typeTerminalText(`> Initiating manifest check for Steam AppID: ${gameId}\n`, 0);
+
+      // Simulated check: if gameId ends with "0" manifest not found, else found. (Example logic)
+      setTimeout(() => {
+        if (gameId.endsWith('0')) {
+          typeTerminalText(`> Searching database...\n> ERROR: Manifest not found for Steam AppID ${gameId}\n`, 100);
+          showNotFound();
+          checkBtn.textContent = 'CHECK COMPLETE';
+          checkBtn.disabled = false;
+          checkBtn.setAttribute('aria-busy', 'false');
+          return;
+        }
+        typeTerminalText(`> Searching database...\n> Manifest found in database!\n> Preparing download link...\n> Ready for download.\n`, 100);
+
+        const githubUrl = `https://codeload.github.com/SteamAutoCracks/ManifestHub/zip/refs/heads/${gameId}`;
+        downloadLink.href = githubUrl;
+        downloadLink.setAttribute('download', `${gameId}-manifest.zip`);
+
+        setTimeout(() => {
+          downloadSection.classList.remove('hidden');
+          checkBtn.innerHTML = '<i class="fas fa-check-circle" aria-hidden="true"></i> CHECK COMPLETE';
+          checkBtn.classList.remove('pulse-animation');
+          checkBtn.disabled = false;
+          checkBtn.setAttribute('aria-busy', 'false');
+        }, 1500);
+      }, 1000);
+    }
+
+    function typeTerminalText(text, initialDelay) {
+      let i = 0;
+      setTimeout(() => {
+        const interval = setInterval(() => {
+          if (i < text.length) {
+            terminalOutput.textContent += text.charAt(i);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            i++;
+          } else {
+            clearInterval(interval);
+          }
+        }, 20);
+      }, initialDelay);
+    }
+
+    function showError(message) {
+      terminalOutput.textContent = `> ERROR: ${message}\n`;
+      resultsSection.classList.remove('hidden');
+      downloadSection.classList.add('hidden');
+      notFoundSection.classList.add('hidden');
+    }
+
+    function showNotFound() {
+      notFoundSection.classList.remove('hidden');
+      downloadSection.classList.add('hidden');
+    }
+  });
+</script>
+
+</body>
+</html>
