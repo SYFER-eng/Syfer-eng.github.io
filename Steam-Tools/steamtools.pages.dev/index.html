@@ -1,19 +1,175 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <link rel="icon" type="image/png" href="favicon.png">
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="XAYg90sqbCgD-X0CFuKuFswF-DEyAB0ChXEjdB8KWJk">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Steam Manifest & Lua Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
         
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #e2e8f0;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #e5e5e5;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Snow particles background */
+        .snow-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #ffffff;
+            user-select: none;
+            pointer-events: none;
+            font-size: 0.8rem;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .snowflake:nth-child(1) {
+            left: 5%;
+            animation-duration: 8s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(2) {
+            left: 10%;
+            animation-duration: 10s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(3) {
+            left: 15%;
+            animation-duration: 6s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(4) {
+            left: 20%;
+            animation-duration: 12s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(5) {
+            left: 25%;
+            animation-duration: 9s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(6) {
+            left: 30%;
+            animation-duration: 7s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(7) {
+            left: 35%;
+            animation-duration: 11s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(8) {
+            left: 40%;
+            animation-duration: 8s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(9) {
+            left: 45%;
+            animation-duration: 10s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(10) {
+            left: 50%;
+            animation-duration: 9s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(11) {
+            left: 55%;
+            animation-duration: 7s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(12) {
+            left: 60%;
+            animation-duration: 11s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(13) {
+            left: 65%;
+            animation-duration: 8s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(14) {
+            left: 70%;
+            animation-duration: 10s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(15) {
+            left: 75%;
+            animation-duration: 9s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(16) {
+            left: 80%;
+            animation-duration: 6s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(17) {
+            left: 85%;
+            animation-duration: 12s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(18) {
+            left: 90%;
+            animation-duration: 8s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(19) {
+            left: 95%;
+            animation-duration: 10s;
+            animation-delay: 0s;
+        }
+        
+        .snowflake:nth-child(20) {
+            left: 2%;
+            animation-duration: 7s;
+            animation-delay: 0s;
         }
         
         .orbitron {
@@ -21,15 +177,15 @@
         }
         
         .glow-text {
-            text-shadow: 0 0 8px rgba(59, 130, 246, 0.7);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
         }
         
         .glow-box {
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
         
         .input-glow:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
         }
         
         .cyber-border {
@@ -43,7 +199,7 @@
             inset: 0;
             border-radius: 0.5rem;
             padding: 2px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            background: linear-gradient(135deg, #ffffff, #cccccc);
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -71,8 +227,8 @@
         
         .terminal-text {
             font-family: 'Courier New', monospace;
-            background-color: rgba(30, 41, 59, 0.7);
-            border-left: 3px solid #3b82f6;
+            background-color: rgba(51, 51, 51, 0.7);
+            border-left: 3px solid #ffffff;
         }
 
         .modal-overlay {
@@ -89,18 +245,103 @@
         }
 
         .modal-content {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border: 2px solid #3b82f6;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+            border: 2px solid #ffffff;
             border-radius: 1rem;
             padding: 2rem;
             max-width: 500px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
         }
+
+        /* Update button colors to black and white */
+        .btn-primary {
+            background: linear-gradient(135deg, #333333, #000000);
+            border: 1px solid #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #555555, #333333);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #666666, #333333);
+            border: 1px solid #ffffff;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #777777, #555555);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #999999, #666666);
+            border: 1px solid #ffffff;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #aaaaaa, #888888);
+        }
+
+        /* Override Tailwind colors for black and white theme */
+        .text-blue-400 { color: #cccccc !important; }
+        .text-purple-400 { color: #aaaaaa !important; }
+        .text-green-400 { color: #dddddd !important; }
+        .text-red-400 { color: #bbbbbb !important; }
+        .text-yellow-400 { color: #cccccc !important; }
+        .text-slate-300 { color: #e5e5e5 !important; }
+        .text-slate-400 { color: #cccccc !important; }
+        .text-red-300 { color: #dddddd !important; }
+        .text-blue-300 { color: #e5e5e5 !important; }
+        .text-purple-300 { color: #e5e5e5 !important; }
+
+        .bg-slate-800 { background-color: #333333 !important; }
+        .bg-slate-700 { background-color: #444444 !important; }
+        .bg-red-900 { background-color: #2a2a2a !important; }
+        .border-slate-600 { border-color: #666666 !important; }
+        .border-slate-700 { border-color: #555555 !important; }
+        .border-red-700 { border-color: #777777 !important; }
+
+        .from-blue-600 { --tw-gradient-from: #333333 !important; }
+        .to-purple-600 { --tw-gradient-to: #000000 !important; }
+        .from-blue-500 { --tw-gradient-from: #555555 !important; }
+        .to-purple-500 { --tw-gradient-to: #333333 !important; }
+        .from-green-600 { --tw-gradient-from: #666666 !important; }
+        .to-emerald-600 { --tw-gradient-to: #333333 !important; }
+        .from-green-500 { --tw-gradient-from: #777777 !important; }
+        .to-emerald-500 { --tw-gradient-to: #555555 !important; }
+        .from-blue-500 { --tw-gradient-from: #888888 !important; }
+        .to-purple-500 { --tw-gradient-to: #555555 !important; }
+
+        .ring-blue-500 { --tw-ring-color: rgba(255, 255, 255, 0.5) !important; }
+        .ring-green-500 { --tw-ring-color: rgba(255, 255, 255, 0.5) !important; }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center p-4">
+    <!-- Snow particles background -->
+    <div class="snow-container">
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+    </div>
+
     <!-- Disclaimer Modal -->
     <div id="disclaimerModal" class="modal-overlay hidden">
         <div class="modal-content">
@@ -116,46 +357,74 @@
                 </p>
             </div>
             
-            <button id="acceptDisclaimer" class="orbitron bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            <button id="acceptDisclaimer" class="orbitron btn-warning text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                 I UNDERSTAND & ACCEPT
             </button>
         </div>
     </div>
 
-    <div class="max-w-4xl w-full mx-auto">
-        <!-- Header -->
-        <header class="text-center mb-10">
-            <h1 class="orbitron text-4xl md:text-5xl font-bold mb-2 glow-text">Steam manifest</h1>
-            <p class="text-slate-300 text-lg">Check and download game manifests by Steam AppID</p>
-            <p class="text-blue-400 text-sm mt-2">Made By <a href="https://discord.gg/vKFayPN4Mu" class="text-purple-400 hover:text-purple-300 transition-colors">Syfer-eng</a></p>
-            <p><a href="https://raw.githubusercontent.com/SYFER-eng/Syfer-eng.github.io/refs/heads/main/Steam-Tools/steamtools.pages.dev/Steam-Tools-Download/st-setup-1.8.16.exe">Download Steamtools from Here</a></p>
-            
-            <div class="flex justify-center mt-6">
-                <div class="w-16 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-            </div>
-        </header>
-        
-        <!-- Main Card -->
-        <main class="cyber-border bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 glow-box">
-            <!-- Input Section -->
-            <div class="mb-8">
-                <div class="flex flex-col md:flex-row gap-4">
-                    <div class="flex-1">
-                        <label for="gameId" class="block text-sm font-medium text-slate-300 mb-2 orbitron">ENTER STEAM APPID</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-gamepad text-blue-400"></i>
-                            </div>
-                            <input type="text" id="gameId" placeholder="e.g. 220968" class="input-glow pl-10 w-full bg-slate-700/50 border border-slate-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+    <div class="min-h-screen grid grid-cols-1 lg:grid-cols-2">
+        <!-- Left Panel - Info & Header -->
+        <div class="bg-black/30 backdrop-blur-sm p-8 flex flex-col justify-center">
+            <div class="max-w-lg mx-auto">
+                <h1 class="orbitron text-4xl font-bold mb-6 glow-text text-left">Steam Manifest</h1>
+                <div class="w-32 h-1 bg-gradient-to-r from-white to-gray-400 rounded-full mb-6"></div>
+                
+                <div class="space-y-4 mb-8">
+                    <p class="text-slate-300 text-lg">Check and download game manifests by Steam AppID</p>
+                    <p class="text-blue-400">Made By <a href="https://discord.gg/vKFayPN4Mu" class="text-purple-400 hover:text-purple-300 transition-colors">Syfer-eng</a></p>
+                    <p><a href="https://raw.githubusercontent.com/SYFER-eng/Syfer-eng.github.io/refs/heads/main/Steam-Tools/steamtools.pages.dev/Steam-Tools-Download/st-setup-1.8.16.exe" class="text-white hover:text-gray-300 underline">Download Steamtools from Here</a></p>
+                </div>
+                
+                <!-- Info Cards -->
+                <div class="space-y-4">
+                    <div class="bg-slate-800/30 p-4 rounded-lg border-l-4 border-white">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-info-circle text-blue-400 mr-3"></i>
+                            <h3 class="orbitron text-sm font-bold">How It Works</h3>
                         </div>
+                        <p class="text-slate-300 text-sm">Enter a Steam AppID to check if a game manifest exists in our database.</p>
                     </div>
-                    <div class="flex items-end">
-                        <button id="checkBtn" class="pulse-animation orbitron bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                            CHECK MANIFEST
-                        </button>
+                    
+                    <div class="bg-slate-800/30 p-4 rounded-lg border-l-4 border-white">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-shield-alt text-green-400 mr-3"></i>
+                            <h3 class="orbitron text-sm font-bold">Privacy</h3>
+                        </div>
+                        <p class="text-slate-300 text-sm">No data is stored or logged. All checks happen client-side.</p>
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <!-- Right Panel - Input & Results -->
+        <div class="p-8 flex flex-col justify-center">
+            <div class="max-w-lg mx-auto w-full">
+                <!-- Main Input Card -->
+                <main class="cyber-border bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 glow-box">
+                    <!-- Input Section -->
+                    <div class="mb-8">
+                        <div class="text-center mb-8">
+                            <h2 class="orbitron text-2xl font-bold text-white mb-4">STEAM APPID CHECKER</h2>
+                            <div class="w-16 h-1 bg-gradient-to-r from-white to-gray-400 rounded-full mx-auto mb-4"></div>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label for="gameId" class="block text-sm font-medium text-slate-300 mb-3 orbitron">ENTER STEAM APPID</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <i class="fas fa-gamepad text-blue-400"></i>
+                                    </div>
+                                    <input type="text" id="gameId" placeholder="e.g. 220968" class="input-glow pl-12 w-full bg-slate-700/50 border border-slate-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                                </div>
+                            </div>
+                            
+                            <button id="checkBtn" class="pulse-animation orbitron btn-primary text-white font-bold py-3 px-8 rounded-lg w-full transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                                CHECK MANIFEST
+                            </button>
+                        </div>
+                    </div>
             
             <!-- Results Section -->
             <div id="resultsSection" class="hidden">
@@ -169,7 +438,7 @@
                 </div>
                 
                 <div id="downloadSection" class="hidden text-center">
-                    <a id="downloadLink" class="inline-block orbitron bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                    <a id="downloadLink" class="inline-block orbitron btn-success text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
                         <i class="fas fa-download mr-2"></i> DOWNLOAD MANIFEST
                     </a>
                     <p class="text-slate-300 mt-3 text-sm">File will be downloaded from servers</p>
@@ -213,12 +482,14 @@
                 </div>
             </div>
         </main>
-        
-        <!-- Footer -->
-        <footer class="mt-12 text-center text-slate-400 text-sm">
-            <p>MADE BY <a href="https://discord.gg/vKFayPN4Mu" class="text-blue-400 hover:text-blue-300 transition-colors">Syfer-eng</a></p>
-            <p class="mt-1">Not affiliated with Steam</p>
-        </footer>
+                
+                <!-- Footer for right panel -->
+                <footer class="mt-8 text-center text-slate-400 text-sm">
+                    <div class="w-16 h-1 bg-gradient-to-r from-white to-gray-400 rounded-full mx-auto mb-4"></div>
+                    <p>Not affiliated with Steam</p>
+                </footer>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -262,60 +533,73 @@
                 checkBtn.classList.remove('pulse-animation');
                 checkBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> CHECKING...';
                 
-                // Clear previous results
-                resultsSection.classList.remove('hidden');
+                // Reset sections
+                resultsSection.classList.add('hidden');
                 downloadSection.classList.add('hidden');
                 notFoundSection.classList.add('hidden');
                 
-                // Simulate terminal output
-                terminalOutput.textContent = '';
-                typeTerminalText(`> Initiating manifest check for Steam AppID: ${gameId}\n`, 0);
+                // GitHub API URL to check if manifest exists
+                const manifestUrl = `https://raw.githubusercontent.com/SYFER-eng/Syfer-eng.github.io/refs/heads/main/Steam-Tools/steamtools.pages.dev/Steam-Tools-Download/Manifests/${gameId}.manifest`;
                 
-                // Simulate checking process without actual validation
-                setTimeout(() => {
-                    typeTerminalText(`> Searching database...\n> Manifest found in database!\n> Preparing download link...\n> Ready for download.\n`, 100);
-                    
-                    // Set download link directly
-                    const githubUrl = `https://codeload.github.com/SteamAutoCracks/ManifestHub/zip/refs/heads/${gameId}`;
-                    downloadLink.href = githubUrl;
-                    
-                    // Show download section after a delay
-                    setTimeout(() => {
-                        downloadSection.classList.remove('hidden');
-                        checkBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> CHECK COMPLETE';
-                        checkBtn.classList.add('bg-gradient-to-r', 'from-green-600', 'to-emerald-600');
-                    }, 1500);
-                }, 1000);
-                
-                // Reset button after completion
-                setTimeout(() => {
-                    checkBtn.disabled = false;
-                }, 3000);
+                fetch(manifestUrl, { method: 'HEAD' })
+                    .then(response => {
+                        if (response.ok) {
+                            // Manifest exists
+                            showSuccess(gameId, manifestUrl);
+                        } else {
+                            // Manifest doesn't exist
+                            showNotFound();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error checking manifest:', error);
+                        showError('Error checking manifest. Please try again.');
+                    })
+                    .finally(() => {
+                        // Reset button state
+                        checkBtn.disabled = false;
+                        checkBtn.classList.add('pulse-animation');
+                        checkBtn.innerHTML = 'CHECK MANIFEST';
+                    });
             }
             
-            function typeTerminalText(text, initialDelay) {
-                let i = 0;
-                setTimeout(() => {
-                    const interval = setInterval(() => {
-                        if (i < text.length) {
-                            terminalOutput.textContent += text.charAt(i);
-                            terminalOutput.scrollTop = terminalOutput.scrollHeight;
-                            i++;
-                        } else {
-                            clearInterval(interval);
-                        }
-                    }, 20);
-                }, initialDelay);
+            function showSuccess(gameId, manifestUrl) {
+                const output = `> Connecting to Steam Database...
+> Searching for AppID: ${gameId}
+> Manifest found in database!
+> Location: GitHub Repository
+> Status: Ready for download
+> File: ${gameId}.manifest`;
+                
+                terminalOutput.textContent = output;
+                downloadLink.href = manifestUrl;
+                downloadLink.download = `${gameId}.manifest`;
+                
+                resultsSection.classList.remove('hidden');
+                downloadSection.classList.remove('hidden');
+            }
+            
+            function showNotFound() {
+                const output = `> Connecting to Steam Database...
+> Searching for AppID: ${gameIdInput.value.trim()}
+> No manifest found in database
+> Status: Not Available
+> This game may not have a manifest or hasn't been indexed yet`;
+                
+                terminalOutput.textContent = output;
+                
+                resultsSection.classList.remove('hidden');
+                notFoundSection.classList.remove('hidden');
             }
             
             function showError(message) {
-                terminalOutput.textContent = `> ERROR: ${message}\n`;
+                const output = `> Error: ${message}
+> Please check your input and try again`;
+                
+                terminalOutput.textContent = output;
                 resultsSection.classList.remove('hidden');
-                downloadSection.classList.add('hidden');
-                notFoundSection.classList.add('hidden');
             }
         });
     </script>
-
-
-</body></html>
+</body>
+</html>
