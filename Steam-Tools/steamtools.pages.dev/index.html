@@ -426,61 +426,34 @@
                         </div>
                     </div>
             
-            <!-- Results Section -->
-            <div id="resultsSection" class="hidden">
-                <div class="terminal-text p-5 rounded-lg mb-6">
-                    <div class="flex items-center mb-3">
-                        <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                        <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <pre id="terminalOutput" class="text-green-400 overflow-x-auto"></pre>
-                </div>
-                
-                <div id="downloadSection" class="hidden text-center">
-                    <a id="downloadLink" class="inline-block orbitron btn-success text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-                        <i class="fas fa-download mr-2"></i> DOWNLOAD MANIFEST
-                    </a>
-                    <p class="text-slate-300 mt-3 text-sm">File will be downloaded from servers</p>
-                </div>
-                
-                <div id="notFoundSection" class="hidden text-center py-6">
-                    <div class="inline-flex items-center bg-red-900/30 border border-red-700/50 px-6 py-4 rounded-lg">
-                        <i class="fas fa-exclamation-triangle text-red-400 mr-3 text-2xl"></i>
-                        <div>
-                            <h3 class="orbitron text-red-300">MANIFEST NOT FOUND</h3>
-                            <p class="text-slate-300 text-sm">No manifest exists for this Steam AppID</p>
+                    <!-- Results Section -->
+                    <div id="resultsSection" class="hidden mt-8">
+                        <div class="terminal-text p-5 rounded-lg mb-6">
+                            <div class="flex items-center mb-3">
+                                <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <pre id="terminalOutput" class="text-green-400 overflow-x-auto"></pre>
+                        </div>
+                        
+                        <div id="downloadSection" class="hidden text-center">
+                            <a id="downloadLink" class="inline-block orbitron btn-success text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                                <i class="fas fa-download mr-2"></i> DOWNLOAD MANIFEST
+                            </a>
+                            <p class="text-slate-300 mt-3 text-sm">File will be downloaded from servers</p>
+                        </div>
+                        
+                        <div id="notFoundSection" class="hidden text-center py-6">
+                            <div class="inline-flex items-center bg-red-900/30 border border-red-700/50 px-6 py-4 rounded-lg">
+                                <i class="fas fa-exclamation-triangle text-red-400 mr-3 text-2xl"></i>
+                                <div>
+                                    <h3 class="orbitron text-red-300">MANIFEST NOT FOUND</h3>
+                                    <p class="text-slate-300 text-sm">No manifest exists for this Steam AppID</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- Info Section -->
-            <div class="mt-10 pt-6 border-t border-slate-700/50">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-slate-800/30 p-4 rounded-lg">
-                        <div class="text-blue-400 mb-2">
-                            <i class="fas fa-info-circle text-xl"></i>
-                        </div>
-                        <h3 class="orbitron text-lg mb-1">How It Works</h3>
-                        <p class="text-slate-300 text-sm">Enter a Steam AppID to check if a game manifest exists in our database.</p>
-                    </div>
-                    <div class="bg-slate-800/30 p-4 rounded-lg">
-                        <div class="text-purple-400 mb-2">
-                            <i class="fas fa-database text-xl"></i>
-                        </div>
-                        <h3 class="orbitron text-lg mb-1">Database</h3>
-                        <p class="text-slate-300 text-sm">Manifests are stored on GitHub and downloaded directly from their servers.</p>
-                    </div>
-                    <div class="bg-slate-800/30 p-4 rounded-lg">
-                        <div class="text-green-400 mb-2">
-                            <i class="fas fa-shield-alt text-xl"></i>
-                        </div>
-                        <h3 class="orbitron text-lg mb-1">Privacy</h3>
-                        <p class="text-slate-300 text-sm">No data is stored or logged. All checks happen client-side.</p>
-                    </div>
-                </div>
-            </div>
         </main>
                 
                 <!-- Footer for right panel -->
