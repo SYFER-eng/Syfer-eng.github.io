@@ -590,6 +590,13 @@
         name: "Let's Go to the Cursed House",
         sub: "https://drive.google.com/file/d/1LZwq6G9St5hxDY5CoyG_IhcMtIXPPPhI/preview",
         dub: "https://syfer-eng.github.io/Shows/Anime-Comming-Soon.html",
+    }
+  },
+     2: {
+      1: {
+        name: "Like, This Is the Legend of the Giant Snake",
+        sub: "https://drive.google.com/file/d/1XpqSTuowvLjl1v1yoi06Zr0736TI9QAr/preview",
+        dub: " ",
       },
     },
   };
@@ -676,25 +683,6 @@
     }
   }
 
-  function updateEpisodeWatchedState(episodeNum, watched) {
-    const li = epList.querySelector(`li[data-episode="${episodeNum}"]`);
-    if (!li) return;
-    const key = generateEpisodeKey(selectedSeason, episodeNum);
-    if (watched) {
-      li.classList.add("watched");
-      if (!li.querySelector(".watched-marker")) {
-        const check = document.createElement("span");
-        check.className = "watched-marker";
-        check.setAttribute("aria-label", "Watched");
-        check.textContent = "✔";
-        li.appendChild(check);
-      }
-    } else {
-      li.classList.remove("watched");
-      const check = li.querySelector(".watched-marker");
-      if (check) check.remove();
-    }
-  }
 
   let filteredEpisodes = null;
 
@@ -741,7 +729,7 @@
         const check = document.createElement("span");
         check.className = "watched-marker";
         check.setAttribute("aria-label", "Watched");
-        check.textContent = "✔";
+        check.textContent = " ";
         li.appendChild(check);
       }
 
