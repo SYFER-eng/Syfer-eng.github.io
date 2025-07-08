@@ -1,239 +1,732 @@
-<!DOCTYPE html><html lang="en"><head>
-    <link rel="icon" type="image/png" href="favicon.png">
-    <meta charset="UTF-8">
-    <meta name="google-site-verification" content="XAYg90sqbCgD-X0CFuKuFswF-DEyAB0ChXEjdB8KWJk">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta charset="UTF-8" />
+    <meta name="google-site-verification" content="XAYg90sqbCgD-X0CFuKuFswF-DEyAB0ChXEjdB8KWJk" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Steam Manifest & Lua Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;500&display=swap');
-        
-        body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #e2e8f0;
-            min-height: 100vh;
-        }
-        
-        .orbitron {
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        .glow-text {
-            text-shadow: 0 0 8px rgba(59, 130, 246, 0.7);
-        }
-        
-        .glow-box {
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-        }
-        
-        .input-glow:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
-        }
-        
-        .cyber-border {
-            position: relative;
-            border: 1px solid transparent;
-        }
-        
-        .cyber-border::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 0.5rem;
-            padding: 2px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-        
-        .pulse-animation {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.05);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-        
-        .terminal-text {
-            font-family: 'Courier New', monospace;
-            background-color: rgba(30, 41, 59, 0.7);
-            border-left: 3px solid #3b82f6;
+        /* Simplify fonts to system sans-serif */
+        /* Reset and base */
+        * {
+            box-sizing: border-box;
         }
 
-        .modal-overlay {
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #000;
+            color: #eee;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Snow canvas full screen behind */
+        #snow-canvas {
             position: fixed;
             top: 0;
             left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            background: #000;
+            display: block;
+        }
+
+        /* Layout: header top, main below with sidebar on left, content on right */
+        .container {
+          margin-bottom: 6rem;
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 2rem auto 3rem;
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            user-select: none;
+        }
+
+        header {
+            text-align: center;
+            color: #eee;
+            font-family: Arial, Helvetica, sans-serif;
+            text-shadow: 0 0 10px #ccc;
+            user-select: text;
+        }
+
+        header h1 {
+            margin: 0 0 0.2rem;
+            font-size: 3rem;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        header p {
+            margin: 0.15rem 0;
+            font-weight: 300;
+            font-size: 1.1rem;
+        }
+
+        header p a {
+            color: #ddd;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dotted #ddd;
+            outline-offset: 3px;
+        }
+
+        header p a:hover,
+        header p a:focus-visible {
+            color: #bbb;
+            outline: none;
+        }
+
+        /* Main container: flex row with sidebar on left and content on right */
+        main {
+            display: flex;
+            gap: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1.2rem;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+            min-height: 340px;
+            color: #eee;
+            user-select: text;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 800px) {
+            main {
+                flex-direction: column;
+                padding: 1.5rem 1.8rem;
+                min-height: auto;
+            }
+        }
+
+        /* Sidebar - input controls */
+        #inputSection {
+            flex: 0 0 320px;
+            background: #000;
+            border-radius: 1rem;
+            padding: 1.8rem 2rem;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.45);
+            color: #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+            user-select: text;
+            border: 2.5px solid #fff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        @media (max-width: 800px) {
+            #inputSection {
+                flex: 1 1 auto;
+                max-width: 100%;
+            }
+        }
+
+        #inputSection label {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.3rem;
+            color: #eee;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .input-container i {
+            position: absolute;
+            left: 1.15rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        /* Steam ID input styled black background and white outline */
+        input[type="text"] {
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            padding: 0.8rem 1rem 0.8rem 3.3rem;
+            border-radius: 0.5rem;
+            border: 2.5px solid #fff;
+            background: #000;
+            font-size: 1.15rem;
+            color: #eee;
+            font-weight: 500;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 12px rgba(255 255 255 / 0.5);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        input[type="text"]::placeholder {
+            color: #bbb;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #eee;
+            box-shadow: 0 0 14px 3px rgba(255 255 255 / 0.9);
+            background: #000;
+        }
+
+        /* Button */
+        #checkBtn {
+            margin-top: 0.5rem;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #111;
+            background: #eee;
+            border-radius: 0.8rem;
+            border: none;
+            box-shadow: 0 0 18px #bbb;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            user-select: none;
+            align-self: flex-start;
+            letter-spacing: 0.035em;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #checkBtn:hover:not(:disabled),
+        #checkBtn:focus-visible:not(:disabled) {
+            background-color: #ddd;
+            box-shadow: 0 0 28px #999;
+            transform: scale(1.05);
+            outline: none;
+        }
+
+        #checkBtn:disabled {
+            background-color: #bbb;
+            box-shadow: none;
+            cursor: default;
+            transform: none;
+            opacity: 0.75;
+        }
+
+        /* Content section - results */
+        #resultsSection {
+            flex: 1 1 auto;
+            background: #000;
+            border-radius: 1rem;
+            padding: 1.8rem 2.2rem;
+            box-shadow: 0 0 40px rgba(255 255 255 / 0.75);
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            color: #eee;
+            min-width: 280px;
+            border: 2.5px solid #fff;
+            user-select: text;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Debug terminal output styled black background with white outline */
+        #terminalOutput {
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.36;
+            background: #000;
+            border-radius: 0.8rem;
+            border: 2.5px solid #fff;
+            padding: 1rem 1.2rem;
+            max-height: 210px;
+            overflow-y: auto;
+            color: #eee;
+            white-space: pre-wrap;
+            user-select: text;
+            box-shadow: 0 0 16px rgba(255 255 255 / 0.6);
+        }
+
+        #terminalOutput:focus {
+            outline: none;
+            box-shadow: 0 0 24px #fff inset;
+        }
+
+        /* Terminal control lights */
+        .terminal-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.7rem;
+            user-select: none;
+        }
+
+        .terminal-btn {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 0 rgba(255 255 255 / 0.7);
+            background: #555;
+        }
+
+        .terminal-btn.red {
+            background: #ff414d;
+            box-shadow: 0 0 10px rgba(255 65 77, 0.85);
+        }
+
+        .terminal-btn.yellow {
+            background: #ffcd3c;
+            box-shadow: 0 0 10px rgba(255 205 60, 0.85);
+        }
+
+        .terminal-btn.green {
+            background: #49d865;
+            box-shadow: 0 0 10px rgba(73 216 101, 0.85);
+        }
+
+        /* Download link */
+        #downloadSection {
+            display: none;
+            flex-direction: column;
+            gap: 0.3rem;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #downloadSection.visible {
+            display: flex;
+        }
+
+        #downloadLink {
+            background: #eee;
+            color: #222;
+            padding: 0.8rem 2.2rem;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 1rem;
+            text-decoration: none;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #downloadLink:hover,
+        #downloadLink:focus-visible {
+            background-color: #ddd;
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.3);
+            transform: scale(1.06);
+            outline: none;
+        }
+
+        #downloadSection p {
+            color: #555;
+            font-size: 0.9rem;
+            margin: 0;
+            user-select: none;
+        }
+
+        /* Not Found Section */
+        #notFoundSection {
+            display: none;
+            background: #f8d7da;
+            border-radius: 1rem;
+            padding: 1.2rem 1.5rem;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+            font-weight: 700;
+            font-size: 1rem;
+            user-select: none;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: nowrap;
+            display: flex;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #notFoundSection.visible {
+            display: flex;
+        }
+
+        #notFoundSection i {
+            font-size: 1.8rem;
+        }
+
+        /* Info section below main content */
+#infoSection {
+    margin-top: 0; /* Remove top margin */
+    max-width: 900px;
+    color: #bbb;
+    display: flex;
+    justify-content: center;
+    gap: 1.8rem;
+    flex-wrap: wrap;
+    user-select: none;
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    bottom: 3.6rem; /* Push it up to give space above the footer */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1001; /* Make sure it’s above footer */
+    background: rgba(0, 0, 0, 0.8); /* Optional: add semi-transparent background for readability */
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+}
+
+    #infoSection > div {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 1rem;
+        padding: 1.5rem 2rem;
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        color: #ddd;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        max-width: 320px;
+        box-sizing: border-box;
+    }
+
+        #infoSection i {
+            font-size: 1.6rem;
+            color: #ccc;
+        }
+
+        #infoSection h3 {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        #infoSection p, #infoSection a {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #aaa;
+        }
+
+        #infoSection a {
+            color: #eee;
+            text-decoration: underline;
+            cursor: pointer;
+            user-select: text;
+        }
+
+        #infoSection a:hover,
+        #infoSection a:focus-visible {
+            color: #ccc;
+            outline: none;
+        }
+
+        /* Footer */
+        footer {
+          margin-bottom: 6rem;
+            margin-top: 3rem;
+            max-width: 900px;
+            color: #777;
+            text-align: padding-bottom;
+            font-size: 0.9rem;
+            user-select: none;
+            padding-bottom: 1rem;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        footer a {
+            color: #ccc;
+            font-weight: 600;
+            border-bottom: 1px dotted #ccc;
+            text-decoration: none;
+            outline-offset: 2px;
+        }
+
+        footer a:hover,
+        footer a:focus-visible {
+            color: #aaa;
+            outline: none;
+        }
+
+        /* Accessibility focus outlines */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 3px;
+        }
+
+        /* Modal overlay */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0 0 0 / 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 10000;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
         }
 
         .modal-content {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border: 2px solid #3b82f6;
+            background: #000;
+            color: #eee;
             border-radius: 1rem;
-            padding: 2rem;
-            max-width: 500px;
+            padding: 2rem 2.5rem;
+            max-width: 460px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 32px rgba(255 255 255 / 0.4);
+            font-family: Arial, Helvetica, sans-serif;
+            user-select: text;
+            border: 2.5px solid #fff;
+        }
+
+        .modal-content h2 {
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #eee;
+        }
+
+        .modal-content h3 {
+            color: #ddd;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .modal-content p {
+            color: #bbb;
+            font-size: 0.95rem;
+            margin-top: 0;
+            margin-bottom: 1.7rem;
+            line-height: 1.4;
+        }
+
+        /* Accept button black background white text with subtle white glow */
+        #acceptDisclaimer {
+            background-color: #000;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 1rem 2.8rem;
+            border-radius: 0.85rem;
+            border: 2.5px solid #fff;
+            cursor: pointer;
+            box-shadow: 0 0 18px #fff;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+            user-select: none;
+            text-shadow: 0 0 6px #fff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #acceptDisclaimer:hover,
+        #acceptDisclaimer:focus-visible {
+            background-color: #222;
+            color: #eee;
+            outline: none;
+            box-shadow: 0 0 30px #fff;
+            transform: scale(1.05);
+        }
+
+        #acceptDisclaimer:active {
+            background-color: #111;
+            transform: scale(0.98);
+            box-shadow: 0 0 12px #fff;
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center p-4">
+
+<body>
+    <!-- Snow Canvas -->
+    <canvas id="snow-canvas" aria-hidden="true"></canvas>
+
     <!-- Disclaimer Modal -->
-    <div id="disclaimerModal" class="modal-overlay hidden">
+    <div id="disclaimerModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="disclaimerHeading"
+        aria-describedby="disclaimerText">
         <div class="modal-content">
-            <div class="mb-6">
-                <i class="fas fa-exclamation-triangle text-yellow-400 text-4xl mb-4"></i>
-                <h2 class="orbitron text-2xl font-bold text-white mb-4">DISCLAIMER</h2>
-            </div>
-            
-            <div class="text-left mb-6">
-                <h3 class="orbitron text-lg text-blue-400 mb-2">English:</h3>
-                <p class="text-slate-300 text-sm leading-relaxed">
-                    This website is for informational purposes only, NOT🤣🤣🤣
-                </p>
-            </div>
-            
-            <button id="acceptDisclaimer" class="orbitron bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                I UNDERSTAND & ACCEPT
-            </button>
+            <h2 id="disclaimerHeading">DISCLAIMER</h2>
+            <h3>English:</h3>
+            <p id="disclaimerText">This website is for informational purposes only, NOT🤣🤣🤣</p>
+            <button id="acceptDisclaimer" type="button" aria-label="Accept disclaimer and continue">I UNDERSTAND &amp;
+                ACCEPT</button>
         </div>
     </div>
 
-    <div class="max-w-4xl w-full mx-auto">
-        <!-- Header -->
-        <header class="text-center mb-10">
-            <h1 class="orbitron text-4xl md:text-5xl font-bold mb-2 glow-text">Steam Tools Thing</h1>
-            <p class="text-slate-300 text-lg">Check and download game manifests by Steam AppID</p>
-            <p class="text-blue-400 text-sm mt-2">Made By <a href="https://t.me/Nafisfuad1" class="text-purple-400 hover:text-purple-300 transition-colors">Syfer-eng</a></p>
-            <p><a href="https://raw.githubusercontent.com/SYFER-eng/Syfer-eng.github.io/refs/heads/main/Steam-Tools/steamtools.pages.dev/Steam-Tools-Download/st-setup-1.8.16.exe">Download Steamtools from Here</a></p>
-            
-            <div class="flex justify-center mt-6">
-                <div class="w-16 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-            </div>
+    <div class="container" role="main" aria-label="Steam AppID manifest checker">
+        <header>
+            <h1> </h1>
+            <p>Check and download game manifests by Steam AppID</p>
+            <p>
+                Made By <a href="https://t.me/Nafisfuad1" target="_blank" rel="noopener noreferrer" tabindex="0">Syfer-eng</a>
+            </p>
+            <p>
+                <a href="https://raw.githubusercontent.com/SYFER-eng/Syfer-eng.github.io/refs/heads/main/Steam-Tools/steamtools.pages.dev/Steam-Tools-Download/st-setup-1.8.16.exe"
+                    target="_blank" rel="noopener noreferrer" tabindex="0" aria-label="Download Steamtools from here">
+                    Download Steamtools from Here
+                </a>
+            </p>
+            <div style="margin-top:1rem; height: 6px; width: 6rem; margin-left: auto; margin-right: auto; background: linear-gradient(90deg, #bbb, #888); border-radius: 9999px;"></div>
         </header>
-        
-        <!-- Main Card -->
-        <main class="cyber-border bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 md:p-8 glow-box">
-            <!-- Input Section -->
-            <div class="mb-8">
-                <div class="flex flex-col md:flex-row gap-4">
-                    <div class="flex-1">
-                        <label for="gameId" class="block text-sm font-medium text-slate-300 mb-2 orbitron">ENTER STEAM APPID</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-gamepad text-blue-400"></i>
-                            </div>
-                            <input type="text" id="gameId" placeholder="e.g. 220968" class="input-glow pl-10 w-full bg-slate-700/50 border border-slate-600 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                        </div>
-                    </div>
-                    <div class="flex items-end">
-                        <button id="checkBtn" class="pulse-animation orbitron bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                            CHECK MANIFEST
-                        </button>
-                    </div>
+
+        <main>
+            <section id="inputSection" aria-labelledby="inputLabel">
+                <label id="inputLabel" for="gameId">ENTER STEAM APPID</label>
+                <div class="input-container" style="margin-top: 0.3rem;">
+                    <i class="fas fa-gamepad" aria-hidden="true"></i>
+                    <input type="text" id="gameId" aria-describedby="gameIdHelp" placeholder="e.g. 220968" autocomplete="off"
+                        inputmode="numeric" pattern="\d*" aria-label="Steam AppID input" />
                 </div>
-            </div>
-            
-            <!-- Results Section -->
-            <div id="resultsSection" class="hidden">
-                <div class="terminal-text p-5 rounded-lg mb-6">
-                    <div class="flex items-center mb-3">
-                        <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                        <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <pre id="terminalOutput" class="text-green-400 overflow-x-auto"></pre>
+                <button id="checkBtn" type="button" aria-live="polite" aria-busy="false"
+                    aria-label="Check manifest for Steam AppID" tabindex="0">
+                    CHECK MANIFEST
+                </button>
+            </section>
+
+            <section id="resultsSection" class="hidden" aria-live="polite" aria-atomic="true" tabindex="0">
+                <div class="terminal-controls" aria-hidden="true">
+                    <div class="terminal-btn red"></div>
+                    <div class="terminal-btn yellow"></div>
+                    <div class="terminal-btn green"></div>
                 </div>
-                
-                <div id="downloadSection" class="hidden text-center">
-                    <a id="downloadLink" class="inline-block orbitron bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-                        <i class="fas fa-download mr-2"></i> DOWNLOAD MANIFEST
+
+                <pre id="terminalOutput" role="log" aria-live="off" tabindex="0"></pre>
+
+                <div id="downloadSection" class="" aria-live="polite" aria-atomic="true"
+                    style="margin-top:1.5rem; display:none;">
+                    <a id="downloadLink" href="#" download aria-label="Download manifest file">
+                        <i class="fas fa-download" aria-hidden="true"></i> DOWNLOAD MANIFEST
                     </a>
-                    <p class="text-slate-300 mt-3 text-sm">File will be downloaded :)</p>
+                    <p>File is ready :)</p>
                 </div>
-                
-                <div id="notFoundSection" class="hidden text-center py-6">
-                    <div class="inline-flex items-center bg-red-900/30 border border-red-700/50 px-6 py-4 rounded-lg">
-                        <i class="fas fa-exclamation-triangle text-red-400 mr-3 text-2xl"></i>
-                        <div>
-                            <h3 class="orbitron text-red-300">MANIFEST NOT FOUND</h3>
-                            <p class="text-slate-300 text-sm">No manifest exists for this Steam AppID</p>
-                        </div>
+
+                <div id="notFoundSection" role="alert" style="margin-top:1.5rem; display:none;">
+                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                    <div>
+                        <h3>MANIFEST NOT FOUND</h3>
+                        <p>No manifest exists for this Steam AppID</p>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Info Section -->
-            <div class="mt-10 pt-6 border-t border-slate-700/50">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-slate-800/30 p-4 rounded-lg">
-                        <div class="text-blue-400 mb-2">
-                            <i class="fas fa-info-circle text-xl"></i>
-                        </div>
-                        <h3 class="orbitron text-lg mb-1">How It Works</h3>
-                        <p class="text-slate-300 text-sm">Enter a Steam AppID to check if a game manifest exists</p>
-                    </div>
-                    <div class="bg-slate-800/30 p-4 rounded-lg">
-                        <div class="text-purple-400 mb-2">
-                            <i class="fas fa-database text-xl"></i>
-                        </div>
-                        <h3 class="orbitron text-lg mb-1">Database</h3>
-                        <p class="text-slate-300 text-sm">Manifests are stored</p>
-                    </div>
-                    <div class="bg-slate-800/30 p-4 rounded-lg">
-                        <div class="text-green-400 mb-2">
-                            <i class="fas fa-shield-alt text-xl"></i>
-                        </div>
-                        <h3 class="orbitron text-lg mb-1">Privacy</h3>
-                        <p class="text-slate-300 text-sm">No data is stored or logged All Client</p>
-                    </div>
-                </div>
-            </div>
+            </section>
         </main>
-        
-        <!-- Footer -->
-        <footer class="mt-12 text-center text-slate-400 text-sm">
-            <p>MADE BY <a href="https://t.me/Nafisfuad1" class="text-blue-400 hover:text-blue-300 transition-colors">Syfer-eng</a></p>
-            <p class="mt-1">Not affiliated with Valve or Steam</p>
+
+        <section id="infoSection" aria-label="Information about how this tool works">
+            <div tabindex="0">
+                <i class="fab fa-discord" aria-hidden="true"></i>
+                <h3>Discord</h3>
+                <p>Username: </p>
+                <p><strong>Reviewedpuppy93</strong></p>
+                <p>
+                    Discord Server: <a href="https://discord.gg/vKFayPN4Mu" target="_blank" rel="noopener noreferrer"
+                        tabindex="0">https://discord.gg/vKFayPN4Mu</a>
+                </p>
+            </div>
+        </section>
+
+        <footer>
+            <p>Made By <a href="https://t.me/Nafisfuad1" target="_blank" rel="noopener noreferrer" tabindex="0">Syfer-eng</a>
+            </p>
+            <p>Not affiliated with Valve or Steam</p>
         </footer>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if disclaimer has been accepted
-            if (!localStorage.getItem('disclaimerAccepted')) {
-                document.getElementById('disclaimerModal').classList.remove('hidden');
+        // Snow particle system - increased quantity and crisp fix for retina screens
+        (() => {
+            const canvas = document.getElementById('snow-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let snowflakes = [];
+            const maxFlakes = 400; // Increased flakes for denser snow
+
+            function random(min, max) {
+                return Math.random() * (max - min) + min;
             }
 
-            // Handle disclaimer acceptance
-            document.getElementById('acceptDisclaimer').addEventListener('click', function() {
-                localStorage.setItem('disclaimerAccepted', 'true');
-                document.getElementById('disclaimerModal').classList.add('hidden');
-            });
+            function setup() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = width * dpr;
+                canvas.height = height * dpr;
+                canvas.style.width = width + 'px';
+                canvas.style.height = height + 'px';
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.scale(dpr, dpr);
 
+                snowflakes = [];
+                for (let i = 0; i < maxFlakes; i++) {
+                    snowflakes.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: random(1.5, 3.5),
+                        speedY: random(1.0, 2.5),
+                        speedX: random(-0.5, 0.5),
+                        opacity: random(0.3, 0.9),
+                        step: random(0, Math.PI * 2),
+                        stepSize: random(0.01, 0.04)
+                    });
+                }
+            }
+
+            function update() {
+                for (const flake of snowflakes) {
+                    flake.step += flake.stepSize;
+                    flake.x += Math.sin(flake.step) * flake.speedX * 0.8;
+                    flake.y += flake.speedY;
+
+                    if (flake.y > height) {
+                        flake.y = -flake.radius;
+                        flake.x = Math.random() * width;
+                        flake.radius = random(1.5, 3.5);
+                        flake.speedY = random(1.0, 2.5);
+                        flake.speedX = random(-0.5, 0.5);
+                        flake.opacity = random(0.3, 0.9);
+                        flake.step = random(0, Math.PI * 2);
+                    }
+
+                    if (flake.x > width) flake.x = 0;
+                    else if (flake.x < 0) flake.x = width;
+                }
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+                ctx.beginPath();
+                for (const flake of snowflakes) {
+                    const gradient = ctx.createRadialGradient(flake.x, flake.y, 0, flake.x, flake.y, flake.radius);
+                    gradient.addColorStop(0, `rgba(255, 255, 255, ${flake.opacity})`);
+                    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.moveTo(flake.x, flake.y);
+                    ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                }
+                ctx.fill();
+            }
+
+            function loop() {
+                update();
+                draw();
+                requestAnimationFrame(loop);
+            }
+
+            window.addEventListener('resize', setup);
+            setup();
+            loop();
+        })();
+
+        // App logic for modal, manifest checking, UI updates
+        document.addEventListener('DOMContentLoaded', () => {
+            const disclaimerModal = document.getElementById('disclaimerModal');
+            const acceptBtn = document.getElementById('acceptDisclaimer');
             const checkBtn = document.getElementById('checkBtn');
             const gameIdInput = document.getElementById('gameId');
             const resultsSection = document.getElementById('resultsSection');
@@ -241,81 +734,90 @@
             const downloadSection = document.getElementById('downloadSection');
             const downloadLink = document.getElementById('downloadLink');
             const notFoundSection = document.getElementById('notFoundSection');
-            
-            checkBtn.addEventListener('click', checkManifest);
-            gameIdInput.addEventListener('keypress', function(e) {
+
+            // Show modal if not accepted
+            if (!localStorage.getItem('disclaimerAccepted')) {
+                disclaimerModal.classList.remove('hidden');
+                acceptBtn.focus();
+            } else {
+                disclaimerModal.classList.add('hidden');
+            }
+
+            acceptBtn.addEventListener('click', () => {
+                localStorage.setItem('disclaimerAccepted', 'true');
+                disclaimerModal.classList.add('hidden');
+                gameIdInput.focus();
+            });
+
+            checkBtn.addEventListener('click', doCheck);
+            gameIdInput.addEventListener('keypress', e => {
                 if (e.key === 'Enter') {
-                    checkManifest();
+                    e.preventDefault();
+                    doCheck();
                 }
             });
-            
-            function checkManifest() {
+
+            function doCheck() {
                 const gameId = gameIdInput.value.trim();
-                
                 if (!gameId || !/^\d+$/.test(gameId)) {
                     showError('Please enter a valid Steam AppID (numbers only)');
                     return;
                 }
-                
-                // Show loading state
+
                 checkBtn.disabled = true;
-                checkBtn.classList.remove('pulse-animation');
-                checkBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> CHECKING...';
-                
-                // Clear previous results
-                resultsSection.classList.remove('hidden');
-                downloadSection.classList.add('hidden');
-                notFoundSection.classList.add('hidden');
-                
-                // Simulate terminal output
+                checkBtn.setAttribute('aria-busy', 'true');
+                checkBtn.textContent = 'CHECKING...';
                 terminalOutput.textContent = '';
+                resultsSection.classList.remove('hidden');
+                downloadSection.style.display = 'none';
+                notFoundSection.style.display = 'none';
+
                 typeTerminalText(`> Initiating manifest check for Steam AppID: ${gameId}\n`, 0);
-                
-                // Simulate checking process without actual validation
+
                 setTimeout(() => {
-                    typeTerminalText(`> Searching database...\n> Manifest found in database!\n> Preparing download link...\n> Ready for download.\n`, 100);
-                    
-                    // Set download link directly
-                    const githubUrl = `https://codeload.github.com/SteamAutoCracks/ManifestHub/zip/refs/heads/${gameId}`;
-                    downloadLink.href = githubUrl;
-                    
-                    // Show download section after a delay
+                    // Fake a found manifest for demonstration
+                    typeTerminalText('> Searching database...\n> Manifest found in database!\n> Preparing download link...\n> Ready for download.\n', 100);
+
+                    const url = `https://codeload.github.com/SteamAutoCracks/ManifestHub/zip/refs/heads/${gameId}`;
+                    downloadLink.href = url;
+                    downloadLink.setAttribute('download', `${gameId}-manifest.zip`);
+
                     setTimeout(() => {
-                        downloadSection.classList.remove('hidden');
-                        checkBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> CHECK COMPLETE';
-                        checkBtn.classList.add('bg-gradient-to-r', 'from-green-600', 'to-emerald-600');
-                    }, 1500);
-                }, 1000);
-                
-                // Reset button after completion
-                setTimeout(() => {
-                    checkBtn.disabled = false;
-                }, 3000);
+                        downloadSection.style.display = 'flex';
+                        checkBtn.textContent = 'CHECK COMPLETE';
+                        checkBtn.disabled = false;
+                        checkBtn.setAttribute('aria-busy', 'false');
+                    }, 1400);
+                }, 1100);
             }
-            
-            function typeTerminalText(text, initialDelay) {
-                let i = 0;
+
+            function typeTerminalText(text, delay) {
+                let idx = 0;
                 setTimeout(() => {
                     const interval = setInterval(() => {
-                        if (i < text.length) {
-                            terminalOutput.textContent += text.charAt(i);
+                        if (idx < text.length) {
+                            terminalOutput.textContent += text.charAt(idx);
                             terminalOutput.scrollTop = terminalOutput.scrollHeight;
-                            i++;
+                            idx++;
                         } else {
                             clearInterval(interval);
                         }
                     }, 20);
-                }, initialDelay);
+                }, delay);
             }
-            
-            function showError(message) {
-                terminalOutput.textContent = `> ERROR: ${message}\n`;
+
+            function showError(msg) {
+                terminalOutput.textContent = `> ERROR: ${msg}\n`;
                 resultsSection.classList.remove('hidden');
-                downloadSection.classList.add('hidden');
-                notFoundSection.classList.add('hidden');
+                downloadSection.style.display = 'none';
+                notFoundSection.style.display = 'none';
+                checkBtn.textContent = 'CHECK MANIFEST';
+                checkBtn.disabled = false;
+                checkBtn.setAttribute('aria-busy', 'false');
+                gameIdInput.focus();
             }
         });
     </script>
+</body>
 
-
-</body></html>
+</html>
