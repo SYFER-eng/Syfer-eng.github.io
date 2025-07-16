@@ -1,1 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Syfer-eng Key Entry</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+  
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #050505, #0f0f0f);
+    font-family: 'Share Tech Mono', monospace;
+    color: #00ff99;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 
+  /* Animated glowing background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-radial-gradient(circle at center, #00ff99 0 20px, transparent 20px 40px);
+    opacity: 0.08;
+    animation: glowAnim 20s linear infinite;
+    z-index: 0;
+  }
+
+  @keyframes glowAnim {
+    0% { transform: rotate(0deg) scale(1);}
+    100% { transform: rotate(360deg) scale(1);}
+  }
+
+  h1.ascii-art {
+    white-space: pre;
+    font-size: 14px;
+    line-height: 1.1;
+    text-align: center;
+    margin: 0 0 3rem 0;
+    user-select: none;
+    text-shadow: 0 0 5px #00ff99aa;
+    z-index: 1;
+  }
+
+  form {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 320px;
+  }
+
+  input[type="password"] {
+    padding: 1rem 1.2rem;
+    font-size: 1.25rem;
+    border-radius: 12px;
+    border: 2px solid #00ff99;
+    background: #0b0b0b;
+    color: #00ff99;
+    text-align: center;
+    outline: none;
+    letter-spacing: 0.2em;
+    box-shadow: 0 0 10px #00ff99aa;
+    transition: box-shadow 0.3s ease;
+  }
+  input[type="password"]:focus {
+    box-shadow: 0 0 18px #00ffaaff;
+  }
+
+  button {
+    background: #00ff99;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #000;
+    box-shadow: 0 0 8px #00ff99cc;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  button:hover {
+    background: #00cc7a;
+    box-shadow: 0 0 12px #00cc7aaa;
+  }
+
+  #message {
+    color: #ff4444;
+    font-weight: 700;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<h1 class="ascii-art">
+  ██████▓██   ██▓  █████▒▓█████  ██▀███       ▓█████  ███▄    █   ▄████ 
+▒██    ▒ ▒██  ██▒▓██   ▒ ▓█   ▀ ▓██ ▒ ██     ▒▓█   ▀  ██ ▀█   █  ██▒ ▀█▒
+░ ▓██▄    ▒██ ██░▒████ ░ ▒███   ▓██ ░▄█      ▒▒███   ▓██  ▀█ ██▒▒██░▄▄▄░
+  ▒   ██▒ ░ ▐██▓░░▓█▒  ░ ▒▓█  ▄ ▒██▀▀█▄       ▒▓█  ▄ ▓██▒  ▐▌██▒░▓█  ██▓
+▒██████▒▒ ░ ██▒▓░░▒█░    ░▒████▒░██▓ ▒██     ▒░▒████▒▒██░   ▓██░░▒▓███▀▒
+▒ ▒▓▒ ▒ ░  ██▒▒▒  ▒ ░    ░░ ▒░ ░░ ▒▓ ░▒▓     ░░░ ▒░ ░░ ▒░   ▒ ▒  ░▒   ▒ 
+░ ░▒  ░ ░▓██ ░▒░  ░       ░ ░  ░  ░▒ ░ ▒     ░ ░ ░  ░░ ░░   ░ ▒░  ░   ░ 
+░  ░  ░  ▒ ▒ ░░   ░ ░       ░     ░░   ░         ░      ░   ░ ░ ░ ░   ░ 
+      ░  ░ ░                ░  ░   ░             ░  ░         ░       ░ 
+         ░ ░                                                       
+</h1>
+
+<form id="keyForm">
+  <input type="password" id="keyInput" placeholder="Enter Key" maxlength="10" autocomplete="off" required />
+  <button type="submit">Submit</button>
+  <div id="message"></div>
+</form>
+
+<script>
+  const expectedKey = "123"; // You can dynamically set this via backend if needed
+
+  const form = document.getElementById('keyForm');
+  const input = document.getElementById('keyInput');
+  const message = document.getElementById('message');
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const val = input.value.trim();
+    if(val === expectedKey) {
+      message.style.color = '#00ff99';
+      message.textContent = 'Key accepted! Loading...';
+
+      // You can place further logic here, or redirect to another script
+      setTimeout(() => {
+        message.textContent = '';
+        input.value = '';
+        // For demo purposes, just reload or you can call API to validate key
+        alert('Access Granted! Run your python script now.');
+      }, 1500);
+
+    } else {
+      message.style.color = '#ff4444';
+      message.textContent = 'Incorrect key. Try again.';
+      input.value = '';
+      input.focus();
+    }
+  });
+</script>
+
+</body>
+</html>
